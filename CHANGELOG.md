@@ -1,5 +1,20 @@
 # Change Log
 
+## 2.0.0 
+
+- 使用 EasySequence 替代系统容器
+- 修复hash冲突导致监听失败的bug
+-  重命名前缀 ER 为 EZR
+-  实现 NSObject `ezr_toNode`  和 `ezr_toMutableNode`
+-  EZRNode + Value 分类 新增 `getValue` `valueWith:` 方法
+-  实现 EZRNode `scan:reduce:` 方法
+-  修改 EZRNode 为不可变对象 EZRMutableNode为可变对象
+-  重构了图论的内存管理逻辑
+-  修改了 Listen 接口
+-  Ztuple 依赖 修改为 EasyTuple
+-  取出Utils 相关类 后续迁移至 EasySequence
+-  添加文档 
+
 ## 1.3.2
 
 -  修改 Node 内存泄露问题

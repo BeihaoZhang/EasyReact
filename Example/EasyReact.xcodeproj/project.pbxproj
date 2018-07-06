@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		221B91FB1F44782500955563 /* ERNode+Operation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2221F3F91EC7933700897FAC /* ERNode+Operation.m */; };
-		221B91FC1F44782800955563 /* ERNodeSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* ERNodeSpec.m */; };
 		2224F33B1F27768000C59BCD /* SwiftSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2224F3391F27766C00C59BCD /* SwiftSpec.swift */; };
 		222515D21F287F2C00291583 /* CustomMatchers.m in Sources */ = {isa = PBXBuildFile; fileRef = 229EA1A61ED9E05000B458B7 /* CustomMatchers.m */; };
 		222515DA1F289A7600291583 /* receive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222515D81F28997700291583 /* receive.swift */; };
 		2233CD831ECDC8B700C9E016 /* TestKVOClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 22461FAE1ECAE48F008C3ED3 /* TestKVOClass.m */; };
+		26ABC841D67CF2EC5D51DE3B /* Pods_EasyReact_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34BC63D07540E3942170E5E4 /* Pods_EasyReact_Tests.framework */; };
+		3EB5F5E37CEA6A2ED7197A11 /* Pods_EasyReact_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE18728872ABA21C1BE86103 /* Pods_EasyReact_Example.framework */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -27,18 +27,22 @@
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
-		8F4828AB05642AD0533F7251 /* Pods_EasyReact_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBCE75EBB529F56F0C8AD368 /* Pods_EasyReact_Tests.framework */; };
+		B1B5C4F7B4CF60BFDCAB2EB6 /* Pods_Benchmark.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D08F16836141D781C5DC0B75 /* Pods_Benchmark.framework */; };
 		CE7038AB1F32D54C00322AF8 /* beEmptyValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222515D31F28823F00291583 /* beEmptyValue.swift */; };
 		CE7038B21F331C8B00322AF8 /* beReleasedCorrectly.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7038B11F331C8B00322AF8 /* beReleasedCorrectly.swift */; };
 		CE796AB51F70CD3B00EB463E /* TestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = CE796AB41F70CD3B00EB463E /* TestObject.m */; };
-		CE796AB91F70ED7400EB463E /* ERBenchmarkTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = CE796AB81F70ED7400EB463E /* ERBenchmarkTarget.m */; };
+		CE796AB91F70ED7400EB463E /* EZRBenchmarkTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = CE796AB81F70ED7400EB463E /* EZRBenchmarkTarget.m */; };
 		CE796ABC1F70EDA700EB463E /* RACBenchmarkTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = CE796ABB1F70EDA700EB463E /* RACBenchmarkTarget.m */; };
 		CE796AC01F7108D400EB463E /* RXSwiftBenchmarkTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE796ABF1F7108D400EB463E /* RXSwiftBenchmarkTarget.swift */; };
 		CE9497F11F73B5F70092D6F4 /* BenchmarkTest.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9497F01F73B5F70092D6F4 /* BenchmarkTest.m */; };
 		CE9497F61F73DB5F0092D6F4 /* BenchmarkCPUTestMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9497F51F73DB5F0092D6F4 /* BenchmarkCPUTestMethod.m */; };
 		CE9497FB1F73E23E0092D6F4 /* BenchmarkResult.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9497FA1F73E23E0092D6F4 /* BenchmarkResult.m */; };
-		CE9497FD1F74B6190092D6F4 /* ERNode+Graph.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9497FC1F74B6190092D6F4 /* ERNode+Graph.m */; };
-		CEA16CAD1F57E7D500412A0F /* NSObject+ER_Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 22461FB01ECAE4EA008C3ED3 /* NSObject+ER_Extension.m */; };
+		CE9D3923208722FF00D7780D /* EZRListenContext.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D3922208722FF00D7780D /* EZRListenContext.m */; };
+		CE9D85CB207F584400CCAEF3 /* EZRNodeTransformSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D85C9207F584000CCAEF3 /* EZRNodeTransformSpec.m */; };
+		CE9D85CC207F5AA800CCAEF3 /* EZRNodeSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* EZRNodeSpec.m */; };
+		CE9D85CD20804E0D00CCAEF3 /* EZRMutableNodeSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = DD3A0500207254AA00682095 /* EZRMutableNodeSpec.m */; };
+		CE9D85CE2080574C00CCAEF3 /* EZRNode+Operation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2221F3F91EC7933700897FAC /* EZRNode+Operation.m */; };
+		CE9D85CF208060E300CCAEF3 /* EZRNode+Value.m in Sources */ = {isa = PBXBuildFile; fileRef = CEBB9A1F207B132F00557A94 /* EZRNode+Value.m */; };
 		CEB23C3F1F6B7DBE009C29FB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CEB23C3E1F6B7DBE009C29FB /* AppDelegate.m */; };
 		CEB23C421F6B7DBE009C29FB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEB23C411F6B7DBE009C29FB /* ViewController.m */; };
 		CEB23C451F6B7DBE009C29FB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEB23C431F6B7DBE009C29FB /* Main.storyboard */; };
@@ -46,12 +50,11 @@
 		CEB23C4A1F6B7DBE009C29FB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEB23C481F6B7DBE009C29FB /* LaunchScreen.storyboard */; };
 		CEB23C4D1F6B7DBE009C29FB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CEB23C4C1F6B7DBE009C29FB /* main.m */; };
 		CEB23C531F6B7DDF009C29FB /* Benchmark.m in Sources */ = {isa = PBXBuildFile; fileRef = CEB23C521F6B7DDF009C29FB /* Benchmark.m */; };
-		CEBC20C91F58292A00F8F883 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 288904831EE7F8240010C1EA /* Utils.m */; };
 		CEC8C2361F7A2CA9009C3BE6 /* matchGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC8C2351F7A2CA9009C3BE6 /* matchGraph.swift */; };
 		CECB7A1A1F39A82E005A6E47 /* AssertionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = CECB7A191F39A82E005A6E47 /* AssertionHandler.m */; };
 		CECB7A1E1F39B72A005A6E47 /* hasAssert.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECB7A1D1F39B72A005A6E47 /* hasAssert.swift */; };
-		DC4F9FA351F2C5C90BFE513C /* Pods_EasyReact_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7460DD09426CDF34F209133 /* Pods_EasyReact_Example.framework */; };
-		FBB415CC40F36CF352A9807A /* Pods_Benchmark.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F699E1F1652667D234712AD /* Pods_Benchmark.framework */; };
+		DD80D45F208051E7007D2754 /* NSObject+ER_Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 22461FB01ECAE4EA008C3ED3 /* NSObject+ER_Extension.m */; };
+		DD80D46020805CED007D2754 /* EZRNode+Graph.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9497FC1F74B6190092D6F4 /* EZRNode+Graph.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,7 +68,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2221F3F91EC7933700897FAC /* ERNode+Operation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "ERNode+Operation.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		045C717C9DAE32C1AA84ADBC /* Pods-EasyReact_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyReact_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EasyReact_Tests/Pods-EasyReact_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		2221F3F91EC7933700897FAC /* EZRNode+Operation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "EZRNode+Operation.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		2224F3391F27766C00C59BCD /* SwiftSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftSpec.swift; path = TestSupportClasses/SwiftSpec.swift; sourceTree = "<group>"; };
 		222515D31F28823F00291583 /* beEmptyValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = beEmptyValue.swift; sourceTree = "<group>"; };
 		222515D71F28997600291583 /* EasyReact_Example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EasyReact_Example-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -76,12 +80,10 @@
 		229EA1A51ED9E05000B458B7 /* CustomMatchers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomMatchers.h; sourceTree = "<group>"; };
 		229EA1A61ED9E05000B458B7 /* CustomMatchers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomMatchers.m; sourceTree = "<group>"; };
 		22FD9C221EF684B000312B97 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; lineEnding = 0; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.markdown; };
-		288904831EE7F8240010C1EA /* Utils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = Utils.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		2F699E1F1652667D234712AD /* Pods_Benchmark.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Benchmark.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		30CACF9F36AC34CDC4D1ACFB /* Pods-EasyReact_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyReact_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-EasyReact_Example/Pods-EasyReact_Example.release.xcconfig"; sourceTree = "<group>"; };
+		307300FD26DD277B85514993 /* Pods-Benchmark.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Benchmark.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Benchmark/Pods-Benchmark.debug.xcconfig"; sourceTree = "<group>"; };
+		34BC63D07540E3942170E5E4 /* Pods_EasyReact_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EasyReact_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		38AD5F16ADF642BD02DCAF5E /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		3DA15B066203EF98766805C5 /* Pods-Benchmark.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Benchmark.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Benchmark/Pods-Benchmark.debug.xcconfig"; sourceTree = "<group>"; };
-		56656FD62AEAF42183A2B9C6 /* Pods-EasyReact_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyReact_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-EasyReact_Tests/Pods-EasyReact_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		40A2B4D0F3FBBDCF9171943D /* Pods-EasyReact_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyReact_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-EasyReact_Example/Pods-EasyReact_Example.release.xcconfig"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* EasyReact_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EasyReact_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -99,21 +101,21 @@
 		6003F5AF195388D20070C39A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		6003F5B7195388D20070C39A /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6003F5BB195388D20070C39A /* ERNodeSpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ERNodeSpec.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		6003F5BB195388D20070C39A /* EZRNodeSpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EZRNodeSpec.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "Tests-Prefix.pch"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		66CB3FD0304A2EA88A478F48 /* EasyReact.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = EasyReact.podspec; path = ../EasyReact.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		74BE614E80D9AC644E87CA0E /* Pods-EasyReact_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyReact_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EasyReact_Tests/Pods-EasyReact_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		A7460DD09426CDF34F209133 /* Pods_EasyReact_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EasyReact_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B283174A01CF7EF9661CBE2 /* Pods-EasyReact_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyReact_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-EasyReact_Tests/Pods-EasyReact_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		A7C0DB8A8D38F41C7B0BE1B6 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; lineEnding = 0; name = README.md; path = ../README.md; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.markdown; };
-		CBCE75EBB529F56F0C8AD368 /* Pods_EasyReact_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EasyReact_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3AFB7A83C1B01E51B9969F6 /* Pods-Benchmark.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Benchmark.release.xcconfig"; path = "Pods/Target Support Files/Pods-Benchmark/Pods-Benchmark.release.xcconfig"; sourceTree = "<group>"; };
+		C8D19E107B0ECEC62236692B /* Pods-EasyReact_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyReact_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EasyReact_Example/Pods-EasyReact_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		CE7038B11F331C8B00322AF8 /* beReleasedCorrectly.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = beReleasedCorrectly.swift; sourceTree = "<group>"; };
 		CE796AB31F70CD3B00EB463E /* TestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestObject.h; sourceTree = "<group>"; };
 		CE796AB41F70CD3B00EB463E /* TestObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestObject.m; sourceTree = "<group>"; };
 		CE796AB61F70EC3A00EB463E /* BenchmarkTargetProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BenchmarkTargetProtocol.h; sourceTree = "<group>"; };
-		CE796AB71F70ED7400EB463E /* ERBenchmarkTarget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ERBenchmarkTarget.h; sourceTree = "<group>"; };
-		CE796AB81F70ED7400EB463E /* ERBenchmarkTarget.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ERBenchmarkTarget.m; sourceTree = "<group>"; };
+		CE796AB71F70ED7400EB463E /* EZRBenchmarkTarget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EZRBenchmarkTarget.h; sourceTree = "<group>"; };
+		CE796AB81F70ED7400EB463E /* EZRBenchmarkTarget.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EZRBenchmarkTarget.m; sourceTree = "<group>"; };
 		CE796ABA1F70EDA700EB463E /* RACBenchmarkTarget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RACBenchmarkTarget.h; sourceTree = "<group>"; };
 		CE796ABB1F70EDA700EB463E /* RACBenchmarkTarget.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RACBenchmarkTarget.m; sourceTree = "<group>"; };
 		CE796ABE1F7108D400EB463E /* Benchmark-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Benchmark-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -126,7 +128,9 @@
 		CE9497F71F73DF670092D6F4 /* BenchmarkResultProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BenchmarkResultProtocol.h; sourceTree = "<group>"; };
 		CE9497F91F73E23E0092D6F4 /* BenchmarkResult.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BenchmarkResult.h; sourceTree = "<group>"; };
 		CE9497FA1F73E23E0092D6F4 /* BenchmarkResult.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BenchmarkResult.m; sourceTree = "<group>"; };
-		CE9497FC1F74B6190092D6F4 /* ERNode+Graph.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "ERNode+Graph.m"; sourceTree = "<group>"; };
+		CE9497FC1F74B6190092D6F4 /* EZRNode+Graph.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "EZRNode+Graph.m"; sourceTree = "<group>"; };
+		CE9D3922208722FF00D7780D /* EZRListenContext.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EZRListenContext.m; sourceTree = "<group>"; };
+		CE9D85C9207F584000CCAEF3 /* EZRNodeTransformSpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EZRNodeTransformSpec.m; sourceTree = "<group>"; };
 		CEB23C3B1F6B7DBE009C29FB /* Benchmark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Benchmark.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEB23C3D1F6B7DBE009C29FB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		CEB23C3E1F6B7DBE009C29FB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -139,12 +143,14 @@
 		CEB23C4C1F6B7DBE009C29FB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CEB23C511F6B7DDF009C29FB /* Benchmark.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Benchmark.h; sourceTree = "<group>"; };
 		CEB23C521F6B7DDF009C29FB /* Benchmark.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Benchmark.m; sourceTree = "<group>"; };
+		CEBB9A1F207B132F00557A94 /* EZRNode+Value.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "EZRNode+Value.m"; sourceTree = "<group>"; };
 		CEC8C2351F7A2CA9009C3BE6 /* matchGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = matchGraph.swift; sourceTree = "<group>"; };
 		CECB7A181F39A82E005A6E47 /* AssertionHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AssertionHandler.h; sourceTree = "<group>"; };
 		CECB7A191F39A82E005A6E47 /* AssertionHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AssertionHandler.m; sourceTree = "<group>"; };
 		CECB7A1D1F39B72A005A6E47 /* hasAssert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hasAssert.swift; sourceTree = "<group>"; };
-		DC5939CE37234142F5ABCFBC /* Pods-Benchmark.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Benchmark.release.xcconfig"; path = "Pods/Target Support Files/Pods-Benchmark/Pods-Benchmark.release.xcconfig"; sourceTree = "<group>"; };
-		E72B0A16A0336617F01F08F7 /* Pods-EasyReact_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyReact_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EasyReact_Example/Pods-EasyReact_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		D08F16836141D781C5DC0B75 /* Pods_Benchmark.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Benchmark.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD3A0500207254AA00682095 /* EZRMutableNodeSpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EZRMutableNodeSpec.m; sourceTree = "<group>"; };
+		EE18728872ABA21C1BE86103 /* Pods_EasyReact_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EasyReact_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,7 +161,7 @@
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
-				DC4F9FA351F2C5C90BFE513C /* Pods_EasyReact_Example.framework in Frameworks */,
+				3EB5F5E37CEA6A2ED7197A11 /* Pods_EasyReact_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -166,7 +172,7 @@
 				6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */,
 				6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */,
-				8F4828AB05642AD0533F7251 /* Pods_EasyReact_Tests.framework in Frameworks */,
+				26ABC841D67CF2EC5D51DE3B /* Pods_EasyReact_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -174,7 +180,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FBB415CC40F36CF352A9807A /* Pods_Benchmark.framework in Frameworks */,
+				B1B5C4F7B4CF60BFDCAB2EB6 /* Pods_Benchmark.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,15 +213,15 @@
 			path = Matchers;
 			sourceTree = "<group>";
 		};
-		478AEE3F3F0C7DDB25F2FEB1 /* Pods */ = {
+		3EA93EA1DBBE04867F576E14 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				E72B0A16A0336617F01F08F7 /* Pods-EasyReact_Example.debug.xcconfig */,
-				30CACF9F36AC34CDC4D1ACFB /* Pods-EasyReact_Example.release.xcconfig */,
-				74BE614E80D9AC644E87CA0E /* Pods-EasyReact_Tests.debug.xcconfig */,
-				56656FD62AEAF42183A2B9C6 /* Pods-EasyReact_Tests.release.xcconfig */,
-				3DA15B066203EF98766805C5 /* Pods-Benchmark.debug.xcconfig */,
-				DC5939CE37234142F5ABCFBC /* Pods-Benchmark.release.xcconfig */,
+				307300FD26DD277B85514993 /* Pods-Benchmark.debug.xcconfig */,
+				C3AFB7A83C1B01E51B9969F6 /* Pods-Benchmark.release.xcconfig */,
+				C8D19E107B0ECEC62236692B /* Pods-EasyReact_Example.debug.xcconfig */,
+				40A2B4D0F3FBBDCF9171943D /* Pods-EasyReact_Example.release.xcconfig */,
+				045C717C9DAE32C1AA84ADBC /* Pods-EasyReact_Tests.debug.xcconfig */,
+				9B283174A01CF7EF9661CBE2 /* Pods-EasyReact_Tests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -229,7 +235,7 @@
 				CEB23C3C1F6B7DBE009C29FB /* Benchmark */,
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
-				478AEE3F3F0C7DDB25F2FEB1 /* Pods */,
+				3EA93EA1DBBE04867F576E14 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -250,9 +256,9 @@
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,
 				6003F5AF195388D20070C39A /* XCTest.framework */,
-				A7460DD09426CDF34F209133 /* Pods_EasyReact_Example.framework */,
-				CBCE75EBB529F56F0C8AD368 /* Pods_EasyReact_Tests.framework */,
-				2F699E1F1652667D234712AD /* Pods_Benchmark.framework */,
+				D08F16836141D781C5DC0B75 /* Pods_Benchmark.framework */,
+				EE18728872ABA21C1BE86103 /* Pods_EasyReact_Example.framework */,
+				34BC63D07540E3942170E5E4 /* Pods_EasyReact_Tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -288,12 +294,15 @@
 			isa = PBXGroup;
 			children = (
 				2221F4011EC95F5B00897FAC /* TestSupportClasses */,
-				6003F5BB195388D20070C39A /* ERNodeSpec.m */,
-				2221F3F91EC7933700897FAC /* ERNode+Operation.m */,
-				CE9497FC1F74B6190092D6F4 /* ERNode+Graph.m */,
+				6003F5BB195388D20070C39A /* EZRNodeSpec.m */,
+				CE9D85C9207F584000CCAEF3 /* EZRNodeTransformSpec.m */,
+				DD3A0500207254AA00682095 /* EZRMutableNodeSpec.m */,
+				2221F3F91EC7933700897FAC /* EZRNode+Operation.m */,
+				CE9497FC1F74B6190092D6F4 /* EZRNode+Graph.m */,
 				22461FB01ECAE4EA008C3ED3 /* NSObject+ER_Extension.m */,
-				288904831EE7F8240010C1EA /* Utils.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
+				CEBB9A1F207B132F00557A94 /* EZRNode+Value.m */,
+				CE9D3922208722FF00D7780D /* EZRListenContext.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -324,8 +333,8 @@
 		CE796ABD1F70FB5000EB463E /* Target */ = {
 			isa = PBXGroup;
 			children = (
-				CE796AB71F70ED7400EB463E /* ERBenchmarkTarget.h */,
-				CE796AB81F70ED7400EB463E /* ERBenchmarkTarget.m */,
+				CE796AB71F70ED7400EB463E /* EZRBenchmarkTarget.h */,
+				CE796AB81F70ED7400EB463E /* EZRBenchmarkTarget.m */,
 				CE796ABA1F70EDA700EB463E /* RACBenchmarkTarget.h */,
 				CE796ABB1F70EDA700EB463E /* RACBenchmarkTarget.m */,
 				CE796ABF1F7108D400EB463E /* RXSwiftBenchmarkTarget.swift */,
@@ -395,11 +404,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6003F5BF195388D20070C39A /* Build configuration list for PBXNativeTarget "EasyReact_Example" */;
 			buildPhases = (
-				92BE89501C7E37F4981E83EB /* [CP] Check Pods Manifest.lock */,
+				37CF6CCC33AC352EC19E93C2 /* [CP] Check Pods Manifest.lock */,
 				6003F586195388D20070C39A /* Sources */,
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
-				6BD61DECBBABCFDD48DDD06A /* [CP] Embed Pods Frameworks */,
+				31C0EC6055AC537E30D08490 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -414,11 +423,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6003F5C2195388D20070C39A /* Build configuration list for PBXNativeTarget "EasyReact_Tests" */;
 			buildPhases = (
-				94FCBC7EC33FB163EA03AA4A /* [CP] Check Pods Manifest.lock */,
+				79207567A275B9127637F2BC /* [CP] Check Pods Manifest.lock */,
 				6003F5AA195388D20070C39A /* Sources */,
 				6003F5AB195388D20070C39A /* Frameworks */,
 				6003F5AC195388D20070C39A /* Resources */,
-				D21CF9256679BD00D2A8F2E1 /* [CP] Embed Pods Frameworks */,
+				EB7ABA7E6DD8C8FDC0BE0DE0 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -434,11 +443,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CEB23C501F6B7DBE009C29FB /* Build configuration list for PBXNativeTarget "Benchmark" */;
 			buildPhases = (
-				410F732B0B9EF091AA1BBA86 /* [CP] Check Pods Manifest.lock */,
+				144684B3373DE3A8C7C7207C /* [CP] Check Pods Manifest.lock */,
 				CEB23C371F6B7DBE009C29FB /* Sources */,
 				CEB23C381F6B7DBE009C29FB /* Frameworks */,
 				CEB23C391F6B7DBE009C29FB /* Resources */,
-				DC7D184A0DF8B286965C76BB /* [CP] Embed Pods Frameworks */,
+				CEDC246BCCE6BDC5DB83B4DB /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -455,9 +464,9 @@
 		6003F582195388D10070C39A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				CLASSPREFIX = ER;
-				LastUpgradeCheck = 0830;
-				ORGANIZATIONNAME = WilliamZang;
+				CLASSPREFIX = EZR;
+				LastUpgradeCheck = 0930;
+				ORGANIZATIONNAME = EasyReact;
 				TargetAttributes = {
 					6003F589195388D20070C39A = {
 						LastSwiftMigration = 0900;
@@ -469,7 +478,7 @@
 					};
 					CEB23C3A1F6B7DBE009C29FB = {
 						CreatedOnToolsVersion = 9.0;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 0930;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -527,7 +536,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		410F732B0B9EF091AA1BBA86 /* [CP] Check Pods Manifest.lock */ = {
+		144684B3373DE3A8C7C7207C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -545,7 +554,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6BD61DECBBABCFDD48DDD06A /* [CP] Embed Pods Frameworks */ = {
+		31C0EC6055AC537E30D08490 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -553,19 +562,21 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-EasyReact_Example/Pods-EasyReact_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/EasyReact/EasyReact.framework",
-				"${BUILT_PRODUCTS_DIR}/ZTuple/ZTuple.framework",
+				"${BUILT_PRODUCTS_DIR}/EasySequence/EasySequence.framework",
+				"${BUILT_PRODUCTS_DIR}/EasyTuple/EasyTuple.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EasyReact.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZTuple.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EasySequence.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EasyTuple.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EasyReact_Example/Pods-EasyReact_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		92BE89501C7E37F4981E83EB /* [CP] Check Pods Manifest.lock */ = {
+		37CF6CCC33AC352EC19E93C2 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -583,7 +594,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		94FCBC7EC33FB163EA03AA4A /* [CP] Check Pods Manifest.lock */ = {
+		79207567A275B9127637F2BC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -601,7 +612,37 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D21CF9256679BD00D2A8F2E1 /* [CP] Embed Pods Frameworks */ = {
+		CEDC246BCCE6BDC5DB83B4DB /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Benchmark/Pods-Benchmark-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/EasyReact/EasyReact.framework",
+				"${BUILT_PRODUCTS_DIR}/EasySequence/EasySequence.framework",
+				"${BUILT_PRODUCTS_DIR}/EasyTuple/EasyTuple.framework",
+				"${BUILT_PRODUCTS_DIR}/ReactiveCocoa/ReactiveCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/ReactiveSwift/ReactiveSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
+				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EasyReact.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EasySequence.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EasyTuple.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactiveCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactiveSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Benchmark/Pods-Benchmark-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EB7ABA7E6DD8C8FDC0BE0DE0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -621,30 +662,6 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EasyReact_Tests/Pods-EasyReact_Tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		DC7D184A0DF8B286965C76BB /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Benchmark/Pods-Benchmark-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/EasyReact/EasyReact.framework",
-				"${BUILT_PRODUCTS_DIR}/ZTuple/ZTuple.framework",
-				"${BUILT_PRODUCTS_DIR}/ReactiveCocoa/ReactiveCocoa.framework",
-				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EasyReact.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZTuple.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactiveCocoa.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Benchmark/Pods-Benchmark-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -662,16 +679,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CEA16CAD1F57E7D500412A0F /* NSObject+ER_Extension.m in Sources */,
-				221B91FC1F44782800955563 /* ERNodeSpec.m in Sources */,
-				CE9497FD1F74B6190092D6F4 /* ERNode+Graph.m in Sources */,
+				CE9D85CD20804E0D00CCAEF3 /* EZRMutableNodeSpec.m in Sources */,
+				DD80D45F208051E7007D2754 /* NSObject+ER_Extension.m in Sources */,
 				CECB7A1E1F39B72A005A6E47 /* hasAssert.swift in Sources */,
 				222515D21F287F2C00291583 /* CustomMatchers.m in Sources */,
+				CE9D85CF208060E300CCAEF3 /* EZRNode+Value.m in Sources */,
 				2224F33B1F27768000C59BCD /* SwiftSpec.swift in Sources */,
-				CEBC20C91F58292A00F8F883 /* Utils.m in Sources */,
+				CE9D85CC207F5AA800CCAEF3 /* EZRNodeSpec.m in Sources */,
+				CE9D85CB207F584400CCAEF3 /* EZRNodeTransformSpec.m in Sources */,
+				CE9D3923208722FF00D7780D /* EZRListenContext.m in Sources */,
+				DD80D46020805CED007D2754 /* EZRNode+Graph.m in Sources */,
 				2233CD831ECDC8B700C9E016 /* TestKVOClass.m in Sources */,
+				CE9D85CE2080574C00CCAEF3 /* EZRNode+Operation.m in Sources */,
 				CECB7A1A1F39A82E005A6E47 /* AssertionHandler.m in Sources */,
-				221B91FB1F44782500955563 /* ERNode+Operation.m in Sources */,
 				CEC8C2361F7A2CA9009C3BE6 /* matchGraph.swift in Sources */,
 				CE7038AB1F32D54C00322AF8 /* beEmptyValue.swift in Sources */,
 				222515DA1F289A7600291583 /* receive.swift in Sources */,
@@ -693,7 +713,7 @@
 				CEB23C4D1F6B7DBE009C29FB /* main.m in Sources */,
 				CE9497F61F73DB5F0092D6F4 /* BenchmarkCPUTestMethod.m in Sources */,
 				CEB23C3F1F6B7DBE009C29FB /* AppDelegate.m in Sources */,
-				CE796AB91F70ED7400EB463E /* ERBenchmarkTarget.m in Sources */,
+				CE796AB91F70ED7400EB463E /* EZRBenchmarkTarget.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -759,14 +779,22 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -792,6 +820,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -804,14 +833,22 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -829,6 +866,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -836,7 +875,7 @@
 		};
 		6003F5C0195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E72B0A16A0336617F01F08F7 /* Pods-EasyReact_Example.debug.xcconfig */;
+			baseConfigurationReference = C8D19E107B0ECEC62236692B /* Pods-EasyReact_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -850,14 +889,14 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Tests/TestSupportClasses/Matchers/EasyReact_Example-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
 		};
 		6003F5C1195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 30CACF9F36AC34CDC4D1ACFB /* Pods-EasyReact_Example.release.xcconfig */;
+			baseConfigurationReference = 40A2B4D0F3FBBDCF9171943D /* Pods-EasyReact_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -870,14 +909,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Tests/TestSupportClasses/Matchers/EasyReact_Example-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
 		};
 		6003F5C3195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 74BE614E80D9AC644E87CA0E /* Pods-EasyReact_Tests.debug.xcconfig */;
+			baseConfigurationReference = 045C717C9DAE32C1AA84ADBC /* Pods-EasyReact_Tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = "";
@@ -896,7 +935,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Tests/EasyReact_Example-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EasyReact_Example.app/EasyReact_Example";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -904,7 +943,7 @@
 		};
 		6003F5C4195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 56656FD62AEAF42183A2B9C6 /* Pods-EasyReact_Tests.release.xcconfig */;
+			baseConfigurationReference = 9B283174A01CF7EF9661CBE2 /* Pods-EasyReact_Tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = "";
@@ -919,7 +958,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Tests/EasyReact_Example-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EasyReact_Example.app/EasyReact_Example";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -927,7 +966,7 @@
 		};
 		CEB23C4E1F6B7DBE009C29FB /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3DA15B066203EF98766805C5 /* Pods-Benchmark.debug.xcconfig */;
+			baseConfigurationReference = 307300FD26DD277B85514993 /* Pods-Benchmark.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -954,14 +993,15 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Benchmark/SupportFiles/Benchmark-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 		CEB23C4F1F6B7DBE009C29FB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DC5939CE37234142F5ABCFBC /* Pods-Benchmark.release.xcconfig */;
+			baseConfigurationReference = C3AFB7A83C1B01E51B9969F6 /* Pods-Benchmark.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -988,7 +1028,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.EasyReact-Benchmark.Benchmark";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Benchmark/SupportFiles/Benchmark-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

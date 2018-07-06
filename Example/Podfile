@@ -14,6 +14,6 @@ end
 target 'Benchmark' do
     use_frameworks!
     pod 'EasyReact', :path => '../'
-    pod 'ReactiveCocoa', '2.5.0'
-    pod 'RxSwift', '~> 3.0'
+    pod 'ReactiveCocoa'
+    pod 'RxSwift'
 end

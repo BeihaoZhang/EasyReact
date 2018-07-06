@@ -1,45 +1,51 @@
 PODS:
-  - EasyReact (1.3.2):
-    - ZTuple (= 1.2.0)
+  - EasyReact (2.0.0):
+    - EasySequence (~> 1.2.0)
+    - EasyTuple (~> 1.0.0)
+  - EasySequence (1.2.1)
+  - EasyTuple (1.0.0)
   - Nimble (7.1.2)
   - Quick (1.3.0)
-  - ReactiveCocoa (2.5):
-    - ReactiveCocoa/UI (= 2.5)
-  - ReactiveCocoa/Core (2.5):
-    - ReactiveCocoa/no-arc
-  - ReactiveCocoa/no-arc (2.5)
-  - ReactiveCocoa/UI (2.5):
-    - ReactiveCocoa/Core
-  - RxSwift (3.6.1)
-  - ZTuple (1.2.0)
+  - ReactiveCocoa (7.2.0):
+    - ReactiveSwift (~> 3.1)
+  - ReactiveSwift (3.1.0):
+    - Result (~> 3.2)
+  - Result (3.2.4)
+  - RxSwift (4.2.0)
 
 DEPENDENCIES:
   - EasyReact (from `../`)
   - Nimble
   - Quick
-  - ReactiveCocoa (= 2.5.0)
-  - RxSwift (~> 3.0)
+  - ReactiveCocoa
+  - RxSwift
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - EasySequence
+    - EasyTuple
     - Nimble
     - Quick
     - ReactiveCocoa
+    - ReactiveSwift
+    - Result
     - RxSwift
-    - ZTuple
 
 EXTERNAL SOURCES:
   EasyReact:
     :path: "../"
 
 SPEC CHECKSUMS:
-  EasyReact: 9cc508adb3692ea30aa7cc674d1dc63e8b5946c5
+  EasyReact: 36eca265683bb8b71a9024e08784c81f4b0dbf09
+  EasySequence: 6519a008ca2705a8eba469cf554b3eb7677930d8
+  EasyTuple: d6c59783f946ccca8e02d9a1820c2441d9a52986
   Nimble: 3835ba9f459daa6b347f8a8e110aaae8ca1920a8
   Quick: 03278013f71aa05fe9ecabc94fbcc6835f1ee76f
-  ReactiveCocoa: e2db045570aa97c695e7aa97c2bcab222ae51f4a
-  RxSwift: f9de85ea20cd2f7716ee5409fc13523dc638e4e4
-  ZTuple: d9e035c656eab315a204db91481a792e68a106b2
+  ReactiveCocoa: 476dae7ca790f40d30d186a1bd7ebae4290395d5
+  ReactiveSwift: 5b26d2e988fe0eed2daf48c4054d1de74db50184
+  Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
+  RxSwift: 99e10317ddfcc7fbe01356aafd118fde4a0be104
 
-PODFILE CHECKSUM: 2a93b6a7e3362543e88e926113a6b2b59d595071
+PODFILE CHECKSUM: 7e7b2279bd325ab81ccaedf843fc45a9883dec73
 
 COCOAPODS: 1.5.3

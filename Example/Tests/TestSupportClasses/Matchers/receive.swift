@@ -19,11 +19,11 @@ import Nimble
 import Quick
 import EasyReact
 
-public class TestListener: NSObject, ERListener {
+@objc public class TestListenTransform: EZRListenTransform {
     
-    public private(set) var receiveValues:[NSObject] = []
+    @objc public private(set) var receiveValues:[NSObject] = []
     
-    public func next(_ value: Any?, from sender: ERNode<AnyObject>) {
+    @objc public override func next(_ value: Any?, from senderList: EZRSenderList, context: Any?) {
         if let next = value as? NSObject {
             receiveValues.append(next)
         } else {
@@ -34,38 +34,38 @@ public class TestListener: NSObject, ERListener {
 }
 
 var privatetestListenerKey: Void?
-public extension ERNode  {
+@objc public extension EZRNode {
     
-    public var testListener:TestListener? {
+    public var testListenTransform: TestListenTransform? {
         set {
-            objc_setAssociatedObject(self, &privatetestListenerKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &privatetestListenerKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
         }
         get {
-            return objc_getAssociatedObject(self, &privatetestListenerKey) as? TestListener
+            return objc_getAssociatedObject(self, &privatetestListenerKey) as? TestListenTransform
         }
     }
-    
-    @discardableResult
-    public func startListenForTest() -> ERCancelable {
-        let listener = TestListener()
-        testListener = listener
-        return add(listener)
+
+    public func startListenForTest(obj: AnyObject) {
+        let transform = TestListenTransform()
+        testListenTransform = transform
+        listened(by: obj).withListenTransform(transform)
     }
     
 }
 
-public func receive(_ expectedValues: [NSObject] ) -> Predicate<ERNode<NSObject>> {
-     return Predicate.define("receive expectValues") {(actualExpress, msg) -> PredicateResult in
+public func receive(_ expectedValues: [NSObject] ) -> Predicate<EZRNode<NSObject>> {
+    return Predicate.define("receive expectValues") {(actualExpress, msg) -> PredicateResult in
         let actual = try actualExpress.evaluate()
         guard let node = actual else {
             return PredicateResult(bool: false,
-                                   message: msg.appended(message: "the actual value is not an ERNode<NSObject>"))
+                                   message: msg.appended(message: "the actual value is not an EZRNode<NSObject>"))
         }
         
-        guard let listener = node.testListener else {
+        guard let listener = node.testListenTransform else {
             return PredicateResult(bool: false,
                                    message: msg.appended(message: "the actual value not be listened please use start listen before check"))
         }
+
         guard listener.receiveValues == expectedValues else {
             return PredicateResult(bool: false,
                                    message: msg.appended(message: "expected:\(expectedValues) got: %@ \(listener.receiveValues)"))
@@ -75,11 +75,11 @@ public func receive(_ expectedValues: [NSObject] ) -> Predicate<ERNode<NSObject>
     }
 }
 
-extension NMBObjCMatcher {
+@objc extension NMBObjCMatcher {
     
     public class func receiveMatcher(_ expectedValues: [NSObject]) -> NMBObjCMatcher {
         return NMBObjCMatcher(canMatchNil: false) { (actualExpression, failureMessage) -> Bool in
-            let expr = actualExpression.cast { $0 as? ERNode<NSObject> }
+            let expr = actualExpression.cast { $0 as? EZRNode<NSObject> }
             return try! receive(expectedValues).matches(expr, failureMessage: failureMessage)
         }
     }

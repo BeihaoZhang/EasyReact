@@ -17,13 +17,12 @@
 import Nimble
 import EasyReact
 
-    
-public func beEmptyValueTo() -> Predicate<ERNode<NSObject>> {
+public func beEmptyValueTo() -> Predicate<EZRNode<NSObject>> {
     return Predicate.define("is Empty Value") { (actualExpress, msg) -> PredicateResult in
         let actual = try actualExpress.evaluate()
         guard let node = actual else {
             return PredicateResult(bool: false,
-                                   message: msg.appended(message: "the actual value is not an ERNode<NSObject>"))
+                                   message: msg.appended(message: "the actual value is not an EZRNode<NSObject>"))
         }
         guard node.isEmpty else {
             return PredicateResult(bool: false,
@@ -33,10 +32,10 @@ public func beEmptyValueTo() -> Predicate<ERNode<NSObject>> {
     }
 }
 
-extension NMBObjCMatcher {
+@objc public extension NMBObjCMatcher {
     public class func beEmptyValueMatcher() -> NMBObjCMatcher {
         return NMBObjCMatcher(canMatchNil: false) { (actualExpression, failureMessage) -> Bool in
-            let expr = actualExpression.cast { $0 as? ERNode<NSObject> }
+            let expr = actualExpression.cast { $0 as? EZRNode<NSObject> }
             return try! beEmptyValueTo().matches(expr , failureMessage: failureMessage)
         }
     }

@@ -20,8 +20,8 @@ import XCTest
 import Quick
 import EasyReact
 
-public class AssertBlockContainer: NSObject {
-    public var action: (() -> Void)?
+@objc public class AssertBlockContainer: NSObject {
+    @objc public var action: (() -> Void)?
 }
 
 public func assertPredicate(_ isParamAssert: Bool) -> Predicate<AssertBlockContainer> {
@@ -50,7 +50,7 @@ public func assertPredicate(_ isParamAssert: Bool) -> Predicate<AssertBlockConta
     }
 }
 
-extension NMBObjCMatcher {
+@objc extension NMBObjCMatcher {
     
     public class func hasParameterAssertMatcher() -> NMBObjCMatcher {
         return NMBObjCMatcher(canMatchNil: false) {  (actualExpression, failureMessage) -> Bool in

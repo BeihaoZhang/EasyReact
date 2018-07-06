@@ -61,11 +61,11 @@ class RXSwiftBenchmarkTarget: NSObject, BenchmarkTargetProtocol {
         }
     }
     
-    func sync(toBenchmarkChangeTimes times: UInt) {
+    func sync(withBenchmarkChangeTimes times: UInt) {
         
     }
     
-    func fattenMapBenchmarkListenerCount(_ listenerCount: UInt, changeTimes times: UInt) {
+    func flattenMapBenchmarkListenerCount(_ listenerCount: UInt, changeTimes times: UInt) {
         let subject = ReplaySubject<Int>.create(bufferSize: 1)
         var subjectSum = 0
         for _ in 0...listenerCount {

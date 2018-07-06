@@ -23,10 +23,10 @@
 - (void)listenerBenchmarkListenerCount:(NSUInteger)listenerCount changeTimes:(NSUInteger)times;
 - (void)mapBenchmarkListenerCount:(NSUInteger)listenerCount changeTimes:(NSUInteger)times;
 - (void)filterBenchmarkListenerCount:(NSUInteger)listenerCount changeTimes:(NSUInteger)times;
-- (void)fattenMapBenchmarkListenerCount:(NSUInteger)listenerCount changeTimes:(NSUInteger)times;
+- (void)flattenMapBenchmarkListenerCount:(NSUInteger)listenerCount changeTimes:(NSUInteger)times;
 - (void)combineBenchmarkListenerCount:(NSUInteger)listenerCount changeTimes:(NSUInteger)times;
 - (void)zipBenchmarkListenerCount:(NSUInteger)listenerCount changeTimes:(NSUInteger)times;
 - (void)mergeBenchmarkListenerCount:(NSUInteger)listenerCount changeTimes:(NSUInteger)times;
-- (void)syncToBenchmarkChangeTimes:(NSUInteger)times;
+- (void)syncWithBenchmarkChangeTimes:(NSUInteger)times;
 
 @end

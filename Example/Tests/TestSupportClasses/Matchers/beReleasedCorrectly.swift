@@ -19,18 +19,18 @@ import Nimble
 import Quick
 import EasyReact
 
-public class CheckReleaseTool: NSObject {
+@objc public class CheckReleaseTool: NSObject {
     
-    var checkTable = NSHashTable<NSObject>.weakObjects()
+    @objc var checkTable = NSHashTable<NSObject>.weakObjects()
     
-    public func checkObj(_ obj: NSObject?) {
+    @objc public func checkObj(_ obj: NSObject?) {
         checkTable.add(obj)
     }
     
 }
 
-public class CheckReleaseToolBlockContainer: NSObject {
-    public var checkReleaseTool: ((CheckReleaseTool) -> Void)?
+@objc public class CheckReleaseToolBlockContainer: NSObject {
+    @objc public var checkReleaseTool: ((CheckReleaseTool) -> Void)?
 }
 
 
@@ -54,7 +54,7 @@ public func beReleasedCorrectly() -> Predicate<CheckReleaseToolBlockContainer> {
     }
 }
 
-extension NMBObjCMatcher {
+@objc extension NMBObjCMatcher {
     public class func beReleasedCorrectlyMatcher() -> NMBObjCMatcher {
         return NMBObjCMatcher(canMatchNil: false) { (actualExpression, failureMessage) -> Bool in
             let expr = actualExpression.cast {

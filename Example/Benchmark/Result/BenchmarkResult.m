@@ -15,6 +15,7 @@
  **/
 
 #import "BenchmarkResult.h"
+#import <EasySequence/EasySequence.h>
 #import <EasyReact/EasyReact.h>
 
 @interface BenchmarkResult ()
@@ -49,15 +50,14 @@
     makeLine([@[@"name"] arrayByAddingObjectsFromArray:self.testNames]);
     
     for (NSString *targetName in self.targetNames) {
-        makeLine([@[targetName] arrayByAddingObjectsFromArray:[self.testNames er_map:^id _Nonnull(NSString * _Nonnull value) {
+        makeLine([@[targetName] arrayByAddingObjectsFromArray:[[EZS_Sequence(self.testNames) map:^id _Nonnull(NSString * _Nonnull value) {
             return [self.testInfoDictionary[targetName][value] stringValue];
-        }]]);
+        }] as:NSArray.class]]);
     }
     return csvResult;
 }
 
 - (NSString *)markdownResult {
-
     NSMutableString *markdownResult = [NSMutableString string];
     //    |name|test1|test2|
     //    | --- | --- | --- |
@@ -68,11 +68,11 @@
     };
     makeLine([@[@"name"] arrayByAddingObjectsFromArray:self.testNames]);
     
-    makeLine([[@[@""] arrayByAddingObjectsFromArray:self.testNames] er_map:^(NSString *_){ return @" --- "; }]);
+    makeLine([[EZS_Sequence([@[@""] arrayByAddingObjectsFromArray:self.testNames]) map:^(NSString *_){ return @" --- "; }] as:NSArray.class]);
     for (NSString *targetName in self.targetNames) {
-        makeLine([@[targetName] arrayByAddingObjectsFromArray:[self.testNames er_map:^id _Nonnull(NSString * _Nonnull value) {
+        makeLine([@[targetName] arrayByAddingObjectsFromArray:[[EZS_Sequence(self.testNames) map:^id _Nonnull(NSString * _Nonnull value) {
             return [self.testInfoDictionary[targetName][value] stringValue];
-        }]]);
+        }] as:NSArray.class]] );
     }
     return markdownResult;
 }

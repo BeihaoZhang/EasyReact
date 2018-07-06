@@ -36,6 +36,6 @@ id<NMBMatcher> hasAssert() {
     return [NMBObjCMatcher hasAssertMatcher];
 }
 
-id<NMBMatcher> matchDotDSL(NSArray<ERNode *> *nodes, NSArray<ERTransform *> *transforms) {
+id<NMBMatcher> matchDotDSL(NSArray<EZRNode *> *nodes, NSArray<id<EZRNodeTransformProtocol>> *transforms) {
     return [NMBObjCMatcher matchDotDSL:nodes transforms:transforms];
 }

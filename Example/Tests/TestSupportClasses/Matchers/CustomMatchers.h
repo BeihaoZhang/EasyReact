@@ -19,12 +19,12 @@
 @import Nimble;
 @import EasyReact;
 
-id<NMBMatcher> beEmptyValue();
+id<NMBMatcher> beEmptyValue(void);
 id<NMBMatcher> receive(NSArray *arr);
-id<NMBMatcher> beReleasedCorrectly();
-id<NMBMatcher> hasParameterAssert();
-id<NMBMatcher> hasAssert();
-id<NMBMatcher> matchDotDSL(NSArray<ERNode *> *nodes, NSArray<ERTransform *> *transforms);
+id<NMBMatcher> beReleasedCorrectly(void);
+id<NMBMatcher> hasParameterAssert(void);
+id<NMBMatcher> hasAssert(void);
+id<NMBMatcher> matchDotDSL(NSArray<EZRNode *> *nodes, NSArray<id<EZRNodeTransformProtocol>> *transforms);
 
 
 #define  expectCheckTool(check)                                                                                         \

@@ -22,9 +22,9 @@ describe(@"NSObject extension test", ^{
             TestKVOClass *obj = [TestKVOClass new];
             obj.property1 = @"aaa";
             
-            ERNode *observer = obj.er_path[@"property1"];
+            EZRNode *observer = obj.ezr_path[@"property1"];
             
-            [observer startListenForTest];
+            [observer startListenForTestWithObj:obj];
             expect(observer.value).to(equal(@"aaa"));
             
             obj.property1 = @"bbb";
@@ -32,79 +32,89 @@ describe(@"NSObject extension test", ^{
             
             expect(observer).to(receive(@[@"aaa", @"bbb"]));
         });
-        
+
         it(@"becomes nil if the property is set to nil", ^{
             TestKVOClass *obj = [TestKVOClass new];
             obj.property1 = @"aaa";
             
-            ERNode *observer = obj.er_path[@"property1"];
+            EZRNode *observer = obj.ezr_path[@"property1"];
             expect(observer.value).to(equal(@"aaa"));
             
             obj.property1 = nil;
             expect(observer.value).to(beNil());
         });
     });
-    
+
     context(@"KVC", ^{
-        it(@"can set a value to an object(KVC)", ^{
+        it(@"can set a value to an object (KVC)", ^{
             TestKVOClass *obj = [TestKVOClass new];
             obj.property1 = @"aaa";
             
-            ERNode *setter = obj.er_path[@"property1"];
+            EZRMutableNode *setter = obj.ezr_path[@"property1"];
             setter.value = @"bbb";
             
             expect(obj.property1).to(equal(@"bbb"));
         });
         
-        it(@"can set an upstream ERNode", ^{
+        it(@"can set an upstream EZRNode", ^{
             TestKVOClass *obj = [TestKVOClass new];
             obj.property1 = @"aaa";
             
-            ERNode *value = obj.er_path[@"property1"];
-            ERNode *upstreamValue = [ERNode value:@"bbb"];
+            EZRNode *value = obj.ezr_path[@"property1"];
+            EZRNode *upstreamValue = [EZRNode value:@"bbb"];
             [value linkTo:upstreamValue];
             expect(obj.property1).to(equal(@"bbb"));
         });
         
-        it(@"can set keypath use er_path property", ^{
+        it(@"can set keypath use ezr_path property", ^{
             TestKVOClass *obj = [TestKVOClass new];
-            ERNode *node = [ERNode new];
+            EZRMutableNode *node = [EZRMutableNode new];
             
-            obj.er_path[@"property1"] = node;
+            obj.ezr_path[@"property1"] = node;
             
             node.value = @"xxx";
             expect(obj.property1).to(equal(@"xxx"));
         });
     });
-    
-    context(@"ER_PATH Macro", ^{
-        it(@"can set a value to an object use ER_PATH Macro", ^{
+
+    context(@"EZR_PATH Macro", ^{
+        it (@"equivalent to ezr_path", ^{
+            TestKVOClass *obj = [TestKVOClass new];
+            obj.property1 = @"aaa";
+
+            EZRMutableNode *node1 = obj.ezr_path[@"property1"];
+            EZRMutableNode *node2 = EZR_PATH(obj, property1);
+            expect(node1).to(equal(node2));
+        });
+        
+        it(@"can set a value to an object use EZR_PATH Macro", ^{
             TestKVOClass *obj = [TestKVOClass new];
             obj.property1 = @"aaa";
             
-            ERNode *setter = ER_PATH(obj, property1);
+            EZRMutableNode *setter = EZR_PATH(obj, property1);
+            expect(setter.value).to(equal(@"aaa"));
+
             setter.value = @"bbb";
-            
             expect(obj.property1).to(equal(@"bbb"));
         });
         
-        it(@"can get a value from an object use ER_PATH Macro", ^{
+        it(@"can get a value from an object use EZR_PATH Macro", ^{
             TestKVOClass *obj = [TestKVOClass new];
-            ERNode *node = [ERNode new];
+            EZRMutableNode *node = [EZRMutableNode new];
             
-            ER_PATH(obj, property1) = node;
+            EZR_PATH(obj, property1) = node;
             node.value = @"xxx";
             
             expect(obj.property1).to(equal(@"xxx"));
         });
     });
-    
+
     context(@"sync", ^{
         it(@"can sync two values bidirectionally", ^{
             TestKVOClass *obj1 = [TestKVOClass new];
             TestKVOClass *obj2 = [TestKVOClass new];
             
-            ER_PATH(obj2, property3) = ER_PATH(obj1, property1);
+            EZR_PATH(obj2, property3) = EZR_PATH(obj1, property1);
             
             obj1.property1 = @"xxx";
             expect(obj2.property3).to(equal(@"xxx"));
@@ -113,14 +123,14 @@ describe(@"NSObject extension test", ^{
             expect(obj1.property1).to(equal(@"yyy"));
         });
         
-        it(@"can sync value from another object use er_path", ^{
+        it(@"can sync value from another object use ezr_path", ^{
             TestKVOClass *obj1 = [TestKVOClass new];
             TestKVOClass *obj2 = [TestKVOClass new];
             
             obj1.property1 = @"xxx";
             obj2.property3 = @"yyy";
             
-            ER_PATH(obj2, property3) = ER_PATH(obj1, property1);
+            EZR_PATH(obj2, property3) = EZR_PATH(obj1, property1);
             expect(obj1.property1).to(equal(@"xxx"));
             expect(obj2.property3).to(equal(@"xxx"));
         });
@@ -132,7 +142,7 @@ describe(@"NSObject extension test", ^{
             obj1.property1 = [TestKVOClass new];
             obj2.property3 = [TestKVOClass new];
             
-            ER_PATH(obj2, property3.property3) = ER_PATH(obj1, property1.property1);
+            EZR_PATH(obj2, property3.property3) = EZR_PATH(obj1, property1.property1);
             
             obj1.property1.property1 = @"15";
             expect(obj2.property3.property3).to(equal(@"15"));
@@ -144,6 +154,20 @@ describe(@"NSObject extension test", ^{
             expect(obj2.property3.property3).to(equal(@1));
         });
     });
+
+    context(@"converting", ^{
+        it(@"can convert a NSObject to a EZRNode", ^{
+            UIView *obj = [[UIView alloc] initWithFrame:CGRectZero];
+            EZRNode *node = [obj ezr_toNode];
+            expect(node.value).to(equal(obj));
+        });
+        
+        it(@"can convert a NSObject to a EZRMutableNode", ^{
+            UIView *obj = [[UIView alloc] initWithFrame:CGRectZero];
+            EZRMutableNode *node = [obj ezr_toMutableNode];
+            expect(node.value).to(equal(obj));
+        });
+    });
     
     context(@"dealloc", ^{
         it(@"can be released correctly", ^{
@@ -151,7 +175,7 @@ describe(@"NSObject extension test", ^{
                 TestKVOClass *obj1 = [TestKVOClass new];
                 TestKVOClass *obj2 = [TestKVOClass new];
                 
-                ER_PATH(obj2, property3) = ER_PATH(obj1, property1);
+                EZR_PATH(obj2, property3) = EZR_PATH(obj1, property1);
                 
                 [checkTool checkObj:obj1];
                 [checkTool checkObj:obj2];
@@ -162,21 +186,21 @@ describe(@"NSObject extension test", ^{
         it(@"will be released if no one is listening", ^{
             expectCheckTool(^(CheckReleaseTool *checkTool) {
                 TestKVOClass *obj = TestKVOClass.new;
-                ERNode *value = ER_PATH(obj, property1);
+                EZRNode *value = EZR_PATH(obj, property1);
                 [checkTool checkObj:value];
             }).to(beReleasedCorrectly());
         });
         
         it(@"will be released after all the listeners stop listening", ^{
-            __weak ERNode *value = nil;
+            NSObject *listener = [NSObject new];
+            __weak EZRNode *value = nil;
             @autoreleasepool {
                 TestKVOClass *obj = TestKVOClass.new;
-                id<ERCancelable> cancelable = nil;
+                id<EZRCancelable> cancelable = nil;
                 @autoreleasepool {
-                    ERNode *strongValue = ER_PATH(obj, property1);
+                    EZRNode *strongValue = EZR_PATH(obj, property1);
                     value = strongValue;
-                    
-                    cancelable = [value listen:^(id next) {
+                    cancelable = [[value listenedBy:listener] withBlock:^(id  _Nullable next) {
                         
                     }];
                 }

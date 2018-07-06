@@ -67,7 +67,7 @@
     }
 }
 
-- (void)syncToBenchmarkChangeTimes:(NSUInteger)times {
+- (void)syncWithBenchmarkChangeTimes:(NSUInteger)times {
     TestObject *obj1 = [TestObject new];
     TestObject *obj2 = [TestObject new];
     
@@ -78,7 +78,7 @@
     }
 }
 
-- (void)fattenMapBenchmarkListenerCount:(NSUInteger)listenerCount changeTimes:(NSUInteger)times {
+- (void)flattenMapBenchmarkListenerCount:(NSUInteger)listenerCount changeTimes:(NSUInteger)times {
     __block long long subjectSum = 0;
     RACSubject *subject = [RACSubject subject];
     for (int i = 0; i < listenerCount; ++i) {

@@ -16,7 +16,7 @@
 
 #import "ViewController.h"
 #import "Benchmark.h"
-#import "ERBenchmarkTarget.h"
+#import "EZRBenchmarkTarget.h"
 #import "RACBenchmarkTarget.h"
 #import "BenchmarkTest.h"
 #import "BenchmarkResult.h"
@@ -31,10 +31,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
 
     Benchmark *benchmark = [Benchmark new];
-    benchmark.benchmarkTargets = @[[ERBenchmarkTarget new], [RACBenchmarkTarget new], [RXSwiftBenchmarkTarget new]];
+    benchmark.benchmarkTargets = @[[EZRBenchmarkTarget new], [RACBenchmarkTarget new], [RXSwiftBenchmarkTarget new]];
     NSUInteger listenerCount = 10;
     NSUInteger changeTimes = 1000;
     NSArray<BenchmarkTest *> *tests = @[
@@ -47,7 +46,7 @@
                                         [BenchmarkTest testWithName:@"filter" block:^(id<BenchmarkTargetProtocol> target) {
                                             [target filterBenchmarkListenerCount:listenerCount changeTimes:changeTimes];
                                         }],
-                                        [BenchmarkTest testWithName:@"fattenMap" block:^(id<BenchmarkTargetProtocol> target) {
+                                        [BenchmarkTest testWithName:@"flattenMap" block:^(id<BenchmarkTargetProtocol> target) {
                                             [target filterBenchmarkListenerCount:listenerCount changeTimes:changeTimes];
                                         }],
                                         [BenchmarkTest testWithName:@"combine" block:^(id<BenchmarkTargetProtocol> target) {
@@ -59,8 +58,8 @@
                                         [BenchmarkTest testWithName:@"merge" block:^(id<BenchmarkTargetProtocol> target) {
                                             [target mergeBenchmarkListenerCount:listenerCount changeTimes:changeTimes];
                                         }],
-                                        [BenchmarkTest testWithName:@"syncTo" block:^(id<BenchmarkTargetProtocol> target) {
-                                            [target syncToBenchmarkChangeTimes:changeTimes];
+                                        [BenchmarkTest testWithName:@"syncWith" block:^(id<BenchmarkTargetProtocol> target) {
+                                            [target syncWithBenchmarkChangeTimes:changeTimes];
                                         }]
                                         ];
     benchmark.benchmarkTests = tests;
