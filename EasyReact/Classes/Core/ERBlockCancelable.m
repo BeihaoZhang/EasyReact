@@ -17,11 +17,11 @@
 #import "ERBlockCancelable.h"
 
 @implementation ERBlockCancelable {
-    @private
     ERCancelBlockType _block;
 }
 
 - (instancetype)initWithBlock:(ERCancelBlockType)block {
+    NSParameterAssert(block);
     if (self = [super init]) {
         _block = [block copy];
     }
@@ -29,8 +29,14 @@
 }
 
 - (void)cancel {
-    if (_block) {
-        _block();
+    ERCancelBlockType block = nil;
+    @synchronized(self) {
+        block = _block;
+        _block = nil;
+    }
+    if (block) {
+        block();
     }
 }
+
 @end

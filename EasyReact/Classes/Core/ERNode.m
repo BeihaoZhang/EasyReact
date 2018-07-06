@@ -292,6 +292,7 @@ NSString *ERNodeExceptionName = @"ERNodeException";
     
     [transform breakLinking];
     [downstream checkRelease];
+    [self checkRelease];
 }
 
 - (void)removeDownstreamNodes {

@@ -22,7 +22,10 @@ typedef void(^ERCancelBlockType)(void);
 
 @interface ERBlockCancelable : NSObject <ERCancelable>
 
-- (instancetype)initWithBlock:(ERCancelBlockType)block;
+- (instancetype)initWithBlock:(ERCancelBlockType)block NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 
 @end
 

@@ -17,7 +17,6 @@
 #import "ERBlockDeliveredListener.h"
 
 @implementation ERBlockDeliveredListener {
-    @private
     dispatch_queue_t _queue;
 }
 

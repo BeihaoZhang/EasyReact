@@ -39,6 +39,7 @@
         _syncFlags = [NSMutableDictionary dictionary];
         ER_LOCK_INIT(_keyPathNodesLock);
         ER_LOCK_INIT(_syncFlagsLock);
+        
         [_target er_listenDealloc:^{
             NSArray<NSString *> *keyPaths = ({
                 ER_SCOPELOCK(self->_keyPathNodesLock);

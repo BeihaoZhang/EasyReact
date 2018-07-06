@@ -22,7 +22,10 @@ typedef void(^ERListenerBlockType)(id _Nullable next);
 
 @interface ERBlockListener : NSObject <ERListener>
 
-- (instancetype)initWithBlock:(ERListenerBlockType)block;
+- (instancetype)initWithBlock:(ERListenerBlockType)block NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 
 @end
 

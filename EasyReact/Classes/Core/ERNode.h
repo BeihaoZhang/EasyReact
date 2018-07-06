@@ -132,7 +132,6 @@ extern NSString *ERNodeExceptionName; // @"ERNodeException"
  */
 - (id<ERCancelable>)listen:(void (^)(T _Nullable next))listenerBlock;
 
-
 /**
  监听值的变化，当值发生变化的时候会在指定队列调用入参的 block。
 
@@ -141,7 +140,6 @@ extern NSString *ERNodeExceptionName; // @"ERNodeException"
  @return 可以取消监听的 cancelable 对象
  */
 - (id<ERCancelable>)listen:(void (^)(T _Nullable next))listenerBlock on:(dispatch_queue_t)queue;
-
 
 /**
  监听值的变化，当值发生变化的时候会在主队列调用入参的 block

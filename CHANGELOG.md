@@ -1,4 +1,10 @@
 # Change Log
+
+## 1.3.2
+
+-  修改 Node 内存泄露问题
+-  修改 DelivedOnMainQueue 实现
+
 ## 1.3.1
 
 -  新增 `er_deallocCancelBag` 接口

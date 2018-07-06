@@ -15,14 +15,13 @@
  **/
 
 #import "ERBlockListener.h"
-#import "ERNode.h"
 
 @implementation ERBlockListener {
-    @private
     ERListenerBlockType _block;
 }
 
 - (instancetype)initWithBlock:(ERListenerBlockType)block {
+    NSParameterAssert(block);
     if (self = [super init]) {
         _block = [block copy];
     }
@@ -30,7 +29,9 @@
 }
 
 - (void)next:(id)value from:(ERNode *)sender {
-    _block(value);
+    if (_block) {
+        _block(value);
+    }
 }
 
 @end

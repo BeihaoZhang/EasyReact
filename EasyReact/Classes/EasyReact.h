@@ -50,7 +50,6 @@ FOUNDATION_EXPORT const unsigned char EasyReactVersionString[];
 
 // Transforms
 #import <EasyReact/ERDeliverTransform.h>
-#import <EasyReact/ERDeliverOnMainThreadTransform.h>
 #import <EasyReact/ERThrottleTransform.h>
 #import <EasyReact/ERDistinctTransform.h>
 #import <EasyReact/ERFilteredTransform.h>

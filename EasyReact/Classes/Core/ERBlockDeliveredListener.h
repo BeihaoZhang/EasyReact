@@ -20,7 +20,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ERBlockDeliveredListener : ERBlockListener<ERListener>
 
-- (instancetype)initWithBlock:(ERListenerBlockType)block on:(dispatch_queue_t)queue;
+- (instancetype)initWithBlock:(ERListenerBlockType)block on:(dispatch_queue_t)queue NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)initWithBlock:(ERListenerBlockType)block NS_UNAVAILABLE;
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 
 @end
 
