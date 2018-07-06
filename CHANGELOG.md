@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.2.1
+
+-  新增 `fork` 接口
+
 ## 1.2.0
 
 -  新增 `deliverOn:(dispatch_queue_t)queue` 和 `deliverOnMainQueue;` 接口

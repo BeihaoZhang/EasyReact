@@ -1,5 +1,5 @@
 PODS:
-  - EasyReact (1.2.0):
+  - EasyReact (1.2.1):
     - ZTuple (= 1.2.0)
   - Nimble (7.1.2)
   - Quick (1.3.0)
@@ -33,7 +33,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  EasyReact: 09501910924b33a377e411bc699d72170f6c4e53
+  EasyReact: 7afe0071ca80c64e76accf3e0360bf609f05ce6c
   Nimble: 3835ba9f459daa6b347f8a8e110aaae8ca1920a8
   Quick: 03278013f71aa05fe9ecabc94fbcc6835f1ee76f
   ReactiveCocoa: e2db045570aa97c695e7aa97c2bcab222ae51f4a

@@ -30,6 +30,7 @@ extern NSString *ERExceptionReason_MapEachNextValueNotTuple;
 
 #pragma mark For single upstream
 
+- (ERNode<T> *)fork;
 - (ERNode *)map:(id _Nullable (^)(T _Nullable next))block;
 - (ERNode<T> *)filter:(BOOL (^)(T _Nullable next))block;
 - (ERNode<T> *)skip:(NSUInteger)number;

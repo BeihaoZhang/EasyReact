@@ -17,6 +17,26 @@
 QuickSpecBegin(ERNodeOperation)
 
 describe(@"ERNode operation test", ^{
+    context(@"fork", ^{
+        it(@"can fork a new node", ^{
+            ERNode<NSNumber *> *oriNode = ERNode.new;
+            ERNode<NSNumber *> *forkedNode = [oriNode fork];
+            expect(forkedNode).notTo(beNil());
+            expect(forkedNode.upstreamNodes).to(contain(oriNode));
+            [forkedNode startListenForTest];
+            oriNode.value = @10;
+            expect(forkedNode).to(receive(@[@10]));
+            expect(forkedNode.value).to(equal(@10));
+        });
+        it(@"can be released correctly", ^{
+            expectCheckTool(^(CheckReleaseTool *checkTool) {
+                ERNode<NSNumber *> *oriNode = ERNode.new;
+                ERNode<NSNumber *> *forkedNode = [oriNode fork];
+                [checkTool checkObj:oriNode];
+                [checkTool checkObj:forkedNode];
+            }).to(beReleasedCorrectly());
+        });
+    });
     context(@"deliver on queue", ^{
         it(@"can deliver on a custome queue", ^{
             dispatch_queue_t queue = dispatch_queue_create("com.er.deliverQueue", DISPATCH_QUEUE_SERIAL);

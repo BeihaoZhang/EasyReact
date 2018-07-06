@@ -41,6 +41,12 @@ NSString *ERExceptionReason_MapEachNextValueNotTuple = @"the mapEack Block next 
 
 @implementation ERNode (Operation)
 
+- (ERNode *)fork {
+    ERNode *returnedNode = ERNode.new;
+    [returnedNode linkTo:self];
+    return returnedNode;
+}
+
 - (ERNode *)map:(ERMapBlock)block {
     ERNode *returnedNode = ERNode.new;
     [returnedNode linkTo:self transform:[[ERMapTransform alloc] initWithMapBlock:block]];
