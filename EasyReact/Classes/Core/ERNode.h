@@ -118,6 +118,12 @@ extern NSString *ERNodeExceptionName; // @"ERNodeException"
  */
 - (instancetype)namedWithFormat:(NSString *)format, ...;
 
+
+/**
+ 清除节点当前的值，使其恢复为empty
+ */
+- (void)clean;
+
 /**
  监听值的变化，当值发生变化的时候会调用入参的 block。
 

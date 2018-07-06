@@ -122,6 +122,10 @@ NSString *ERNodeExceptionName = @"ERNodeException";
     return self.value == EREmpty.empty;
 }
 
+- (void)clean {
+    self.value = [EREmpty empty];
+}
+
 #pragma mark listener
 
 - (NSArray<id<ERListener>> *)listeners {

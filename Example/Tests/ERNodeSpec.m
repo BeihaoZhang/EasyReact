@@ -33,6 +33,14 @@ describe(@"ERNode common test", ^{
             expect(testNode.isEmpty).to(beTrue());
         });
         
+        it(@"can clean the value", ^{
+            ERNode *testNode = [ERNode value:@1];
+            
+            expect(testNode.value).to(equal(@1));
+            [testNode clean];
+            expect(testNode).to(beEmptyValue());
+        });
+        
         it(@"can get last value when set some times", ^{
             ERNode *testNode = [ERNode value:@1];
             testNode.value = @2;
