@@ -1,0 +1,10 @@
+//  The contents of this file are implicitly included at the beginning of every test case source file.
+
+#ifdef __OBJC__
+
+#import <ZTuple/ZTuple.h>
+#import "TestKVOClass.h"
+#import "CustomMatchers.h"
+#import "EasyReact_Tests-Swift.h"
+
+#endif
