@@ -15,6 +15,8 @@
  **/
 
 #import "ERNode+Operation.h"
+#import "ERDeliverTransform.h"
+#import "ERDeliverOnMainThreadTransform.h"
 #import "ERMapTransform.h"
 #import "ERFilteredTransform.h"
 #import "ERDistinctTransform.h"
@@ -75,6 +77,19 @@ NSString *ERExceptionReason_MapEachNextValueNotTuple = @"the mapEack Block next 
     return [self map:^id _Nullable(id  _Nullable next) {
         return  mappedValue;
     }];
+}
+
+- (ERNode*)deliverOn:(dispatch_queue_t)queue {
+    NSParameterAssert(queue);
+    ERNode *returnedNode = ERNode.new;
+    [returnedNode linkTo:self transform:[[ERDeliverTransform alloc] initWithQueue:queue]];
+    return returnedNode;
+}
+
+- (ERNode *)deliverOnMainQueue {
+    ERNode *returnedNode = ERNode.new;
+    [returnedNode linkTo:self transform:[ERDeliverOnMainThreadTransform new]];
+    return returnedNode;
 }
 
 - (ERNode *)distinctUntilChanged {

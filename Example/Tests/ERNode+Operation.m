@@ -17,6 +17,60 @@
 QuickSpecBegin(ERNodeOperation)
 
 describe(@"ERNode operation test", ^{
+    context(@"deliver on queue", ^{
+        it(@"can deliver on a custome queue", ^{
+            dispatch_queue_t queue = dispatch_queue_create("com.er.deliverQueue", DISPATCH_QUEUE_SERIAL);
+            ERNode<NSNumber *> *oriNode = ERNode.new;
+            ERNode<NSNumber *> *testNode = [oriNode deliverOn:queue];
+            [testNode listen:^(NSNumber * _Nullable next) {
+                expect([NSThread currentThread].isMainThread).to(beFalse());
+            }];
+            oriNode.value = @1;
+        });
+        
+        it(@"can deliver on mainQueue", ^{
+            dispatch_queue_t queue = dispatch_queue_create("com.er.deliverQueue", DISPATCH_QUEUE_SERIAL);
+            ERNode<NSNumber *> *oriNode = ERNode.new;
+            ERNode<NSNumber *> *testNode = [oriNode deliverOnMainQueue];
+            [testNode listen:^(NSNumber * _Nullable next) {
+                expect([NSThread currentThread].isMainThread).to(beTrue());
+            }];
+            dispatch_async(queue, ^{
+                oriNode.value = @1;
+            });
+        });
+        
+        it(@"can listen on a special queue use listenOn:queue whatever you deliver on any queue", ^{
+            dispatch_queue_t sendQueue = dispatch_queue_create("com.er.deliverQueue1", DISPATCH_QUEUE_SERIAL);
+            dispatch_queue_t listenerQueue = dispatch_queue_create("com.er.listenerQueue", DISPATCH_QUEUE_SERIAL);
+            
+            ERNode<NSNumber *> *oriNode = ERNode.new;
+            ERNode<NSNumber *> *testNode = [oriNode deliverOn:sendQueue];
+            [testNode listen:^(NSNumber * _Nullable next) {
+                expect([NSThread currentThread].isMainThread).to(beFalse());
+            }];
+            [testNode listen:^(NSNumber * _Nullable next) {
+                expect([NSThread currentThread].isMainThread).to(beFalse());
+            }
+                          on:listenerQueue];
+            [testNode listenOnMainQueue:^(NSNumber * _Nullable next) {
+                 expect([NSThread currentThread].isMainThread).to(beTrue());
+            }];
+            oriNode.value  = @1;
+            dispatch_async(sendQueue, ^{
+                oriNode.value  = @2;
+            });
+        });
+        
+        it(@"should raise an asset if deliver on a NULL queue ",^{
+            assertExpect(^{
+                dispatch_queue_t queue = NULL;
+                ERNode<NSNumber *> *oriNode = ERNode.new;
+                [oriNode deliverOn:queue];
+            }).to(hasParameterAssert());
+        });
+    });
+    
     context(@"map", ^{
         it(@"can map to get a new value", ^{
             ERNode<NSNumber *> *testValue = [ERNode value:@1];

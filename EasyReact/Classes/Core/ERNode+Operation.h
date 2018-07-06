@@ -38,6 +38,9 @@ extern NSString *ERExceptionReason_MapEachNextValueNotTuple;
 - (ERNode<T> *)mapReplace:(nullable id)mappedValue;
 - (ERNode<T> *)distinctUntilChanged;
 
+- (ERNode<T> *)deliverOn:(dispatch_queue_t)queue;
+- (ERNode<T> *)deliverOnMainQueue;
+
 /**
  Sync the current value to another value.
  The other ERNode's value will be set to the current ERNode's value even if the current value is empty.
