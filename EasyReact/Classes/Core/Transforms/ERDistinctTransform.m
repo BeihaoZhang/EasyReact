@@ -30,7 +30,7 @@
     if (self.to.value == value || [self.to.value isEqual:value]) {
         return;
     }
-    [self.to next:value from:senderList];
+    [super next:value from:senderList];
 }
 
 @end

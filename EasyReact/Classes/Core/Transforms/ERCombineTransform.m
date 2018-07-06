@@ -46,7 +46,7 @@
     
     id nextValue = [self.group nextValue];
     if (nextValue != EREmpty.empty) {
-        [self.to next:nextValue from:senderList];
+        [super next:nextValue from:senderList];
     }
 }
 

@@ -46,8 +46,8 @@ extern NSString *ERExceptionReason_MapEachNextValueNotTuple;
  @param otherNode The other ERNode you want to sync.
  @return a cancelable object which is able to stop syncing.
  */
-- (id<ERCancelable>)syncTo:(ERNode<T> *)otherNode;
-- (id<ERCancelable>)syncTo:(ERNode *)otherNode transform:(id (^)(T source))transform revert:(T (^)(id target))revert;
+- (id<ERCancelable>)syncWith:(ERNode<T> *)otherNode;
+- (id<ERCancelable>)syncWith:(ERNode *)otherNode transform:(id (^)(T source))transform revert:(T (^)(id target))revert;
 
 - (ERNode *)flattenMap:(ERNode * _Nullable (^)(T _Nullable next))block;
 - (ERNode *)flatten;

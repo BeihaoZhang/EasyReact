@@ -38,6 +38,7 @@
 }
 
 - (void)linkNode:(nonnull ERNode *)fromNode to:(nonnull ERNode *)toNode {
+    [self breakLinking];
     self.from = fromNode;
     self.to = toNode;
 }

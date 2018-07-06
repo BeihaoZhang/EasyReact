@@ -33,7 +33,7 @@
     return self;
 }
 
-- (void)next:(id)value from:(ERSenderList *)senderlist {
+- (void)next:(id)value from:(ERSenderList *)senderList {
     [_nextQueue enqueue:value];
     
     if (!self.group) {
@@ -42,7 +42,7 @@
     
     id nextValue = [self.group nextValue];
     if (nextValue != EREmpty.empty) {
-        [self.to next:nextValue from:senderlist];
+        [super next:nextValue from:senderList];
     }
 }
 

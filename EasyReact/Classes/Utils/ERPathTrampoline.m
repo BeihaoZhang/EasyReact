@@ -58,7 +58,7 @@
     NSParameterAssert(keyPath);
     
     ERNode *keyPathNode = self[keyPath];
-    [keyPathNode syncTo:node];
+    [keyPathNode syncWith:node];
 }
 
 - (ERNode *)nodeWithKeyPath:(NSString *)keyPath {

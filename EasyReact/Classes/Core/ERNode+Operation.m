@@ -113,7 +113,7 @@ NSString *ERExceptionReason_MapEachNextValueNotTuple = @"the mapEack Block next 
     return returnedNode;
 }
 
-- (id<ERCancelable>)syncTo:(ERNode *)otherNode transform:(id  _Nonnull (^)(id _Nonnull))transform revert:(id  _Nonnull (^)(id _Nonnull))revert {
+- (id<ERCancelable>)syncWith:(ERNode *)otherNode transform:(id  _Nonnull (^)(id _Nonnull))transform revert:(id  _Nonnull (^)(id _Nonnull))revert {
     NSParameterAssert(transform);
     NSParameterAssert(revert);
     ERMapTransform *mapTransform = [[ERMapTransform alloc] initWithMapBlock:transform];
@@ -127,9 +127,9 @@ NSString *ERExceptionReason_MapEachNextValueNotTuple = @"the mapEack Block next 
     }];
 }
 
-- (id<ERCancelable>)syncTo:(ERNode *)otherNode {
+- (id<ERCancelable>)syncWith:(ERNode *)otherNode {
     id (^idFunction)(id) = ^(id source) { return source; };
-    return [self syncTo:otherNode transform:idFunction revert:idFunction];
+    return [self syncWith:otherNode transform:idFunction revert:idFunction];
 }
 
 + (ERNode *)merge:(NSArray<ERNode *> *)nodes {

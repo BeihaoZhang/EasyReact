@@ -290,7 +290,7 @@ describe(@"ERNode operation test", ^{
             ERNode *value1 = [ERNode value:@1];
             ERNode *value2 = [ERNode value:@2];
 
-            [value1 syncTo:value2];
+            [value1 syncWith:value2];
             expect(value1.hasUpstreamNode).to(beTrue());
             expect(value2.hasUpstreamNode).to(beTrue());
             expect(value1.hasDownstreamNode).to(beTrue());
@@ -308,7 +308,7 @@ describe(@"ERNode operation test", ^{
             ERNode *value1 = [ERNode value:@1];
             ERNode *value2 = [ERNode value:@2];
 
-            id<ERCancelable> cancelable = [value1 syncTo:value2];
+            id<ERCancelable> cancelable = [value1 syncWith:value2];
             expect(value1.value).to(equal(@2));
 
             [cancelable cancel];
@@ -324,7 +324,7 @@ describe(@"ERNode operation test", ^{
             ERNode<NSNumber *> *value1 = ERNode.new;
             ERNode<NSNumber *> *value2 = ERNode.new;
 
-            [value1 syncTo:value2 transform:^NSNumber *(NSNumber *source) {
+            [value1 syncWith:value2 transform:^NSNumber *(NSNumber *source) {
                 return @(source.unsignedIntegerValue  * 2);
             } revert:^NSNumber *(NSNumber *target) {
                 return @(target.unsignedIntegerValue  / 2);
@@ -342,8 +342,8 @@ describe(@"ERNode operation test", ^{
             ERNode<NSNumber *> *nodea = ERNode.new;
             ERNode<NSNumber *> *nodeb = ERNode.new;
             ERNode<NSNumber *> *nodec = ERNode.new;
-            [nodea syncTo:nodeb];
-            [nodec syncTo:nodeb];
+            [nodea syncWith:nodeb];
+            [nodec syncWith:nodeb];
             nodea.value = @10;
             expect(nodeb.value).to(equal(@10));
             expect(nodec.value).to(equal(@10));
@@ -356,8 +356,8 @@ describe(@"ERNode operation test", ^{
                 ERNode<NSNumber *> *nodea = ERNode.new;
                 ERNode<NSNumber *> *nodeb = ERNode.new;
                 ERNode<NSNumber *> *nodec = ERNode.new;
-                [nodea syncTo:nodeb];
-                [nodec syncTo:nodeb];
+                [nodea syncWith:nodeb];
+                [nodec syncWith:nodeb];
                 
                 [checkTool checkObj:nodea];
                 [checkTool checkObj:nodeb];
@@ -373,9 +373,9 @@ describe(@"ERNode operation test", ^{
             ERNode<NSNumber *> *nodea = ERNode.new;
             ERNode<NSNumber *> *nodeb = ERNode.new;
             ERNode<NSNumber *> *nodec = ERNode.new;
-            [nodea syncTo:nodeb];
-            [nodeb syncTo:nodec];
-            [nodec syncTo:nodea];
+            [nodea syncWith:nodeb];
+            [nodeb syncWith:nodec];
+            [nodec syncWith:nodea];
             nodea.value = @10;
             expect(nodeb.value).to(equal(@10));
             expect(nodec.value).to(equal(@10));
@@ -391,9 +391,9 @@ describe(@"ERNode operation test", ^{
                 ERNode<NSNumber *> *nodea = ERNode.new;
                 ERNode<NSNumber *> *nodeb = ERNode.new;
                 ERNode<NSNumber *> *nodec = ERNode.new;
-                [nodea syncTo:nodeb];
-                [nodeb syncTo:nodec];
-                [nodec syncTo:nodea];
+                [nodea syncWith:nodeb];
+                [nodeb syncWith:nodec];
+                [nodec syncWith:nodea];
                 [checkTool checkObj:nodea];
                 [checkTool checkObj:nodeb];
                 [checkTool checkObj:nodec];
@@ -406,9 +406,9 @@ describe(@"ERNode operation test", ^{
                 ERNode<NSNumber *> *nodeb = ERNode.new;
                 ERNode<NSNumber *> *nodec = ERNode.new;
                 
-                [nodea syncTo:nodeb];
-                [nodeb syncTo:nodec];
-                [nodec syncTo:nodea];
+                [nodea syncWith:nodeb];
+                [nodeb syncWith:nodec];
+                [nodec syncWith:nodea];
                 [checkTool checkObj:nodeb];
                 [checkTool checkObj:nodec];
             }).to(beReleasedCorrectly());
@@ -419,7 +419,7 @@ describe(@"ERNode operation test", ^{
                 ERNode *value1 = [ERNode value:@1];
                 ERNode *value2 = [ERNode value:@2];
 
-                [value1 syncTo:value2];
+                [value1 syncWith:value2];
                 [checkTool checkObj:value1];
                 [checkTool checkObj:value2];
             }).to(beReleasedCorrectly());
@@ -435,7 +435,7 @@ describe(@"ERNode operation test", ^{
                 mappedValue = [numbERNode flattenMap:^ERNode * _Nullable(NSNumber * _Nullable next) {
                     ERNode *value = ERNode.new;
                     for (int i = 0; i < next.integerValue; ++i) {
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.01 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
                             value.value = @(i);
                         });
                     }
@@ -445,16 +445,16 @@ describe(@"ERNode operation test", ^{
 
                 [mappedValue startListenForTest];
 
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
                     numbERNode.value = @1;
                 });
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
                     numbERNode.value = @2;
                 });
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
                     numbERNode.value = @3;
                 });
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 4 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.4 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
                     done();
                 });
             });

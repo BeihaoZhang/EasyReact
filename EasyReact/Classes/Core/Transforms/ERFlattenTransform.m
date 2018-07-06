@@ -53,8 +53,12 @@
     @er_weakify(self)
     self.cancelable = [node listen:^(id  _Nullable next) {
         @er_strongify(self)
-        [self.to next:next from:senderList];
+        [self _superNext:next from:senderList];
     }];
+}
+
+- (void)_superNext:(id)value from:(ERSenderList *)senderList {
+    [super next:value from:senderList];
 }
 
 - (void)dealloc {

@@ -47,7 +47,7 @@
     }
     
     _throttleSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, _queue);
-    dispatch_source_set_timer(_throttleSource, dispatch_time(DISPATCH_TIME_NOW, _throttleInterval * NSEC_PER_SEC), DISPATCH_TIME_FOREVER, 0);
+    dispatch_source_set_timer(_throttleSource, dispatch_time(DISPATCH_TIME_NOW, _throttleInterval * NSEC_PER_SEC), DISPATCH_TIME_FOREVER, 0.005);
     
     @er_weakify(self)
     dispatch_source_set_event_handler(_throttleSource, ^{
@@ -56,13 +56,17 @@
             return ;
         }
         ER_SCOPELOCK(self->_sourceLock);
-        [self.to next:value from:senderList];
+        [self _superNext:value from:senderList];
         
         dispatch_source_cancel(self->_throttleSource);
         self->_throttleSource = nil;
     });
     
     dispatch_resume(_throttleSource);
+}
+
+- (void)_superNext:(id)value from:(ERSenderList *)senderList {
+    [super next:value from:senderList];
 }
 
 @end

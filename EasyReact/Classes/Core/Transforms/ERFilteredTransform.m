@@ -32,7 +32,7 @@
 
 - (void)next:(id)value from:(ERSenderList *)senderList {
     if (_block && _block(value)) {
-        [self.to next:value from:senderList];
+        [super next:value from:senderList];
     }
 }
 

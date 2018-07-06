@@ -351,7 +351,7 @@ Xcode 9, iOS11, iPhone X simulator
 
 重复上面的实验10次，得到数据平均值如下。
 
-|name|listener|map|filter|fattenMap|combine|zip|merge|syncTo|
+|name|listener|map|filter|fattenMap|combine|zip|merge|syncWith|
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 |ERNode|6190929|68637372|21442593|19151285|16321936|157713421|59110553|20955312|
 |ReactiveCocoa|5372738|116090536|80578466|70141812|420171171|241515088|18736906|79677172|
