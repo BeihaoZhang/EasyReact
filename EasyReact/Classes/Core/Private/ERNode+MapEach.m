@@ -22,7 +22,11 @@
 
 @implementation ERNode (MapEach)
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wstrict-prototypes"
 - (ERNode *)mapEach:(id (^)())block  {
+#pragma clang diagnostic pop
+
     return [self map:^id _Nullable(ZTupleBase *tuple) {
         if (![tuple isKindOfClass:[ZTupleBase class]]) {
             ER_THROW(ERNodeExceptionName, ERExceptionReason_MapEachNextValueNotTuple, nil)

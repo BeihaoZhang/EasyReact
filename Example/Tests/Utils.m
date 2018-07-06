@@ -241,26 +241,39 @@ describe(@"Utils test", ^{
     context(@"NSObject ER_DeallocSwizzle test", ^{
         it(@"can sent will dealloc when an object dealloc which class don't have dealloc method", ^{
             __block BOOL receiveCallback = NO;
+           
             @autoreleasepool {
                 TestKVOClass *obj = [TestKVOClass new];
-                
                 [obj er_listenDealloc:^{
                     receiveCallback = YES;
                 }];
-                
             }
             expect(receiveCallback).to(beTrue());
         });
         
         it(@"can sent will dealloc when an object dealloc which class have dealloc method", ^{
             __block BOOL receiveCallback = NO;
+            
             @autoreleasepool {
-                TestKVOClassWithDealloc *obj = [TestKVOClassWithDealloc new];
+                TestKVOClass *obj = [TestKVOClass new];
                 [obj er_listenDealloc:^{
                     receiveCallback = YES;
                 }];
             }
             expect(receiveCallback).to(beTrue());
+        });
+        
+        it(@"cat't receive dealloc callback when cancel the listen dealloc", ^{
+            __block BOOL receiveCallback = NO;
+            
+            @autoreleasepool {
+                TestKVOClass *obj = [TestKVOClass new];
+                id<ERCancelable> cancelable = [obj er_listenDealloc:^{
+                    receiveCallback = YES;
+                }];
+                [cancelable cancel];
+            }
+            expect(receiveCallback).to(beFalse());
         });
     });
 });

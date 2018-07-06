@@ -14,15 +14,20 @@
  * limitations under the License.
  **/
 
-#import <Foundation/Foundation.h>
+#import <EasyReact/ERCancelable.h>
 
-@class ERCancelableBag;
-@protocol ERCancelable;
+NS_ASSUME_NONNULL_BEGIN
 
-@interface NSObject (ER_DeallocSwizzle)
+@interface ERCancelableBag : NSObject <ERCancelable>
 
-@property (nonatomic, readonly, strong) ERCancelableBag *er_deallocCancelBag;
++ (instancetype)bag;
 
-- (id<ERCancelable>)er_listenDealloc:(void (^)(void))deallocBlock;
+- (void)addCancelable:(id<ERCancelable>)cancelable;
+
+- (void)addCancelBlock:(void (^)(void))cancelBlock;
+
+- (void)removeCancelable:(id<ERCancelable>)cancelable;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -35,6 +35,7 @@ FOUNDATION_EXPORT const unsigned char EasyReactVersionString[];
 #import <EasyReact/ERTypeDefine.h>
 #import <EasyReact/ERNode+Traversal.h>
 #import <EasyReact/ERNode+Graph.h>
+#import <EasyReact/ERCancelableBag.h>
 
 // Utils
 #import <EasyReact/NSArray+ER_Extension.h>

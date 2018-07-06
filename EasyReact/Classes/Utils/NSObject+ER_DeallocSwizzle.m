@@ -15,27 +15,45 @@
  **/
 
 #import "NSObject+ER_DeallocSwizzle.h"
-#import "ERNode.h"
-#import "EREmpty.h"
+#import "ERCancelableBag.h"
+#import "ERBlockCancelable.h"
+#import "ERMetaMacros.h"
 @import ObjectiveC.runtime;
 @import ObjectiveC.message;
 
-static const void *ERObjectWillDeallocNodeKey = &ERObjectWillDeallocNodeKey;
+static const void *ERObjectDeallocBagKey = &ERObjectDeallocBagKey;
 static void swizzleDeallocIfNeeded(Class classToSwizzle);
 
 @implementation NSObject (ER_DeallocSwizzling)
 
-- (id<ERCancelable>)er_listenDealloc:(void (^)(void))listenerBlock {
-    ERNode *willDeallocNode = objc_getAssociatedObject(self, ERObjectWillDeallocNodeKey);
-    if (willDeallocNode == nil) {
-        swizzleDeallocIfNeeded(self.class);
-        willDeallocNode = ERNode.new;
-        objc_setAssociatedObject(self, ERObjectWillDeallocNodeKey, willDeallocNode, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
-    return [willDeallocNode listen:^(id  _Nullable next) {
-        if (listenerBlock) {
-            listenerBlock();
+- (ERCancelableBag *)er_deallocCancelBag {
+    ERCancelableBag *cancelableBag = objc_getAssociatedObject(self, ERObjectDeallocBagKey);
+    
+    if (!cancelableBag) {
+        @synchronized(self) {
+            cancelableBag = objc_getAssociatedObject(self, ERObjectDeallocBagKey);
+            if (!cancelableBag) {
+                swizzleDeallocIfNeeded(self.class);
+                cancelableBag = [ERCancelableBag bag];
+                objc_setAssociatedObject(self, ERObjectDeallocBagKey, cancelableBag, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+            }
         }
+    }
+    return cancelableBag;
+}
+
+- (id<ERCancelable>)er_listenDealloc:(void (^)(void))deallocBlock {
+    NSCParameterAssert(deallocBlock);
+    if (!deallocBlock) {
+        return [[ERBlockCancelable alloc] initWithBlock:^{}];
+    }
+    
+    ERBlockCancelable *deallocCancelable = [[ERBlockCancelable alloc] initWithBlock:deallocBlock];
+    [self.er_deallocCancelBag addCancelable:deallocCancelable];
+    @er_weakify(self)
+    return [[ERBlockCancelable alloc] initWithBlock:^{
+        @er_strongify(self)
+        [self.er_deallocCancelBag removeCancelable:deallocCancelable];
     }];
 }
 
@@ -61,11 +79,9 @@ static void swizzleDeallocIfNeeded(Class classToSwizzle) {
         __block void (*originalDealloc)(__unsafe_unretained id, SEL) = NULL;
         
         id newDealloc = ^(__unsafe_unretained id self) {
-            ERNode *willDeallocNode = objc_getAssociatedObject(self, ERObjectWillDeallocNodeKey);
-            willDeallocNode.value = self;
-            willDeallocNode.value = EREmpty.empty;
-            
-            objc_setAssociatedObject(self, ERObjectWillDeallocNodeKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+            ERCancelableBag *cancelableBag = objc_getAssociatedObject(self, ERObjectDeallocBagKey);
+            [cancelableBag cancel];
+            objc_setAssociatedObject(self, ERObjectDeallocBagKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
             
             if (originalDealloc == NULL) {
                 struct objc_super superInfo = {
