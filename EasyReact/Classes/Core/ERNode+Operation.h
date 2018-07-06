@@ -36,9 +36,10 @@ extern NSString *ERExceptionReason_MapEachNextValueNotTuple;
 - (ERNode<T> *)skip:(NSUInteger)number;
 - (ERNode<T> *)take:(NSUInteger)number;
 - (ERNode<T> *)ignore:(nullable T)ignoreValue;
+- (ERNode<T> *)select:(nullable T)selectedValue;
 - (ERNode<T> *)mapReplace:(nullable id)mappedValue;
 - (ERNode<T> *)distinctUntilChanged;
-
+- (ERNode<T> *)then:(void(^)(ERNode<T> *node))thenBlock;
 - (ERNode<T> *)deliverOn:(dispatch_queue_t)queue;
 - (ERNode<T> *)deliverOnMainQueue;
 
@@ -66,7 +67,7 @@ extern NSString *ERExceptionReason_MapEachNextValueNotTuple;
  @param timeInterval The time interval in seconds, MUST be greater than 0.
  @return A new ERNode which change its value iff the value lasts for a given interval.
  */
-- (ERNode *)throttle:(NSTimeInterval)timeInterval;
+- (ERNode<T> *)throttleOnMainQueue:(NSTimeInterval)timeInterval;
 
 /**
  Changes value if and only if the value does not change again in `interval` seconds.
@@ -77,7 +78,10 @@ extern NSString *ERExceptionReason_MapEachNextValueNotTuple;
  @param queue The queue which listener block will be invoked in.
  @return A new ERNode which change its value iff the value lasts for a given interval.
  */
-- (ERNode *)throttle:(NSTimeInterval)timeInterval queue:(dispatch_queue_t)queue;
+- (ERNode<T> *)throttle:(NSTimeInterval)timeInterval queue:(dispatch_queue_t)queue;
+
+- (ERNode<T> *)delay:(NSTimeInterval)timeInterval queue:(dispatch_queue_t)queue;
+- (ERNode<T> *)delayOnMainQueue:(NSTimeInterval)timeInterval ;
 
 #pragma mark For multipart upstreamNodes
 + (ERNode<__kindof ZTupleBase *> *)combine:(NSArray<ERNode *> *)nodes;

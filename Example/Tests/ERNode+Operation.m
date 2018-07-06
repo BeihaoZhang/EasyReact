@@ -291,7 +291,104 @@ describe(@"ERNode operation test", ^{
             }).to(beReleasedCorrectly());
         });
     });
-
+    
+    context(@"select", ^{
+        it(@"can select the given value", ^{
+            ERNode<NSNumber *> *testValue = [ERNode value:@1];
+            ERNode<NSNumber *> *selectedValue = [testValue select:@5];
+            
+            [selectedValue startListenForTest];
+            
+            testValue.value = @2;
+            testValue.value = @5;
+            testValue.value = @3;
+            testValue.value = @4;
+            testValue.value = @5;
+            testValue.value = @5;
+            testValue.value = @6;
+            testValue.value = @7;
+            testValue.value = @5;
+            
+            expect(selectedValue.value).to(equal(@5));
+            expect(selectedValue).to(receive(@[@5, @5, @5, @5]));
+        });
+        
+        it(@"can select nil", ^{
+            ERNode<NSNumber *> *testValue = [ERNode value:@1];
+            ERNode<NSNumber *> *selectedValue = [testValue select:nil];
+            
+            [selectedValue startListenForTest];
+            
+            testValue.value = @2;
+            testValue.value = nil;
+            testValue.value = @4;
+            testValue.value = nil;
+            testValue.value = @6;
+            testValue.value = @5;
+            
+            expect(selectedValue.value).to(beNil());
+            expect(selectedValue).to(receive(@[NSNull.null, NSNull.null]));
+        });
+        
+        it(@"can be released correctly", ^{
+            expectCheckTool(^(CheckReleaseTool *checkTool) {
+                ERNode<NSNumber *> *testValue = [ERNode value:@1];
+                ERNode<NSNumber *> *selectedValue = [testValue select:nil];
+                
+                [checkTool checkObj:testValue];
+                [checkTool checkObj:selectedValue];
+            }).to(beReleasedCorrectly());
+        });
+    });
+    
+    context(@"then", ^{
+        it(@"can use then when node transform have different way", ^{
+            ERNode <NSNumber *> *node = [ERNode new];
+            __block ERNode <NSNumber *> *evenNode;
+            ERNode <NSNumber *> *oddNode = [[node then:^(ERNode<NSNumber *> * _Nonnull node) {
+                evenNode = [node filter:^BOOL(NSNumber * _Nullable next) {
+                   return [next integerValue] % 2 == 0;
+                }];
+            }] filter:^BOOL(NSNumber * _Nullable next) {
+                return [next integerValue] % 2 != 0;
+            }];
+            
+            [evenNode startListenForTest];
+            [oddNode startListenForTest];
+            node.value = @1;
+            node.value = @2;
+            node.value = @3;
+            node.value = @4;
+            expect(evenNode).to(receive(@[@2, @4]));
+            expect(oddNode).to(receive(@[@1, @3]));
+            
+        });
+        
+        it(@"the thenblock arguements as same as operator object", ^{
+            ERNode<NSNumber *> *node1 = [ERNode new];
+            __block ERNode<NSNumber *> *node2 = nil;
+            ERNode<NSNumber *> *node3 = [node1 then:^(ERNode<NSNumber *> * _Nonnull node) {
+                node2 = node;
+            }];
+            node1.value = @1;
+            expect(node2).to(beIdenticalTo(node1));
+            expect(node3).to(beIdenticalTo(node1));
+        });
+        
+        it(@"can be released correctly", ^{
+            expectCheckTool(^(CheckReleaseTool *checkTool) {
+                ERNode<NSNumber *> *node1 = [ERNode new];
+                __block ERNode<NSNumber *> *node2 = nil;
+                ERNode<NSNumber *> *node3 = [node1 then:^(ERNode<NSNumber *> * _Nonnull node) {
+                    node2 = node;
+                }];
+                node1.value = @1;
+                [checkTool checkObj:node1];
+                [checkTool checkObj:node2];
+                [checkTool checkObj:node3];
+            }).to(beReleasedCorrectly());
+        });
+    });
     context(@"mapReplace", ^{
         it(@"can map every value to a unique value", ^{
             ERNode *value = [ERNode value:@3];
@@ -958,10 +1055,10 @@ describe(@"ERNode operation test", ^{
     });
 
     context(@"throttle", ^{
-        xit(@"only receives value which lasts long enough", ^{
+        it(@"only receives value which lasts long enough", ^{
             dispatch_queue_t q = dispatch_queue_create("test.queue", DISPATCH_QUEUE_CONCURRENT);
-            ERNode<NSString *> *value = [ERNode value:@""];
-            ERNode<NSString *> *throttledValue = [value throttle:0.1];
+            ERNode<NSString *> *value = [ERNode new];
+            ERNode<NSString *> *throttledValue = [value throttleOnMainQueue:0.1];
             [throttledValue startListenForTest];
             
             waitUntil(^(void (^done)(void)) {
@@ -971,29 +1068,30 @@ describe(@"ERNode operation test", ^{
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.15 * NSEC_PER_SEC), q, ^{
                     value.value = @"re";
                 });
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC), q, ^{
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC), q, ^{
                     value.value = @"res";
                 });
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.35 * NSEC_PER_SEC), q, ^{
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.34 * NSEC_PER_SEC), q, ^{
                     value.value = @"resu";
                 });
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.36 * NSEC_PER_SEC), q, ^{
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.50 * NSEC_PER_SEC), q, ^{
                     value.value = @"resul";
                 });
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.37 * NSEC_PER_SEC), q, ^{
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.52 * NSEC_PER_SEC), q, ^{
                     value.value = @"result";
                 });
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.49 * NSEC_PER_SEC), q, ^{
+    
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.8 * NSEC_PER_SEC), q, ^{
                     done();
                 });
             });
             
-            expect(throttledValue).to(receive(@[@"", @"res", @"result"]));
+            expect(throttledValue).to(receive(@[@"re", @"resu", @"result"]));
         });
 
         it(@"ignores empty values", ^{
             ERNode<NSString *> *value = [ERNode new];
-            ERNode<NSString *> *throttledValue = [value throttle:0.1];
+            ERNode<NSString *> *throttledValue = [value throttleOnMainQueue:0.1];
             [throttledValue startListenForTest];
             
             waitUntil(^(void (^done)(void)) {
@@ -1027,7 +1125,7 @@ describe(@"ERNode operation test", ^{
                 }];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     ERNode *value = [ERNode value:@100];
-                    throttledValue = [value throttle:0.1];
+                    throttledValue = [value throttleOnMainQueue:0.1];
                     [throttledValue startListenForTest];
                     [throttledValue addListener:listener];
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.12 * NSEC_PER_SEC), q, ^{
@@ -1122,7 +1220,7 @@ describe(@"ERNode operation test", ^{
             ERNode *value = [ERNode value:@1000];
           
             assertExpect(^{
-                [value throttle:-1];
+                [value throttleOnMainQueue:-1];
             }).to(hasParameterAssert());
         });
 
@@ -1131,7 +1229,7 @@ describe(@"ERNode operation test", ^{
                 waitUntil(^(void (^done)(void)) {
                     ERNode<NSNumber *> *value = [ERNode value:@10];
                     
-                    ERNode<NSNumber *> *throttledValue = [value throttle:0.5];
+                    ERNode<NSNumber *> *throttledValue = [value throttleOnMainQueue:0.5];
                     ERNode<NSNumber *> *throttledValue2 = [value throttle:0.2 queue:dispatch_get_main_queue()];
                     [throttledValue listen:^(NSNumber * _Nullable next) {
                         
@@ -1148,6 +1246,111 @@ describe(@"ERNode operation test", ^{
                 });
             };
                       
+            expectCheckTool(check).to(beReleasedCorrectly());
+        });
+    });
+    
+    context(@"delay", ^{
+        it(@"can delay send values", ^{
+            dispatch_queue_t q = dispatch_queue_create("test.queue", DISPATCH_QUEUE_CONCURRENT);
+            ERNode<NSString *> *node = [ERNode new];
+            ERNode<NSString *> *delayNode = [node delay:0.1 queue:q];
+            [delayNode startListenForTest];
+            
+            node.value = @"A";
+            expect(delayNode).to(beEmptyValue());
+        
+            expect(delayNode).withTimeout(0.2).toEventually(receive(@[@"A"]));
+
+        });
+        
+        it(@"should delay send values in the main queue if it was created in the main queue", ^{
+            __block ERNode *delayNode = nil;
+            
+            waitUntil(^(void (^done)(void)) {
+                id<ERListener> listener = [[ERBlockListener alloc] initWithBlock:^(id  _Nullable next) {
+                    expect([NSThread isMainThread]).to(beTrue());
+                }];
+                
+                ERNode *node = [ERNode value:@100];
+                delayNode = [node delayOnMainQueue:0.1];
+                [delayNode startListenForTest];
+                [delayNode addListener:listener];
+                
+                node.value = @200;
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    node.value = @300;
+                });
+                
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                    done();
+                });
+                
+            });
+            
+            expect(delayNode).to(receive(@[@100, @200, @300]));
+        });
+        
+        it(@"should delay send values in the main queue if it was created in the special queue", ^{
+            dispatch_queue_t q = dispatch_queue_create("test.queue", DISPATCH_QUEUE_CONCURRENT);
+            __block ERNode *delayNode = nil;
+            
+            waitUntil(^(void (^done)(void)) {
+                id<ERListener> listener = [[ERBlockListener alloc] initWithBlock:^(id  _Nullable next) {
+                    expect([NSThread isMainThread]).to(beFalse());
+                }];
+                
+                ERNode *node = [ERNode value:@100];
+                delayNode = [node delay:0.1 queue:q];
+                [delayNode startListenForTest];
+                [delayNode addListener:listener];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    node.value = @200;
+        
+                });
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    node.value = @300;
+                });
+                
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.4 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                    done();
+                });
+            });
+            
+            expect(delayNode).to(receive(@[@100, @200, @300]));
+            
+        });
+        
+        it(@"ERNode delay with a number lessthan zero should raise an asset", ^(){
+            ERNode *node = [ERNode value:@1000];
+            
+            assertExpect(^{
+                [node delayOnMainQueue:-1];
+            }).to(hasParameterAssert());
+        });
+        
+        it(@"can be released correctly", ^{
+            void (^check)(CheckReleaseTool *checkTool) = ^(CheckReleaseTool *checkTool) {
+                waitUntil(^(void (^done)(void)) {
+                    ERNode<NSNumber *> *value = [ERNode value:@10];
+                    
+                    ERNode<NSNumber *> *throttledValue = [value throttleOnMainQueue:0.5];
+                    ERNode<NSNumber *> *throttledValue2 = [value throttle:0.2 queue:dispatch_get_main_queue()];
+                    [throttledValue listen:^(NSNumber * _Nullable next) {
+                        
+                    }];
+                    [throttledValue2 listen:^(NSNumber * _Nullable next) {
+                        
+                    }];
+                    [checkTool checkObj:value];
+                    [checkTool checkObj:throttledValue];
+                    [checkTool checkObj:throttledValue2];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        done();
+                    });
+                });
+            };
+            
             expectCheckTool(check).to(beReleasedCorrectly());
         });
     });

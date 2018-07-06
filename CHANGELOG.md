@@ -1,5 +1,10 @@
 # Change Log
 
+## 1.3.0
+
+-  新增 `delay` `then` `select:` 接口
+-  重命名throttle到throttleOnMainQueue
+
 ## 1.2.2
 
 -  新增 `clean` 接口

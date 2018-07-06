@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'EasyReact'
-  s.version          = '1.2.2'
+  s.version          = '1.3.0'
   s.summary          = 'EasyReact is an easy-to-use library for reactive programming.'
 
   s.description      = <<-DESC
@@ -20,7 +20,8 @@ DESC
 
   s.requires_arc = 'EasyReact/Classes/{Utils,Core,Categories}/**/*.m'
 
-  s.private_header_files = ['EasyReact/Classes/Core/Private/**/*.h', 'EasyReact/Classes/Core/Transforms/**/*.h']
+  s.private_header_files = ['EasyReact/Classes/Core/Private/**/*.h']
+  
 
   s.dependency 'ZTuple', '= 1.2.0'
 end

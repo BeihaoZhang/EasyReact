@@ -26,6 +26,7 @@
 #import "NSArray+ER_Extension.h"
 #import "ERZipTransform.h"
 #import "ERZipTransformGroup.h"
+#import "ERDelayTransform.h"
 #import "ERCombineTransform.h"
 #import "ERCombineTransformGroup.h"
 #import "EREmpty.h"
@@ -75,8 +76,22 @@ NSString *ERExceptionReason_MapEachNextValueNotTuple = @"the mapEack Block next 
 
 - (ERNode *)ignore:(id)ignoreValue {
     return [self filter:^BOOL(id  _Nullable next) {
-        return !(ignoreValue == next || [ignoreValue isEqual: next]);
+        return !(ignoreValue == next || [ignoreValue isEqual:next]);
     }];
+}
+
+- (ERNode *)select:(id)selectedValue {
+    return [self filter:^BOOL(id  _Nullable next) {
+        return selectedValue == next || [selectedValue isEqual:next];
+    }];
+}
+
+- (ERNode *)then:(void(^)(ERNode<id> *node))thenBlock {
+    NSParameterAssert(thenBlock);
+    if (thenBlock) {
+        thenBlock(self);
+    }
+    return self;
 }
 
 - (ERNode *)mapReplace:(id)mappedValue {
@@ -120,7 +135,7 @@ NSString *ERExceptionReason_MapEachNextValueNotTuple = @"the mapEack Block next 
     return returnedNode;
 }
 
-- (ERNode *)throttle:(NSTimeInterval)timeInterval {
+- (ERNode *)throttleOnMainQueue:(NSTimeInterval)timeInterval {
     NSParameterAssert(timeInterval > 0);
     return [self throttle:timeInterval queue:dispatch_get_main_queue()];
 }
@@ -132,6 +147,20 @@ NSString *ERExceptionReason_MapEachNextValueNotTuple = @"the mapEack Block next 
     ERThrottleTransform *transform = [[ERThrottleTransform alloc] initWithThrottle:timeInterval on:queue];
     [returnedNode linkTo:self transform:transform];
     return returnedNode;
+}
+
+- (ERNode *)delay:(NSTimeInterval)timeInterval queue:(dispatch_queue_t)queue {
+    NSParameterAssert(timeInterval > 0);
+    NSParameterAssert(queue);
+    ERNode *returnedNode = ERNode.new;
+    ERDelayTransform *transform = [[ERDelayTransform alloc] initWithDelay:timeInterval queue:queue];
+    [returnedNode linkTo:self transform:transform];
+    return returnedNode;
+}
+
+- (ERNode *)delayOnMainQueue:(NSTimeInterval)timeInterval {
+    NSParameterAssert(timeInterval > 0);
+    return [self delay:timeInterval queue:dispatch_get_main_queue()];
 }
 
 - (id<ERCancelable>)syncWith:(ERNode *)otherNode transform:(id  _Nonnull (^)(id _Nonnull))transform revert:(id  _Nonnull (^)(id _Nonnull))revert {

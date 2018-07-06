@@ -46,3 +46,16 @@ FOUNDATION_EXPORT const unsigned char EasyReactVersionString[];
 
 // Categories
 #import <EasyReact/NSObject+ER_Extension.h>
+
+// Transforms
+#import <EasyReact/ERDeliverTransform.h>
+#import <EasyReact/ERDeliverOnMainThreadTransform.h>
+#import <EasyReact/ERThrottleTransform.h>
+#import <EasyReact/ERDistinctTransform.h>
+#import <EasyReact/ERFilteredTransform.h>
+#import <EasyReact/ERCombineTransformGroup.h>
+#import <EasyReact/ERFlattenTransform.h>
+#import <EasyReact/ERZipTransform.h>
+#import <EasyReact/ERCombineTransform.h>
+#import <EasyReact/ERMapTransform.h>
+#import <EasyReact/ERZipTransformGroup.h>
