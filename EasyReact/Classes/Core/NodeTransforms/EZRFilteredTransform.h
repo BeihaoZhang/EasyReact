@@ -14,12 +14,12 @@
  * limitations under the License.
  **/
 
-#import <EasyReact/EZRNodeTransform.h>
+#import <EasyReact/EZRTransform.h>
 #import <EasyReact/EZRTypeDefine.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EZRFilteredTransform : EZRNodeTransform
+@interface EZRFilteredTransform : EZRTransform
 
 - (instancetype)initWithFilterBlock:(EZRFilterBlock)block;
 

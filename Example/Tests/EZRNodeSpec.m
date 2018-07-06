@@ -154,7 +154,7 @@ describe(@"EZRNode common test", ^{
             EZRMutableNode<NSNumber *> *upstream = [EZRMutableNode value:@1];
             EZRNode<NSNumber *> *downstream = [EZRNode new];
             
-            EZRNodeTransform *transform = [EZRNodeTransform new];
+            EZRTransform *transform = [EZRTransform new];
             expect(transform.from).to(beNil());
             expect(transform.to).to(beNil());
             
@@ -174,7 +174,7 @@ describe(@"EZRNode common test", ^{
             EZRMutableNode<NSNumber *> *upstream = [EZRMutableNode value:@1];
             EZRNode<NSNumber *> *downstream = [EZRNode new];
             
-            id<EZRCancelable> cancelable = [downstream linkTo:upstream transform:[EZRNodeTransform new]];
+            id<EZRCancelable> cancelable = [downstream linkTo:upstream transform:[EZRTransform new]];
             
             expect(downstream.value).to(equal(@1));
             expect(downstream.hasUpstreamNode).to(beTruthy());
@@ -239,9 +239,9 @@ describe(@"EZRNode common test", ^{
         it(@"can fetch all upstream transfrom from node", ^{
             EZRNode *node = [EZRNode new];
             EZRNode *from = [EZRNode new];
-            EZRNodeTransform *transform1 = [EZRNodeTransform new];
-            EZRNodeTransform *transform2 = [EZRNodeTransform new];
-            EZRNodeTransform *transform3 = [EZRNodeTransform new];
+            EZRTransform *transform1 = [EZRTransform new];
+            EZRTransform *transform2 = [EZRTransform new];
+            EZRTransform *transform3 = [EZRTransform new];
             [node linkTo:from transform:transform1];
             [node linkTo:from transform:transform2];
             [node linkTo:from transform:transform3];
@@ -263,9 +263,9 @@ describe(@"EZRNode common test", ^{
         it(@"can fetch all downstream transfrom to node", ^{
             EZRNode *node = [EZRNode new];
             EZRNode *to = [EZRNode new];
-            EZRNodeTransform *transform1 = [EZRNodeTransform new];
-            EZRNodeTransform *transform2 = [EZRNodeTransform new];
-            EZRNodeTransform *transform3 = [EZRNodeTransform new];
+            EZRTransform *transform1 = [EZRTransform new];
+            EZRTransform *transform2 = [EZRTransform new];
+            EZRTransform *transform3 = [EZRTransform new];
             [to linkTo:node transform:transform1];
             [to linkTo:node transform:transform2];
             [to linkTo:node transform:transform3];
@@ -286,7 +286,7 @@ describe(@"EZRNode common test", ^{
         it(@"add a transform twice times should raise an asset",^{
             EZRNode<NSNumber *> *upstream1 = [EZRNode value:@1];
             EZRNode<NSNumber *> *downstream1 = EZRNode.new;
-            EZRNodeTransform *transform = [EZRNodeTransform new];
+            EZRTransform *transform = [EZRTransform new];
             [downstream1 linkTo:upstream1 transform:transform];
             
             expect(transform.from).to(equal(upstream1));

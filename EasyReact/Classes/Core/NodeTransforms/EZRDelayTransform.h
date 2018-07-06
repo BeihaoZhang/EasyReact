@@ -14,11 +14,11 @@
  * limitations under the License.
  **/
 
-#import <EasyReact/EZRNodeTransform.h>
+#import <EasyReact/EZRTransform.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EZRDelayTransform : EZRNodeTransform
+@interface EZRDelayTransform : EZRTransform
 
 - (instancetype)initWithDelay:(NSTimeInterval)timeInterval queue:(dispatch_queue_t)queue;
 

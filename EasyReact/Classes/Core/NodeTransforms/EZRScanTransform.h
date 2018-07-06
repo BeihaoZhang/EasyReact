@@ -14,26 +14,18 @@
  * limitations under the License.
  **/
 
-#import "EZRBlockDeliveredListenTransform.h"
+#import <EasyReact/EasyReact.h>
+#import <EasyReact/EZRTypeDefine.h>
 
-@implementation EZRBlockDeliveredListenTransform {
-    dispatch_queue_t _queue;
-}
+NS_ASSUME_NONNULL_BEGIN
 
-- (instancetype)initWithBlock:(EZRListenBlockType)block on:(dispatch_queue_t)queue {
-    NSParameterAssert(queue);
-    if (self = [super initWithBlock:block]) {
-        _queue = queue;
-    }
-    return self;
-}
+@interface EZRScanTransform : EZRTransform
 
-- (void)next:(id)value from:(EZRSenderList *)senderList context:(nullable id)context {
-    if (_queue) {
-        dispatch_async(_queue, ^{
-            [super next:value from:senderList context:context];
-        });
-    }
-}
+- (instancetype)initWithStartValue:(id _Nullable)startValue reduceBlock:(EZRReduceWithIndexBlock)block NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 
 @end
+
+NS_ASSUME_NONNULL_END

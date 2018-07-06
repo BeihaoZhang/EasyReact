@@ -20,12 +20,12 @@
 #import "EZRNode+ProjectPrivate.h"
 #import "EZRMutableNode+ProjectPrivate.h"
 #import "EZRListenContext+ProjectPrivate.h"
-#import "EZRListenTransformProtocol.h"
-#import "EZRNodeTransformProtocol.h"
+#import "EZRListenEdge.h"
+#import "EZRTransformEdge.h"
 #import "EZREmpty.h"
 #import "EZRMetaMacros.h"
 #import "EZRBlockCancelable.h"
-#import "EZRNodeTransform.h"
+#import "EZRTransform.h"
 #import <objc/runtime.h>
 
 NSString *EZRExceptionReason_CannotModifyEZRNode = @"EZRExceptionReason_CannotModifyEZRNode";
@@ -124,10 +124,10 @@ static inline EZSFliterBlock _EZR_PropertyExists(NSString *keyPath) {
     EZRSenderList *newQueue = senderList.copy;
     [newQueue appendSender:self];
 
-    EZSequence *canPushValueDownstreams = [EZS_Sequence(_downstreamTransforms) reject:^BOOL(id<EZRNodeTransformProtocol> item) {
+    EZSequence *canPushValueDownstreams = [EZS_Sequence(_downstreamTransforms) reject:^BOOL(id<EZRTransformEdge> item) {
         return [newQueue contains:item.to];
     }];
-    [[EZS_Sequence(_listenTransforms) concat:canPushValueDownstreams] forEach:^(id<EZRNodeTransformProtocol> item) {
+    [[EZS_Sequence(_listenTransforms) concat:canPushValueDownstreams] forEach:^(id<EZRTransformEdge> item) {
         [item next:value from:newQueue context:context];
     }];
 }
@@ -143,15 +143,15 @@ static inline EZSFliterBlock _EZR_PropertyExists(NSString *keyPath) {
 
 #pragma mark listener
 
-- (NSArray<id<EZRListenTransformProtocol>> *)listenTransforms {
+- (NSArray<id<EZRListenEdge>> *)listenTransforms {
     return _listenTransforms.allObjects;
 }
 
 - (BOOL)hasListener {
-    return [EZS_Sequence(_listenTransforms) any:_EZR_PropertyExists(EZS_KeyPath(EZRNodeTransform, to))];
+    return [EZS_Sequence(_listenTransforms) any:_EZR_PropertyExists(EZS_KeyPath(EZRTransform, to))];
 }
 
-- (void)addListenTransform:(id<EZRListenTransformProtocol>)listenTransform {
+- (void)addListenTransform:(id<EZRListenEdge>)listenTransform {
     NSParameterAssert(listenTransform);
     if (!listenTransform) {
         return ;
@@ -159,27 +159,27 @@ static inline EZSFliterBlock _EZR_PropertyExists(NSString *keyPath) {
     [_listenTransforms addObject:listenTransform];
 }
 
-- (void)removeListenTransform:(id<EZRListenTransformProtocol>)listenTransform {
+- (void)removeListenTransform:(id<EZRListenEdge>)listenTransform {
     [_listenTransforms removeObject:listenTransform];
 }
 
 #pragma mark downstream
 
 - (NSArray<EZRNode *> *)downstreamNodes {
-    return [[[EZS_Sequence(_downstreamTransforms) select:_EZR_PropertyExists(EZS_KeyPath(EZRNodeTransform, to))]
-             map:EZS_propertyWith(EZS_KeyPath(EZRNodeTransform, to))]
+    return [[[EZS_Sequence(_downstreamTransforms) select:_EZR_PropertyExists(EZS_KeyPath(EZRTransform, to))]
+             map:EZS_propertyWith(EZS_KeyPath(EZRTransform, to))]
             as:NSArray.class];
 }
 
-- (NSArray<id<EZRNodeTransformProtocol>> *)downstreamTransforms {
+- (NSArray<id<EZRTransformEdge>> *)downstreamTransforms {
     return _downstreamTransforms.allObjects;
 }
 
 - (BOOL)hasDownstreamNode {
-    return [EZS_Sequence(_downstreamTransforms) any:_EZR_PropertyExists(EZS_KeyPath(EZRNodeTransform, to))];
+    return [EZS_Sequence(_downstreamTransforms) any:_EZR_PropertyExists(EZS_KeyPath(EZRTransform, to))];
 }
 
-- (id<EZRCancelable>)linkTo:(EZRMutableNode *)node transform:(id<EZRNodeTransformProtocol>)transform {
+- (id<EZRCancelable>)linkTo:(EZRMutableNode *)node transform:(id<EZRTransformEdge>)transform {
     if (!node || node == self) {
         return nil;
     }
@@ -202,37 +202,37 @@ static inline EZSFliterBlock _EZR_PropertyExists(NSString *keyPath) {
 }
 
 - (id<EZRCancelable>)linkTo:(EZRNode *)node {
-    return [self linkTo:node transform:EZRNodeTransform.new];
+    return [self linkTo:node transform:EZRTransform.new];
 }
 
 - (void)removeDownstreamNode:(EZRNode *)downstream {
     NSParameterAssert(downstream);
-    [EZS_Sequence([self downstreamTransformsToNode:downstream]) forEach:^(id<EZRNodeTransformProtocol>  _Nonnull value) {
+    [EZS_Sequence([self downstreamTransformsToNode:downstream]) forEach:^(id<EZRTransformEdge>  _Nonnull value) {
         value.from = nil;
         value.to = nil;
     }];
 }
 
-- (NSArray<id<EZRNodeTransformProtocol>> *)upstreamTransformsFromNode:(EZRNode *)from {
-    return [[EZS_Sequence(self.upstreamTransforms) select:^BOOL(id<EZRNodeTransformProtocol>  _Nonnull value) {
+- (NSArray<id<EZRTransformEdge>> *)upstreamTransformsFromNode:(EZRNode *)from {
+    return [[EZS_Sequence(self.upstreamTransforms) select:^BOOL(id<EZRTransformEdge>  _Nonnull value) {
         return value.from == from;
     }] as:NSArray.class];
 }
 
-- (NSArray<id<EZRNodeTransformProtocol>> *)downstreamTransformsToNode:(EZRNode *)to {
-    return [[EZS_Sequence(self.downstreamTransforms) select:^BOOL(id<EZRNodeTransformProtocol>  _Nonnull value) {
+- (NSArray<id<EZRTransformEdge>> *)downstreamTransformsToNode:(EZRNode *)to {
+    return [[EZS_Sequence(self.downstreamTransforms) select:^BOOL(id<EZRTransformEdge>  _Nonnull value) {
         return value.to == to;
     }] as:NSArray.class];
 }
 
-- (void)removeTransform:(id<EZRNodeTransformProtocol>)transform {
+- (void)removeTransform:(id<EZRTransformEdge>)transform {
     NSParameterAssert(transform);
     transform.from = nil;
     transform.to = nil;
 }
 
 - (void)removeDownstreamNodes {
-    [EZS_Sequence(self.downstreamTransforms) forEach:^(id<EZRNodeTransformProtocol>  _Nonnull value) {
+    [EZS_Sequence(self.downstreamTransforms) forEach:^(id<EZRTransformEdge>  _Nonnull value) {
         [self removeTransform:value];
     }];
 }
@@ -243,7 +243,7 @@ static inline EZSFliterBlock _EZR_PropertyExists(NSString *keyPath) {
 }
 
 - (void)removeUpstreamNodes {
-    [EZS_Sequence(self.upstreamTransforms) forEach:^(id<EZRNodeTransformProtocol>  _Nonnull value) {
+    [EZS_Sequence(self.upstreamTransforms) forEach:^(id<EZRTransformEdge>  _Nonnull value) {
         [self removeTransform:value];
     }];
 }
@@ -251,34 +251,34 @@ static inline EZSFliterBlock _EZR_PropertyExists(NSString *keyPath) {
 #pragma mark upstream
 
 - (NSArray<EZRNode *> *)upstreamNodes {
-    return [[[EZS_Sequence(_upstreamTransforms) select:_EZR_PropertyExists(EZS_KeyPath(EZRNodeTransform, from))]
-             map:EZS_propertyWith(EZS_KeyPath(EZRNodeTransform, from))]
+    return [[[EZS_Sequence(_upstreamTransforms) select:_EZR_PropertyExists(EZS_KeyPath(EZRTransform, from))]
+             map:EZS_propertyWith(EZS_KeyPath(EZRTransform, from))]
             as:NSArray.class];
 }
 
-- (NSArray<id<EZRNodeTransformProtocol>> *)upstreamTransforms {
+- (NSArray<id<EZRTransformEdge>> *)upstreamTransforms {
     return _upstreamTransforms.allObjects;
 }
 
 - (BOOL)hasUpstreamNode {
-    return [EZS_Sequence(_upstreamTransforms) any:_EZR_PropertyExists(EZS_KeyPath(EZRNodeTransform, from))];
+    return [EZS_Sequence(_upstreamTransforms) any:_EZR_PropertyExists(EZS_KeyPath(EZRTransform, from))];
 }
 
 #pragma mark - operator data structure
 
-- (void)addUpstreamTransformData:(id<EZRNodeTransformProtocol>)transform {
+- (void)addUpstreamTransformData:(id<EZRTransformEdge>)transform {
     [_upstreamTransforms addObject:transform];
 }
 
-- (void)addDownstreamTransformData:(id<EZRNodeTransformProtocol>)transform {
+- (void)addDownstreamTransformData:(id<EZRTransformEdge>)transform {
     [_downstreamTransforms addObject:transform];
 }
 
-- (void)removeUpstreamTransformData:(id<EZRNodeTransformProtocol>)transform {
+- (void)removeUpstreamTransformData:(id<EZRTransformEdge>)transform {
     [_upstreamTransforms removeObject:transform];
 }
 
-- (void)removeDownstreamTransformData:(id<EZRNodeTransformProtocol>)transform {
+- (void)removeDownstreamTransformData:(id<EZRTransformEdge>)transform {
     [_downstreamTransforms removeObject:transform];
 }
 

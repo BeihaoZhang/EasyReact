@@ -20,9 +20,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-extern NSString *EZRExceptionReason_SyncTransformBlockAndRevertNotInverseOperations;
-extern NSString *EZRExceptionReason_FlattenOrFlattenMapNextValueNotEZRNode;
-extern NSString *EZRExceptionReason_MapEachNextValueNotTuple;
+FOUNDATION_EXTERN NSString * const EZRExceptionReason_SyncTransformBlockAndRevertNotInverseOperations;
+FOUNDATION_EXTERN NSString * const EZRExceptionReason_FlattenOrFlattenMapNextValueNotEZRNode;
+FOUNDATION_EXTERN NSString * const EZRExceptionReason_MapEachNextValueNotTuple;
+FOUNDATION_EXTERN NSString * const EZRExceptionReason_CasedNodeMustGenerateBySwitchOrSwitchMapOperation;
 
 @interface EZRNode<T: id> (Operation)
 
@@ -226,12 +227,27 @@ extern NSString *EZRExceptionReason_MapEachNextValueNotTuple;
 + (EZRNode<__kindof EZTupleBase *> *)combine:(NSArray<EZRNode *> *)nodes;
 
 /**
+ 此操作将当期节点和传递进来的节点做合并， 效果等同 [EZRNode combine:@[self, node]]
+
+ @param node 将要合并的node
+ @return 新的node，值为ZTupleBase类型，即当前node和传递来的node的value组成的元组。
+ */
+- (EZRNode<EZTuple2<T, id> *> *)combine:(EZRNode *)node;
+/**
  此操作作用为合并多个node，产生一个新的节点，便于把多个node当成一个node来用。merge操作会返回新的节点, 此节点会作为多个原节点的下游。当多个node的任何一个node变化时，新的节点的值发生变化。
 
  @param nodes 要合并的多个node。
  @return 新的node。
  */
 + (EZRNode *)merge:(NSArray<EZRNode *> *)nodes;
+
+/**
+ 此操作将当期节点和传递进来的节点做合并操作， 效果等同 [EZRNode merge:@[self, node]]
+
+ @param node 将要合并的node
+ @return 新的node。
+ */
+- (EZRNode *)merge:(EZRNode *)node;
 
 /**
  Zips several EZRNodes into one.
@@ -247,6 +263,14 @@ extern NSString *EZRExceptionReason_MapEachNextValueNotTuple;
  */
 + (EZRNode<__kindof EZTupleBase *> *)zip:(NSArray<EZRNode *> *)nodes;
 
+/**
+ 此操作将当期节点和传递进来的节点做zip打包， 效果等同 [EZRNode zip:@[self, node]]
+
+ @param node 将要打包的节点
+ @return 新的node
+ */
+- (EZRNode<EZTuple2<T, id> *> *)zip:(EZRNode *)node;
+
 @end
 
 #define EZRCombine(...)  _EZRCombine(__VA_ARGS__)
@@ -254,4 +278,39 @@ extern NSString *EZRExceptionReason_MapEachNextValueNotTuple;
 
 EZR_MapEachFakeInterfaceDef(15)
 
+#define EZRIFResultTable(_) \
+_(EZRNode<T> *, thenNode) \
+_(EZRNode<T> *, elseNode);
+
+EZTNamedTupleDef(EZRIFResult, T)
+
+#define EZRSwitchedNodeTupleTable(_) \
+_(id<NSCopying>, key) \
+_(EZRNode<T> *, node);
+
+EZTNamedTupleDef(EZRSwitchedNodeTuple, T)
+
+@interface EZRIFResult<T> (Extension)
+
+- (EZRIFResult<T> *)then:(void (NS_NOESCAPE ^)(EZRNode<T> *node))thenBlock;
+- (EZRIFResult<T> *)else:(void (NS_NOESCAPE ^)(EZRNode<T> *node))elseBlock;
+
+@end
+
+
+@interface EZRNode<T: id> (SwitchCase)
+
+- (EZRNode<EZRSwitchedNodeTuple<T> *> *)switch:(id<NSCopying> _Nullable (^)(T _Nullable next))switchBlock;
+
+- (EZRNode<EZRSwitchedNodeTuple<id> *> *)switchMap:(EZTuple2<id<NSCopying>, id> *(^)(T _Nullable next))switchMapBlock;
+
+- (EZRNode *)case:(nullable id<NSCopying>)key;
+
+- (EZRIFResult<T> *)if:(BOOL (^)(T _Nullable next))block;
+
+- (EZRNode *)default;
+
+@end
+
 NS_ASSUME_NONNULL_END
+

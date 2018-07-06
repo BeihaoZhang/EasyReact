@@ -15,8 +15,9 @@
  **/
 
 #import <Foundation/Foundation.h>
+#import <EasyReact/EZRSenderList.h>
 
-@protocol EZRCancelable, EZRListenTransformProtocol;
+@protocol EZRCancelable, EZRListenEdge, EZRSenderList;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -62,6 +63,22 @@ NS_ASSUME_NONNULL_BEGIN
 - (id<EZRCancelable>)withContextBlock:(void (^)(T _Nullable next, id _Nullable context))block on:(dispatch_queue_t)queue;
 
 /**
+ 监听值的变化，当值发生变化的时候会在指定队列调用入参的 block。
+ 
+ @param block 用来接收新值的block, 除新值外还带有一个context 和 senderlist
+ @return 可以取消监听动作的对象
+ */
+- (id<EZRCancelable>)withSenderListAndContextBlock:(void (^)(T _Nullable next, EZRSenderList *senderList,  id _Nullable context))block;
+
+/**
+ 监听值的变化，当值发生变化的时候会在指定队列调用入参的 block。
+ 
+ @param block 用来接收新值的block, 除新值外还带有一个context 和 senderlist
+ @param queue 指定的队列
+ @return 可以取消监听动作的对象
+ */
+- (id<EZRCancelable>)withSenderListAndContextBlock:(void (^)(T _Nullable next, EZRSenderList *senderList,  id _Nullable context))block on:(dispatch_queue_t)queue;
+/**
  监听值的变化，当值发生变化的时候会在主队列调用入参的 block
  
  @param block 用来接收新值的block
@@ -80,9 +97,9 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  监听值的变化，当值发生变化的时候会调用入参的监听处理方法。
  
- @param listenTransform 用来接收新值的监听者，必须要符合 EZRListenTransformProtocol 协议
+ @param listenTransform 用来接收新值的监听者，必须要符合 EZRListenEdge 协议
  */
-- (id<EZRCancelable>)withListenTransform:(id<EZRListenTransformProtocol>)listenTransform;
+- (id<EZRCancelable>)withListenTransform:(id<EZRListenEdge>)listenTransform;
 
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;

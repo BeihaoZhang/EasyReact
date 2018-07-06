@@ -22,7 +22,7 @@ private func dotlanguageFrom(node: EZRNode<AnyObject>) -> String {
     return NSString(format: "  er_%p[label=\"%@\"]", node, node.name ?? "") as String
 }
 
-private func dotlanguageFrom(transform: EZRNodeTransformProtocol) -> String {
+private func dotlanguageFrom(transform: EZRTransformEdge) -> String {
     let fromAddress = transform.from != nil ? String(format: "%p", transform.from ?? "") : "0x0"
     let toAddress = transform.to != nil ? String(format: "%p", transform.to ?? "") : "0x0"
     return "  er_\(fromAddress) -> er_\(toAddress)[label=\"\(transform.name ?? "")\"]"
@@ -35,7 +35,7 @@ private func extractNodeAndEdgeDSLFromDigraph(graph: String) -> Set<String> {
     return Set(result.components(separatedBy: "\n"))
 }
 
-public func canLink(to nodes: [EZRNode<AnyObject>], use transform: [EZRNodeTransformProtocol]) -> Predicate<String> {
+public func canLink(to nodes: [EZRNode<AnyObject>], use transform: [EZRTransformEdge]) -> Predicate<String> {
     return Predicate.define("canLink nodes") {(actualExpress, msg) -> PredicateResult in
         let actual = try actualExpress.evaluate()
         guard let graph = actual else {
@@ -53,7 +53,7 @@ public func canLink(to nodes: [EZRNode<AnyObject>], use transform: [EZRNodeTrans
 
 @objc public extension NMBObjCMatcher {
     
-    public class func matchDotDSL(_ nodes: [EZRNode<AnyObject>], transforms: [EZRNodeTransformProtocol]) -> NMBObjCMatcher {
+    public class func matchDotDSL(_ nodes: [EZRNode<AnyObject>], transforms: [EZRTransformEdge]) -> NMBObjCMatcher {
         return NMBObjCMatcher(canMatchNil: false) { (actualExpression, failureMessage) -> Bool in
             let expr = actualExpression.cast { $0 as? String }
             return try! canLink(to: nodes, use: transforms).matches(expr, failureMessage: failureMessage)

@@ -14,16 +14,24 @@
  * limitations under the License.
  **/
 
-#import <EasyReact/EZRTransform.h>
-#import <EasyReact/EZRTypeDefine.h>
+#import "EZRBlockListen.h"
 
-NS_ASSUME_NONNULL_BEGIN
+@implementation EZRBlockListen {
+    EZRListenBlockType _block;
+}
 
-@interface EZRFlattenTransform : EZRTransform
+- (instancetype)initWithBlock:(EZRListenBlockType)block {
+    NSParameterAssert(block);
+    if (self = [super init]) {
+        _block = [block copy];
+    }
+    return self;
+}
 
-- (instancetype)initWithBlock:(EZRFlattenMapBlock)block;
+- (void)next:(id)value from:(EZRSenderList *)senderList context:(nullable id)context {
+    if (_block) {
+        _block(value, senderList, context);
+    }
+}
 
 @end
-
-NS_ASSUME_NONNULL_END
-

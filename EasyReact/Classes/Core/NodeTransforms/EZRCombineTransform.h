@@ -14,13 +14,13 @@
  * limitations under the License.
  **/
 
-#import <EasyReact/EZRNodeTransform.h>
+#import <EasyReact/EZRTransform.h>
 
 @class EZRCombineTransformGroup;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EZRCombineTransform : EZRNodeTransform
+@interface EZRCombineTransform : EZRTransform
 
 @property (atomic, readwrite, strong, nullable) EZRCombineTransformGroup *group;
 @property (atomic, readonly, strong) id lastValue;

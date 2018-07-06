@@ -14,11 +14,11 @@ EasyReact 的内存管理逻辑非常简单，但是也非常精巧。可以让�
 
 表示了图论中有向边的概念，边的上游是节点，是数据流的来源者。
 
-#### EZRNodeTransformProtocol
+#### EZRTransformEdge
 
 表示了一种从节点指向节点的边，这种边关心的是如何将数据加工并且传递给下游节点。
 
-#### EZRListenTransformProtocol
+#### EZRListenEdge
 
 表示了一种从节点指向监听者的边，这种边的关心的是如何在未来值发送变化时传递给监听者。
 
@@ -119,9 +119,9 @@ Node ----> Listener
 
 
 @interface EZRNode () {
-    NSMutableSet<id<EZRNodeTransformProtocol>> *_upstreamTransforms;
-    NSHashTable<id<EZRNodeTransformProtocol>> *_downstreamTransforms;
-    NSHashTable<id<EZRListenTransformProtocol>> *_listenTransforms;
+    NSMutableSet<id<EZRTransformEdge>> *_upstreamTransforms;
+    NSHashTable<id<EZRTransformEdge>> *_downstreamTransforms;
+    NSHashTable<id<EZRListenEdge>> *_listenTransforms;
 
 }
 ```

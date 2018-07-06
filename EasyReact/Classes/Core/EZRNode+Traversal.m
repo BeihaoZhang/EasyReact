@@ -15,7 +15,7 @@
  **/
 
 #import "EZRNode+Traversal.h"
-#import "EZRNodeTransformProtocol.h"
+#import "EZRTransformEdge.h"
 #import <EasySequence/EasySequence.h>
 
 @interface EZRNodeVisitElement : NSObject
@@ -70,7 +70,7 @@
 
 - (void)traversal:(id<EZRNodeVisitor>)visitor {
     NSMutableSet<EZRNodeVisitElement *> *uniqueElementSet = [NSMutableSet new];
-    NSMutableSet<id<EZRNodeTransformProtocol>> *uniqueTransformSet = [NSMutableSet new];
+    NSMutableSet<id<EZRTransformEdge>> *uniqueTransformSet = [NSMutableSet new];
     EZSQueue<EZRNodeVisitElement *> *traversalQueue = [EZSQueue new];
     
     EZRNodeVisitElement *root = [self er_visitElementWithDeep:0];
@@ -97,7 +97,7 @@
         [EZS_Sequence(element.node.upstreamNodes) forEach:enqueNewElement(element.deep - 1)];
         [EZS_Sequence(element.node.downstreamNodes) forEach:enqueNewElement(element.deep + 1)];
         if ([visitor respondsToSelector:@selector(visitTransform:)]) {
-            [EZS_Sequence([element.node.upstreamTransforms arrayByAddingObjectsFromArray:element.node.downstreamTransforms]) forEach:^(id<EZRNodeTransformProtocol> _Nonnull value) {
+            [EZS_Sequence([element.node.upstreamTransforms arrayByAddingObjectsFromArray:element.node.downstreamTransforms]) forEach:^(id<EZRTransformEdge> _Nonnull value) {
                 if (![uniqueTransformSet containsObject:value]) {
                     [uniqueTransformSet addObject:value];
                     if ([visitor visitTransform:value]) {

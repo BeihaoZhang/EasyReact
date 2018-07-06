@@ -24,7 +24,7 @@ id<NMBMatcher> receive(NSArray *arr);
 id<NMBMatcher> beReleasedCorrectly(void);
 id<NMBMatcher> hasParameterAssert(void);
 id<NMBMatcher> hasAssert(void);
-id<NMBMatcher> matchDotDSL(NSArray<EZRNode *> *nodes, NSArray<id<EZRNodeTransformProtocol>> *transforms);
+id<NMBMatcher> matchDotDSL(NSArray<EZRNode *> *nodes, NSArray<id<EZRTransformEdge>> *transforms);
 
 
 #define  expectCheckTool(check)                                                                                         \

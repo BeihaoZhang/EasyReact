@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 extern NSString *EZRNodeExceptionName; 
 extern NSString *EZRExceptionReason_CannotModifyEZRNode;
 
-@protocol EZRCancelable, EZRNodeTransformProtocol;
+@protocol EZRCancelable, EZRTransformEdge;
 @class EZRListenContext<T>;
 
 /**
@@ -59,12 +59,12 @@ extern NSString *EZRExceptionReason_CannotModifyEZRNode;
 /**
  上游变换
  */
-@property (atomic, readonly, copy) NSArray<id<EZRNodeTransformProtocol>> *upstreamTransforms;
+@property (atomic, readonly, copy) NSArray<id<EZRTransformEdge>> *upstreamTransforms;
 
 /**
  下游变换
  */
-@property (atomic, readonly, copy) NSArray<id<EZRNodeTransformProtocol>> *downstreamTransforms;
+@property (atomic, readonly, copy) NSArray<id<EZRTransformEdge>> *downstreamTransforms;
 
 /**
  是否拥有上游节点
@@ -132,7 +132,7 @@ extern NSString *EZRExceptionReason_CannotModifyEZRNode;
  @param transform 与上游节点值的变换
  @return 可以取消连接的 Cancelable 对象
  */
-- (id<EZRCancelable>)linkTo:(EZRNode *)node transform:(id<EZRNodeTransformProtocol>)transform;
+- (id<EZRCancelable>)linkTo:(EZRNode *)node transform:(id<EZRTransformEdge>)transform;
 
 /**
  连接到上游节点，并且保持与上游节点值相同。
@@ -148,7 +148,7 @@ extern NSString *EZRExceptionReason_CannotModifyEZRNode;
  @param to 下游节点
  @return 下游边的数组
  */
-- (NSArray<id<EZRNodeTransformProtocol>> *)downstreamTransformsToNode:(EZRNode *)to;
+- (NSArray<id<EZRTransformEdge>> *)downstreamTransformsToNode:(EZRNode *)to;
 
 /**
  从下游节点查找与当前节点相连接的边 如果上游节点和自己不存在关系则查找出来的数组内容为空
@@ -156,7 +156,7 @@ extern NSString *EZRExceptionReason_CannotModifyEZRNode;
  @param from 上游节点
  @return 上游边的数组
  */
-- (NSArray<id<EZRNodeTransformProtocol>> *)upstreamTransformsFromNode:(EZRNode *)from;
+- (NSArray<id<EZRTransformEdge>> *)upstreamTransformsFromNode:(EZRNode *)from;
 /**
  移除下游节点，与此节点连接的变换也会一并移除。
 

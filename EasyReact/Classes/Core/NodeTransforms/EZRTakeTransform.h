@@ -14,19 +14,13 @@
  * limitations under the License.
  **/
 
-#import <EasyReact/EZRListenTransform.h>
+#import <EasyReact/EZRTransform.h>
 
-NS_ASSUME_NONNULL_BEGIN
+@interface EZRTakeTransform : EZRTransform
 
-typedef void(^EZRListenBlockType)(id _Nullable next, id _Nullable context);
-
-@interface EZRBlockListenTransform : EZRListenTransform
-
-- (instancetype)initWithBlock:(EZRListenBlockType)block NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithNumber:(NSUInteger)needTakenTimes NS_DESIGNATED_INITIALIZER;
 
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;
 
 @end
-
-NS_ASSUME_NONNULL_END

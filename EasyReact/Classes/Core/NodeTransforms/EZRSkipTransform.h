@@ -14,18 +14,13 @@
  * limitations under the License.
  **/
 
-#import <EasyReact/EZRBlockListenTransform.h>
+#import <EasyReact/EasyReact.h>
 
-NS_ASSUME_NONNULL_BEGIN
+@interface EZRSkipTransform : EZRTransform
 
-@interface EZRBlockDeliveredListenTransform : EZRBlockListenTransform
+- (instancetype)initWithNumber:(NSUInteger)needSkipTimes NS_DESIGNATED_INITIALIZER;
 
-- (instancetype)initWithBlock:(EZRListenBlockType)block on:(dispatch_queue_t)queue NS_DESIGNATED_INITIALIZER;
-
-- (instancetype)initWithBlock:(EZRListenBlockType)block NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;
 
 @end
-
-NS_ASSUME_NONNULL_END

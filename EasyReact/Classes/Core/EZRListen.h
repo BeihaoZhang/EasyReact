@@ -14,9 +14,9 @@
  * limitations under the License.
  **/
 
-#import <EasyReact/EZRListenTransformProtocol.h>
+#import <EasyReact/EZRListenEdge.h>
 
-@interface EZRListenTransform : NSObject <EZRListenTransformProtocol>
+@interface EZRListen : NSObject <EZRListenEdge>
 
 @end
 

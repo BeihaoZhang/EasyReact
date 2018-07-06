@@ -14,14 +14,14 @@
  * limitations under the License.
  **/
 
-#import <EasyReact/EZRNodeTransform.h>
+#import <EasyReact/EZRTransform.h>
 #import <EasySequence/EasySequence.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class EZRZipTransformGroup, EZSQueue;
 
-@interface EZRZipTransform : EZRNodeTransform
+@interface EZRZipTransform : EZRTransform
 
 @property (nonatomic, readonly, strong) EZSQueue *nextQueue;
 @property (atomic, readwrite, strong, nullable) EZRZipTransformGroup *group;

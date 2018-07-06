@@ -14,11 +14,16 @@
  * limitations under the License.
  **/
 
+#import <EasyTuple/EasyTuple.h>
 @import Foundation;
 
 @class EZRNode;
+@class EZTuple2;
 
 typedef id _Nullable(^EZRMapBlock)(id _Nullable value);
 typedef BOOL (^EZRConditionBlock)(id _Nullable value);
 typedef EZRNode *_Nullable (^EZRFlattenMapBlock)(id _Nullable value);
 typedef BOOL (^EZRFilterBlock)(id _Nullable value);
+typedef EZTuple2<id<NSCopying>, id> * _Nonnull(^EZRSwitchMapBlock)(id _Nullable next);
+typedef id _Nonnull(^EZRReduceBlock)(id _Nullable runningValue, id  _Nullable next);
+typedef id _Nonnull(^EZRReduceWithIndexBlock)(id _Nullable runningValue, id  _Nullable next, NSUInteger index);

@@ -28,6 +28,7 @@
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		B1B5C4F7B4CF60BFDCAB2EB6 /* Pods_Benchmark.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D08F16836141D781C5DC0B75 /* Pods_Benchmark.framework */; };
+		CE22ECCF20A985BB003CE2EC /* EZRTransformSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = CE22ECCC20A98527003CE2EC /* EZRTransformSpec.m */; };
 		CE7038AB1F32D54C00322AF8 /* beEmptyValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222515D31F28823F00291583 /* beEmptyValue.swift */; };
 		CE7038B21F331C8B00322AF8 /* beReleasedCorrectly.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7038B11F331C8B00322AF8 /* beReleasedCorrectly.swift */; };
 		CE796AB51F70CD3B00EB463E /* TestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = CE796AB41F70CD3B00EB463E /* TestObject.m */; };
@@ -38,7 +39,6 @@
 		CE9497F61F73DB5F0092D6F4 /* BenchmarkCPUTestMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9497F51F73DB5F0092D6F4 /* BenchmarkCPUTestMethod.m */; };
 		CE9497FB1F73E23E0092D6F4 /* BenchmarkResult.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9497FA1F73E23E0092D6F4 /* BenchmarkResult.m */; };
 		CE9D3923208722FF00D7780D /* EZRListenContext.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D3922208722FF00D7780D /* EZRListenContext.m */; };
-		CE9D85CB207F584400CCAEF3 /* EZRNodeTransformSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D85C9207F584000CCAEF3 /* EZRNodeTransformSpec.m */; };
 		CE9D85CC207F5AA800CCAEF3 /* EZRNodeSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* EZRNodeSpec.m */; };
 		CE9D85CD20804E0D00CCAEF3 /* EZRMutableNodeSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = DD3A0500207254AA00682095 /* EZRMutableNodeSpec.m */; };
 		CE9D85CE2080574C00CCAEF3 /* EZRNode+Operation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2221F3F91EC7933700897FAC /* EZRNode+Operation.m */; };
@@ -110,6 +110,7 @@
 		A7C0DB8A8D38F41C7B0BE1B6 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; lineEnding = 0; name = README.md; path = ../README.md; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.markdown; };
 		C3AFB7A83C1B01E51B9969F6 /* Pods-Benchmark.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Benchmark.release.xcconfig"; path = "Pods/Target Support Files/Pods-Benchmark/Pods-Benchmark.release.xcconfig"; sourceTree = "<group>"; };
 		C8D19E107B0ECEC62236692B /* Pods-EasyReact_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyReact_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EasyReact_Example/Pods-EasyReact_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		CE22ECCC20A98527003CE2EC /* EZRTransformSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZRTransformSpec.m; sourceTree = "<group>"; };
 		CE7038B11F331C8B00322AF8 /* beReleasedCorrectly.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = beReleasedCorrectly.swift; sourceTree = "<group>"; };
 		CE796AB31F70CD3B00EB463E /* TestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestObject.h; sourceTree = "<group>"; };
 		CE796AB41F70CD3B00EB463E /* TestObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestObject.m; sourceTree = "<group>"; };
@@ -130,7 +131,6 @@
 		CE9497FA1F73E23E0092D6F4 /* BenchmarkResult.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BenchmarkResult.m; sourceTree = "<group>"; };
 		CE9497FC1F74B6190092D6F4 /* EZRNode+Graph.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "EZRNode+Graph.m"; sourceTree = "<group>"; };
 		CE9D3922208722FF00D7780D /* EZRListenContext.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EZRListenContext.m; sourceTree = "<group>"; };
-		CE9D85C9207F584000CCAEF3 /* EZRNodeTransformSpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EZRNodeTransformSpec.m; sourceTree = "<group>"; };
 		CEB23C3B1F6B7DBE009C29FB /* Benchmark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Benchmark.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEB23C3D1F6B7DBE009C29FB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		CEB23C3E1F6B7DBE009C29FB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -293,9 +293,9 @@
 		6003F5B5195388D20070C39A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				CE22ECCC20A98527003CE2EC /* EZRTransformSpec.m */,
 				2221F4011EC95F5B00897FAC /* TestSupportClasses */,
 				6003F5BB195388D20070C39A /* EZRNodeSpec.m */,
-				CE9D85C9207F584000CCAEF3 /* EZRNodeTransformSpec.m */,
 				DD3A0500207254AA00682095 /* EZRMutableNodeSpec.m */,
 				2221F3F91EC7933700897FAC /* EZRNode+Operation.m */,
 				CE9497FC1F74B6190092D6F4 /* EZRNode+Graph.m */,
@@ -680,13 +680,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE9D85CD20804E0D00CCAEF3 /* EZRMutableNodeSpec.m in Sources */,
+				CE22ECCF20A985BB003CE2EC /* EZRTransformSpec.m in Sources */,
 				DD80D45F208051E7007D2754 /* NSObject+ER_Extension.m in Sources */,
 				CECB7A1E1F39B72A005A6E47 /* hasAssert.swift in Sources */,
 				222515D21F287F2C00291583 /* CustomMatchers.m in Sources */,
 				CE9D85CF208060E300CCAEF3 /* EZRNode+Value.m in Sources */,
 				2224F33B1F27768000C59BCD /* SwiftSpec.swift in Sources */,
 				CE9D85CC207F5AA800CCAEF3 /* EZRNodeSpec.m in Sources */,
-				CE9D85CB207F584400CCAEF3 /* EZRNodeTransformSpec.m in Sources */,
 				CE9D3923208722FF00D7780D /* EZRListenContext.m in Sources */,
 				DD80D46020805CED007D2754 /* EZRNode+Graph.m in Sources */,
 				2233CD831ECDC8B700C9E016 /* TestKVOClass.m in Sources */,

@@ -16,12 +16,12 @@
 
 #import <Foundation/Foundation.h>
 
-QuickSpecBegin(EZRNodeTransformSpec)
+QuickSpecBegin(EZRTransformSpec)
 
 describe(@"transfrom test", ^{
     context(@"upstream and downstream ", ^{
         it(@"can set an upstream", ^{
-            EZRNodeTransform *transfrom = [EZRNodeTransform new];
+            EZRTransform *transfrom = [EZRTransform new];
             EZRNode *node = [EZRNode new];
             transfrom.from = node;
             expect(transfrom.from).to(equal(node));
@@ -31,7 +31,7 @@ describe(@"transfrom test", ^{
         });
         
         it(@"can set a downstream", ^{
-            EZRNodeTransform *transfrom = [EZRNodeTransform new];
+            EZRTransform *transfrom = [EZRTransform new];
             EZRNode *node = [EZRNode new];
             transfrom.to = node;
             expect(transfrom.to).to(equal(node));
@@ -41,7 +41,7 @@ describe(@"transfrom test", ^{
         });
         
         it(@"can link two nodes", ^{
-            EZRNodeTransform *transfrom = [EZRNodeTransform new];
+            EZRTransform *transfrom = [EZRTransform new];
             EZRNode *from = [EZRNode new];
             EZRNode *to = [EZRNode new];
             transfrom.from = from;
@@ -58,7 +58,7 @@ describe(@"transfrom test", ^{
     context(@"data flow", ^{
         it(@"can get from upstream when transfrom links two node", ^{
             EZRMutableNode *from = [EZRMutableNode value:@1];
-            EZRNodeTransform *transfrom = [EZRNodeTransform new];
+            EZRTransform *transfrom = [EZRTransform new];
             EZRNode *to = [EZRNode new];
             expect(to.value).to(equal([EZREmpty empty]));
             transfrom.from = from;
@@ -71,7 +71,7 @@ describe(@"transfrom test", ^{
         
         it(@"should not receive new values when links break", ^{
             EZRMutableNode *from = [EZRMutableNode value:@1];
-            EZRNodeTransform *transfrom = [EZRNodeTransform new];
+            EZRTransform *transfrom = [EZRTransform new];
             EZRNode *to = [EZRNode new];
             transfrom.from = from;
             transfrom.to = to;
@@ -87,7 +87,7 @@ describe(@"transfrom test", ^{
     
     context(@"memory managerment", ^{
         it(@"should retain the from node", ^{
-            EZRNodeTransform *transform = [EZRNodeTransform new];
+            EZRTransform *transform = [EZRTransform new];
             __weak EZRNode *node;
             @autoreleasepool {
                 EZRNode *strongNode = [EZRNode new];
@@ -99,7 +99,7 @@ describe(@"transfrom test", ^{
         });
         
         it(@"should not retain the to node", ^{
-            EZRNodeTransform *transform = [EZRNodeTransform new];
+            EZRTransform *transform = [EZRTransform new];
             __weak EZRNode *node;
             @autoreleasepool {
                 EZRNode *strongNode = [EZRNode new];

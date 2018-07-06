@@ -15,7 +15,7 @@
  **/
 
 #import "EZRNode+Graph.h"
-#import "EZRNodeTransformProtocol.h"
+#import "EZRTransformEdge.h"
 #import "EZRNode+Traversal.h"
 #import <EasySequence/EasySequence.h>
 
@@ -34,14 +34,14 @@
 @end
 
 // For Swift Protocol Extension
-static inline NSString *transformDotString(id<EZRTransformProtocol> self) {
+static inline NSString *transformDotString(id<EZREdge> self) {
     return [NSString stringWithFormat:@"  er_%p -> er_%p[label=\"%@\"]", self.from, self.to, self.name];
 }
 
 @interface EZRNodeGraphVisitor : NSObject <EZRNodeVisitor>
 
 @property (nonatomic, readonly) NSMutableSet<EZRNode *> *nodes;
-@property (nonatomic, readonly) NSMutableSet<id<EZRNodeTransformProtocol>> *transforms;
+@property (nonatomic, readonly) NSMutableSet<id<EZRTransformEdge>> *transforms;
 
 - (NSString *)dotFile;
 
@@ -62,7 +62,7 @@ static inline NSString *transformDotString(id<EZRTransformProtocol> self) {
     return NO;
 }
 
-- (BOOL)visitTransform:(id<EZRNodeTransformProtocol>)transform {
+- (BOOL)visitTransform:(id<EZRTransformEdge>)transform {
     [self.transforms addObject:transform];
     return NO;
 }
@@ -71,7 +71,7 @@ static inline NSString *transformDotString(id<EZRTransformProtocol> self) {
     NSMutableString *result = [NSMutableString string];
     [result appendString:@"digraph G {\n  node [peripheries=2 style=filled color=\"#eecc80\"]\n  edge [color=\"sienna\" fontcolor=\"black\"] \n"];
     
-    [result appendString:[[[EZS_Sequence(self.transforms) map:^id _Nonnull(id<EZRNodeTransformProtocol> _Nonnull value) {
+    [result appendString:[[[EZS_Sequence(self.transforms) map:^id _Nonnull(id<EZRTransformEdge> _Nonnull value) {
         return transformDotString(value);
     }] as:NSArray.class] componentsJoinedByString:@"\n"]];
     [result appendString:@"\n"];

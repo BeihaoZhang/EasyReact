@@ -34,7 +34,7 @@
 
 **使用Transform动态组合**
 
-- 使用`EZRNodeTransform`连连接两个Node
+- 使用`EZRTransform`连连接两个Node
 
 - 使用其他Transform连接两个Node
 
@@ -251,7 +251,7 @@ node.value = @10;
 
 ## 使用Transform动态组合
 
-### 使用`EZRNodeTransform`连连接两个Node
+### 使用`EZRTransform`连连接两个Node
 
 一个Transform对象可以通过设置 `form` 和 `to` 来连接两个Node。
 
@@ -264,7 +264,7 @@ NSObject *listener = [NSObject new];
 [[labelNode listenedBy:listener] withBlock:^(NSNumber * _Nullable next) {
   NSLog(@"%@", next);
 }];
-EZRNodeTransform *transform = [EZRNodeTransform new];
+EZRTransform *transform = [EZRTransform new];
 transform.from = serverNode;
 transform.to = labelNode;
 // should print 1
@@ -274,7 +274,7 @@ serverNode.value = @2;
 
 ### 使用其他Transform连接两个Node
 
-`EZRNodeTransform`本身是没有变换的，他会保持传递来的值，并将其传递下去。当这种不改变值的Transform对象不能满足我们对数据加工处理的需求时，我们可以通过`EZRNodeTransform`的子类，诸如 `EZRMapTransform`等，这种带有对数据加工操作的Transform，来对上游传递来的值进行变换。
+`EZRTransform`本身是没有变换的，他会保持传递来的值，并将其传递下去。当这种不改变值的Transform对象不能满足我们对数据加工处理的需求时，我们可以通过`EZRTransform`的子类，诸如 `EZRMapTransform`等，这种带有对数据加工操作的Transform，来对上游传递来的值进行变换。
 
 ```objectivec
 EZRMutableNode<NSNumber *> *serverNode = [EZRMutableNode value:@1];
@@ -285,7 +285,7 @@ NSObject *listener = [NSObject new];
 [[labelNode listenedBy:listener] withBlock:^(NSString * _Nullable next) {
   NSLog(@"%@", next);
 }];
-EZRNodeTransform *transform = [[EZRMapTransform alloc] initWithMapBlock:^id _Nullable(NSNumber * value) {
+EZRTransform *transform = [[EZRMapTransform alloc] initWithMapBlock:^id _Nullable(NSNumber * value) {
   return [NSString stringWithFormat:@"price :￥%@", value.stringValue];
 }];
 transform.from = serverNode;
@@ -308,7 +308,7 @@ NSObject *listener = [NSObject new];
 [[labelNode listenedBy:listener] withBlock:^(NSString * _Nullable next) {
   NSLog(@"%@", next);
 }];
-EZRNodeTransform *transform = [EZRNodeTransform new];
+EZRTransform *transform = [EZRTransform new];
 transform.from = serverNode;
 transform.to = labelNode;
 serverNode.value = @1;

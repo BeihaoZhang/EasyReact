@@ -14,16 +14,8 @@
  * limitations under the License.
  **/
 
-#import <EasyReact/EZRTransform.h>
-#import <EasyReact/EZRTypeDefine.h>
+#import <EasyReact/EZREdge.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
-@interface EZRFlattenTransform : EZRTransform
-
-- (instancetype)initWithBlock:(EZRFlattenMapBlock)block;
+@protocol EZRListenEdge <EZREdge>
 
 @end
-
-NS_ASSUME_NONNULL_END
-

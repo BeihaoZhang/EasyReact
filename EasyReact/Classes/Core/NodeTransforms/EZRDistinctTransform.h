@@ -14,8 +14,8 @@
  * limitations under the License.
  **/
 
-#import <EasyReact/EZRNodeTransform.h>
+#import <EasyReact/EZRTransform.h>
 
-@interface EZRDistinctTransform : EZRNodeTransform
+@interface EZRDistinctTransform : EZRTransform
 
 @end

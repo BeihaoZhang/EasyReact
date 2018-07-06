@@ -19,7 +19,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class EZRSenderList;
-@protocol EZRListenTransformProtocol;
+@protocol EZRListenEdge;
 
 @interface EZRNode () 
 
@@ -31,17 +31,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EZRNode<T> (Listener)
 
-- (void)addListenTransform:(id<EZRListenTransformProtocol>)listenTransform;
-- (void)removeListenTransform:(id<EZRListenTransformProtocol>)listenTransform;
+- (void)addListenTransform:(id<EZRListenEdge>)listenTransform;
+- (void)removeListenTransform:(id<EZRListenEdge>)listenTransform;
 
 @end
 
 @interface EZRNode (Transfrom)
 
-- (void)addUpstreamTransformData:(id<EZRNodeTransformProtocol>)transform;
-- (void)addDownstreamTransformData:(id<EZRNodeTransformProtocol>)transform;
-- (void)removeUpstreamTransformData:(id<EZRNodeTransformProtocol>)transform;
-- (void)removeDownstreamTransformData:(id<EZRNodeTransformProtocol>)transform;
+- (void)addUpstreamTransformData:(id<EZRTransformEdge>)transform;
+- (void)addDownstreamTransformData:(id<EZRTransformEdge>)transform;
+- (void)removeUpstreamTransformData:(id<EZRTransformEdge>)transform;
+- (void)removeDownstreamTransformData:(id<EZRTransformEdge>)transform;
 
 @end
 

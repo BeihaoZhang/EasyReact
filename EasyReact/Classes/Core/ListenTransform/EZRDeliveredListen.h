@@ -14,8 +14,18 @@
  * limitations under the License.
  **/
 
-#import <EasyReact/EZRTransformProtocol.h>
+#import <EasyReact/EZRBlockListen.h>
 
-@protocol EZRListenTransformProtocol <EZRTransformProtocol>
+NS_ASSUME_NONNULL_BEGIN
+
+@interface EZRDeliveredListen : EZRBlockListen
+
+- (instancetype)initWithBlock:(EZRListenBlockType)block on:(dispatch_queue_t)queue NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)initWithBlock:(EZRListenBlockType)block NS_UNAVAILABLE;
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 
 @end
+
+NS_ASSUME_NONNULL_END

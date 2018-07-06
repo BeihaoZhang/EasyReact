@@ -27,7 +27,7 @@
 
 一个Transform, 被`id<EZRTransformProtocol>`类型表示。Transform的含义是"变换"，代表了一种数据加工。同时，可以通过Transform的`from`和`to`属性指定数据的来源和去向，从而构建连接关系。从构建连接关系的功能上来看，Transform和有向图的边的概念是一致的。
 
-举个例子，如`EZRMapTransform`，它是`EZRNodeTransform`的子类，这种边可以让数据先经过map操作产生新的数据，再将新的数据向下游传递。
+举个例子，如`EZRMapTransform`，它是`EZRTransform`的子类，这种边可以让数据先经过map操作产生新的数据，再将新的数据向下游传递。
 
 ## Upstream & Downstream
 

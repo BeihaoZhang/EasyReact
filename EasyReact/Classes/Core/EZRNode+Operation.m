@@ -26,18 +26,23 @@
 #import "EZRZipTransformGroup.h"
 #import "EZRDelayTransform.h"
 #import "EZRCombineTransform.h"
+#import "EZRTakeTransform.h"
+#import "EZRSkipTransform.h"
+#import "EZRScanTransform.h"
 #import "EZRCombineTransformGroup.h"
 #import "EZREmpty.h"
 #import "EZRNode+ProjectPrivate.h"
 #import "EZRSenderList.h"
+#import "EZRSwitchMapTransform.h"
 #import <EasySequence/EasySequence.h>
+#import "EZRCaseTransform.h"
 
 @import ObjectiveC.runtime;
 
-NSString *EZRExceptionReason_SyncTransformBlockAndRevertNotInverseOperations = @"The transform block and the revert block are not inverse operations";
-NSString *EZRExceptionReason_FlattenOrFlattenMapNextValueNotEZRNode = @"The flatten block next value isnot EZRNode";
-NSString *EZRExceptionReason_MapEachNextValueNotTuple = @"the mapEack Block next value isnot tuple";
-
+NSString * const EZRExceptionReason_SyncTransformBlockAndRevertNotInverseOperations = @"The transform block and the revert block are not inverse operations";
+NSString * const EZRExceptionReason_FlattenOrFlattenMapNextValueNotEZRNode = @"The flatten block next value isnot EZRNode";
+NSString * const EZRExceptionReason_MapEachNextValueNotTuple = @"the mapEack Block next value isnot tuple";
+NSString * const EZRExceptionReason_CasedNodeMustGenerateBySwitchOrSwitchMapOperation = @"the case node must generate by switch or switchMap operation";
 @implementation EZRNode (Operation)
 
 - (EZRNode *)fork {
@@ -59,17 +64,15 @@ NSString *EZRExceptionReason_MapEachNextValueNotTuple = @"the mapEack Block next
 }
 
 - (EZRNode *)skip:(NSUInteger)number {
-    __block NSUInteger skipTimes = 0;
-    return [self filter:^BOOL(id next) {
-        return ++skipTimes > number;
-    }];
+    EZRNode *returnedNode = EZRNode.new;
+    [returnedNode linkTo:self transform:[[EZRSkipTransform alloc] initWithNumber:number]];
+    return returnedNode;
 }
 
 - (EZRNode *)take:(NSUInteger)number {
-    __block NSUInteger takeTimes = 0;
-    return [self filter:^BOOL(id next) {
-        return takeTimes++ < number;
-    }];
+    EZRNode *returnedNode = EZRNode.new;
+    [returnedNode linkTo:self transform:[[EZRTakeTransform alloc] initWithNumber:number]];
+    return returnedNode;
 }
 
 - (EZRNode *)ignore:(id)ignoreValue {
@@ -180,28 +183,22 @@ NSString *EZRExceptionReason_MapEachNextValueNotTuple = @"the mapEack Block next
     return [self syncWith:othEZRNode transform:idFunction revert:idFunction];
 }
 
-- (EZRNode *)scanWithStart:(id)startingValue reduce:(id  _Nonnull (^)(id _Nullable, id _Nullable))reduceBlock {
+- (EZRNode *)scanWithStart:(id)startingValue reduce:(EZRReduceBlock)reduceBlock {
     NSParameterAssert(reduceBlock);
-
-    return [self scanWithStart:startingValue reduceWithIndex:^id _Nonnull(id  _Nullable running, id  _Nullable next, NSUInteger index) {
+    EZRReduceWithIndexBlock block = ^id _Nonnull(id  _Nullable runningValue, id  _Nullable next, NSUInteger index) {
         if (reduceBlock) {
-            return reduceBlock(running, next);
+            return reduceBlock(runningValue, next);
         }
         return nil;
-    }];
+    };
+    return [self scanWithStart:startingValue reduceWithIndex:block];
 }
 
-- (EZRNode *)scanWithStart:(id)startingValue reduceWithIndex:(id  _Nonnull (^)(id _Nullable, id _Nullable, NSUInteger))reduceBlock {
+- (EZRNode *)scanWithStart:(id)startingValue reduceWithIndex:(EZRReduceWithIndexBlock)reduceBlock {
     NSParameterAssert(reduceBlock);
-    __block NSUInteger index = 0;
-    __block id running = startingValue;
-    return [self map:^id _Nullable(id  _Nullable next) {
-        if (reduceBlock) {
-            running = reduceBlock(running, next, index++);
-            return running;
-        }
-        return nil;
-    }];
+    EZRNode *returnedNode = EZRNode.new;
+    [returnedNode linkTo:self transform:[[EZRScanTransform alloc] initWithStartValue:startingValue reduceBlock:reduceBlock]];
+    return returnedNode;
 }
 
 + (EZRNode *)merge:(NSArray<EZRNode *> *)nodes {
@@ -211,6 +208,11 @@ NSString *EZRExceptionReason_MapEachNextValueNotTuple = @"the mapEack Block next
         [returnedNode linkTo:value];
     }];
     return returnedNode;
+}
+
+- (EZRNode *)merge:(EZRNode *)node {
+    NSParameterAssert(node);
+    return [EZRNode merge:@[self, node]];
 }
 
 + (EZRNode<__kindof EZTupleBase *> *)zip:(NSArray<EZRNode *> *)nodes {
@@ -236,6 +238,11 @@ NSString *EZRExceptionReason_MapEachNextValueNotTuple = @"the mapEack Block next
     return returnedNode;
 }
 
+- (EZRNode *)zip:(EZRNode *)node {
+    NSParameterAssert(node);
+    return [EZRNode zip:@[self, node]];
+}
+
 + (EZRNode<__kindof EZTupleBase *> *)combine:(NSArray<EZRNode *> *)nodes {
     NSParameterAssert(nodes);
     EZRNode *returnedNode = EZRNode.new;
@@ -257,6 +264,73 @@ NSString *EZRExceptionReason_MapEachNextValueNotTuple = @"the mapEack Block next
     }
     
     return returnedNode;
+}
+
+- (EZRNode *)combine:(EZRNode *)node {
+    NSParameterAssert(node);
+    return [EZRNode combine:@[self, node]];
+}
+
+@end
+
+@implementation EZRNode (SwitchCase)
+
+- (EZRNode<EZRSwitchedNodeTuple<id> *> *)switch:(id<NSCopying>  _Nullable (^)(id _Nullable))switchBlock {
+    NSParameterAssert(switchBlock);
+    return [self switchMap:^EZTuple2<id<NSCopying>,id> * _Nonnull(id  _Nullable next) {
+        return EZRSwitchedNodeTupleMake(switchBlock(next), next);
+    }];
+}
+
+- (EZRNode<EZRSwitchedNodeTuple<id> *> *)switchMap:(EZTuple2<id<NSCopying>,id> * _Nonnull (^)(id _Nullable))switchMapBlock {
+    NSParameterAssert(switchMapBlock);
+    EZRSwitchMapTransform *transform = [[EZRSwitchMapTransform alloc] initWithSwitchMapBlock:switchMapBlock];
+    EZRNode *returnedNode = [EZRNode new];
+    [returnedNode linkTo:self transform:transform];
+    return returnedNode;
+}
+
+- (EZRNode *)case:(nullable id<NSCopying>)key {
+    EZRCaseTransform *transform = [[EZRCaseTransform alloc] initWithCaseKey:key];
+    EZRNode *returnedNode = [EZRNode new];
+    [returnedNode linkTo:self transform:transform];
+    return returnedNode;
+}
+
+- (EZRNode *)default {
+    return [self case:nil];
+}
+
+- (EZRIFResult *)if:(BOOL (^)(id _Nullable next))block {
+    NSParameterAssert(block);
+    EZRNode<EZRSwitchedNodeTuple<id> *> *switchedNode = [self switch:^id<NSCopying> _Nonnull(id  _Nullable next) {
+        return @(block(next));
+    }];
+    return EZRIFResultMake([switchedNode case:@YES], [switchedNode case:@NO]);
+}
+
+@end
+
+EZTNamedTupleImp(EZRIFResult)
+
+EZTNamedTupleImp(EZRSwitchedNodeTuple)
+
+@implementation EZRIFResult (Extension)
+
+- (EZRIFResult *)then:(void (^)(EZRNode<id> * _Nonnull))thenBlock {
+     NSParameterAssert(thenBlock);
+    if (thenBlock) {
+        thenBlock(self.thenNode);
+    }
+    return self;
+}
+
+- (EZRIFResult *)else:(void (^)(EZRNode<id> * _Nonnull))elseBlock {
+    NSParameterAssert(elseBlock);
+    if (elseBlock) {
+        elseBlock(self.elseNode);
+    }
+    return self;
 }
 
 @end

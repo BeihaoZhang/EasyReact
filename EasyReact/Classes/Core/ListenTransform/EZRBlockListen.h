@@ -14,16 +14,20 @@
  * limitations under the License.
  **/
 
-#import <EasyReact/EZRTransform.h>
-#import <EasyReact/EZRTypeDefine.h>
+#import <EasyReact/EZRListen.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EZRFlattenTransform : EZRTransform
+@class EZRSenderList;
+typedef void(^EZRListenBlockType)(id _Nullable next, EZRSenderList *senderList, id _Nullable context);
 
-- (instancetype)initWithBlock:(EZRFlattenMapBlock)block;
+@interface EZRBlockListen : EZRListen
+
+- (instancetype)initWithBlock:(EZRListenBlockType)block NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 
 @end
 
 NS_ASSUME_NONNULL_END
-

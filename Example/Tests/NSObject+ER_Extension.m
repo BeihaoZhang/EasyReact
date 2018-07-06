@@ -179,6 +179,8 @@ describe(@"NSObject extension test", ^{
                 
                 [checkTool checkObj:obj1];
                 [checkTool checkObj:obj2];
+                [checkTool checkObj:EZR_PATH(obj1, property1)];
+                [checkTool checkObj:EZR_PATH(obj2, property3)];
             };
             expectCheckTool(check).to(beReleasedCorrectly());
         });
@@ -188,6 +190,7 @@ describe(@"NSObject extension test", ^{
                 TestKVOClass *obj = TestKVOClass.new;
                 EZRNode *value = EZR_PATH(obj, property1);
                 [checkTool checkObj:value];
+                [checkTool checkObj:obj];
             }).to(beReleasedCorrectly());
         });
         

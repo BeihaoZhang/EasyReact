@@ -18,17 +18,17 @@
 #import "EZRListenContext+ProjectPrivate.h"
 #import "EZRNode+ProjectPrivate.h"
 #import "EZRCancelableBagProtocol.h"
-#import "EZRBlockListenTransform.h"
-#import "EZRBlockDeliveredListenTransform.h"
-#import "EZRListenTransform.h"
+#import "EZRBlockListen.h"
+#import "EZRDeliveredListen.h"
+#import "EZRListen.h"
 #import "EZRBlockCancelable.h"
-#import "EZRListenTransformProtocol.h"
+#import "EZRListenEdge.h"
 #import "NSObject+EZR_Listen.h"
 
 @implementation EZRListenContext {
     __weak EZRNode *_node;
     __weak id _listener;
-    NSMutableArray<id<EZRListenTransformProtocol>> *_transforms;
+    NSMutableArray<id<EZRListenEdge>> *_transforms;
 }
 
 - (instancetype)initWithNode:(__weak EZRNode *)node listener:(__weak id)listener {
@@ -42,12 +42,12 @@
 
 - (id<EZRCancelable>)withBlock:(void (^)(id _Nullable next))block {
     NSParameterAssert(block);
-    EZRListenBlockType contextBlock = ^(id next, id context) {
+    EZRListenBlockType contextBlock = ^(id next, EZRSenderList *senderList, id context) {
         if (block) {
             block(next);
         }
     };
-    return [self withContextBlock:contextBlock];
+    return [self withSenderListAndContextBlock:contextBlock];
 }
 
 - (id<EZRCancelable>)withContextBlock:(void (^)(id _Nullable, id _Nullable))block {
@@ -55,26 +55,47 @@
     if (!block) {
         return [[EZRBlockCancelable alloc] initWithBlock:^{}];
     }
-    EZRBlockListenTransform *handler = [[EZRBlockListenTransform alloc] initWithBlock:block];
+    EZRListenBlockType contextBlock = ^(id next, EZRSenderList *senderList, id context) {
+        if (block) {
+            block(next, context);
+        }
+    };
+    return [self withSenderListAndContextBlock:contextBlock];
+}
+
+- (id<EZRCancelable>)withSenderListAndContextBlock:(void (^)(id _Nullable, EZRSenderList * _Nonnull, id _Nullable))block {
+    NSParameterAssert(block);
+    EZRBlockListen *handler = [[EZRBlockListen alloc] initWithBlock:block];
     return [self withListenTransform:handler];
 }
 
 - (id<EZRCancelable>)withBlock:(void (^)(id _Nullable))block on:(dispatch_queue_t)queue {
     NSParameterAssert(block);
     NSParameterAssert(queue);
-    EZRListenBlockType contextBlock = ^(id next, id context) {
+    EZRListenBlockType contextBlock = ^(id next, EZRSenderList *senderList, id context) {
         if (block) {
             block(next);
         }
     };
-    return [self withContextBlock:contextBlock on:queue];
+    return [self withSenderListAndContextBlock:contextBlock on:queue];
 }
 
 - (id<EZRCancelable>)withContextBlock:(void (^)(id _Nullable, id _Nullable))block on:(dispatch_queue_t)queue {
     NSParameterAssert(block);
     NSParameterAssert(queue);
+    EZRListenBlockType contextBlock = ^(id next, EZRSenderList *senderList, id context) {
+        if (block) {
+            block(next, context);
+        }
+    };
+    return [self withSenderListAndContextBlock:contextBlock on:queue];
+}
+
+- (id<EZRCancelable>)withSenderListAndContextBlock:(void (^)(id _Nullable next, EZRSenderList *senderList,  id _Nullable context))block on:(dispatch_queue_t)queue {
+    NSParameterAssert(block);
+    NSParameterAssert(queue);
     if (block && queue) {
-        EZRBlockDeliveredListenTransform *handler = [[EZRBlockDeliveredListenTransform alloc] initWithBlock:block on:queue];
+        EZRDeliveredListen *handler = [[EZRDeliveredListen alloc] initWithBlock:block on:queue];
         return [self withListenTransform:handler];
     }
     return [[EZRBlockCancelable alloc] initWithBlock:^{}];
@@ -88,7 +109,7 @@
     return [self withContextBlock:block on:dispatch_get_main_queue()];
 }
 
-- (id<EZRCancelable>)withListenTransform:(id<EZRListenTransformProtocol>)listenTransform {
+- (id<EZRCancelable>)withListenTransform:(id<EZRListenEdge>)listenTransform {
     NSParameterAssert(listenTransform);
     EZRNode *strongNode = _node;
     if (listenTransform && strongNode) {

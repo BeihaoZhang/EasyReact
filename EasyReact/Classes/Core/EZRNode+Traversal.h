@@ -37,7 +37,7 @@
  @param transform 变换
  @return 是否终止遍历
  */
-- (BOOL)visitTransform:(id<EZRNodeTransformProtocol>)transform;
+- (BOOL)visitTransform:(id<EZRTransformEdge>)transform;
 
 @end
 

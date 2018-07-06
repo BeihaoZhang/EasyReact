@@ -173,6 +173,33 @@ describe(@"EZRNode operation test", ^{
             expect(takenValue.value).notTo(equal(10));
         });
         
+        it(@"can change upstream", ^{
+            EZRMutableNode<NSNumber *> *testValue = [EZRMutableNode value:@1];
+            EZRNode<NSNumber *> *takenValue = [testValue take:5];
+            NSObject *listener = [NSObject new];
+            [takenValue startListenForTestWithObj:listener];
+            
+            testValue.value = @2;
+            testValue.value = @3;
+            testValue.value = @4;
+            testValue.value = @5;
+            expect(takenValue.value).to(equal(@5));
+            testValue.value = @10;
+            expect(takenValue.value).notTo(equal(10));
+            expect(takenValue).to(receive(@[@1, @2, @3, @4, @5]));
+            EZRTransform *transform = takenValue.upstreamTransforms.firstObject;
+            EZRMutableNode *anotherNode = [EZRMutableNode value:@21];
+            transform.from = anotherNode;
+            
+            anotherNode.value = @22;
+            anotherNode.value = @23;
+            anotherNode.value = @24;
+            anotherNode.value = @25;
+            anotherNode.value = @26;
+            expect(takenValue.value).to(equal(@25));
+            expect(takenValue).to(receive(@[@1, @2, @3, @4, @5, @21, @22, @23, @24, @25]));
+        });
+        
         it(@"can be released correctly", ^{
             expectCheckTool(^(CheckReleaseTool *checkTool) {
                 EZRNode<NSNumber *> *testValue = [EZRNode value:@1];
@@ -202,6 +229,33 @@ describe(@"EZRNode operation test", ^{
             expect(skippedValue).to(receive(@[@3, @4, @5, @6, @7]));
         });
         
+        it(@"can change upstream", ^{
+            EZRMutableNode<NSNumber *> *testValue = [EZRMutableNode value:@1];
+            EZRNode<NSNumber *> *skippedValue = [testValue skip:2];
+            NSObject *listener = [NSObject new];
+            [skippedValue startListenForTestWithObj:listener];
+
+            testValue.value = @2;
+            testValue.value = @3;
+            testValue.value = @4;
+            testValue.value = @5;
+            testValue.value = @6;
+            testValue.value = @7;
+            
+            expect(skippedValue.value).to(equal(@7));
+            expect(skippedValue).to(receive(@[@3, @4, @5, @6, @7]));
+            
+            EZRTransform *transform = skippedValue.upstreamTransforms.firstObject;
+            EZRMutableNode *anotherNode = [EZRMutableNode value:@10];
+            transform.from = anotherNode;
+            anotherNode.value = @11;
+            anotherNode.value = @12;
+            anotherNode.value = @13;
+            anotherNode.value = @14;
+            expect(skippedValue.value).to(equal(@14));
+            expect(skippedValue).to(receive(@[@3, @4, @5, @6, @7, @12, @13, @14]));
+            
+        });
         it(@"can be released correctly", ^{
             expectCheckTool(^(CheckReleaseTool *checkTool) {
                 EZRNode<NSNumber *> *testValue = [EZRNode value:@1];
@@ -603,6 +657,7 @@ describe(@"EZRNode operation test", ^{
             expect(mappedValue).to(receive(@[@0, @0, @1,  @0, @1, @2]));
         });
         
+        
         it(@"should raise an exception when block return value isn't an EZRNode", ^{
             EZRMutableNode<NSNumber *> *numbEZRNode = EZRMutableNode.new;
             EZRNode<NSNumber *> *mappedValue __attribute__((unused)) = [numbEZRNode flattenMap:^EZRNode * _Nullable(NSNumber * _Nullable next) {
@@ -612,6 +667,27 @@ describe(@"EZRNode operation test", ^{
             expectAction(^{
                 numbEZRNode.value = @1;
             }).to(raiseException().named(EZRNodeExceptionName).reason(EZRExceptionReason_FlattenOrFlattenMapNextValueNotEZRNode));
+        });
+        
+        it(@"flattened inside cycle", ^{
+            EZRMutableNode<NSNumber *> *node = [EZRMutableNode new];
+            EZRMutableNode<NSNumber *> *insideNode = [EZRMutableNode new];
+            EZRNode *flattenedNode = [node flattenMap:^EZRNode * _Nullable(NSNumber * _Nullable next) {
+                insideNode.value = next;
+                return insideNode;
+            }];
+            [insideNode linkTo:flattenedNode];
+//               node    ->
+//                  ^       \
+//                  |        ->   flattenedNode
+//                  |       /
+//            insideNode <-
+            node.value = @5;
+            expect(flattenedNode.value).to(equal(@5));
+            expect(insideNode.value).to(equal(@5));
+            insideNode.value = @7;
+            expect(flattenedNode.value).to(equal(@7));
+            
         });
         
         it(@"can be released correctly", ^{
@@ -644,8 +720,23 @@ describe(@"EZRNode operation test", ^{
             EZRMutableNode<NSNumber *> *value2 = [EZRMutableNode value:@4];
             highOrdEZRNode.value = value2;
             value2.value = @5;
-            NSLog(@"----%@", [(NSObject *)flattenValue.upstreamTransforms.firstObject valueForKey:@"nodeContext"]);
             expect(flattenValue).to(receive(@[@1, @2, @3, @4, @5]));
+        });
+        
+        it(@"can change upstream", ^{
+            EZRMutableNode<EZRMutableNode<NSNumber *> *> *highOrderNode1 = [EZRMutableNode value:[EZRMutableNode value:@1]];
+            EZRMutableNode<EZRMutableNode<NSNumber *> *> *highOrderNode2 = [EZRMutableNode new];
+            EZRNode<NSNumber *> *flattenedNode = [highOrderNode1 flatten];
+            EZRFlattenTransform *transform = flattenedNode.upstreamTransforms.firstObject;
+            expect(flattenedNode.value).to(equal(@1));
+            transform.from = highOrderNode2;
+            
+            highOrderNode1.value.value = @2;
+            expect(flattenedNode.value).notTo(equal(@2));
+            highOrderNode2.value = [EZRMutableNode value:@3];
+            expect(flattenedNode.value).to(equal(@3));
+            highOrderNode2.value.value = @4;
+            expect(flattenedNode.value).to(equal(@4));
         });
         
         it(@"should raise an exception when EZRNode is not a high order EZRNode", ^{
@@ -701,6 +792,32 @@ describe(@"EZRNode operation test", ^{
             expect(receiveNode.value).to(equal(@35));
         });
         
+        it(@"can change upstream", ^{
+            EZRMutableNode<NSNumber *> *node = [EZRMutableNode value:@1];
+            EZRNode<NSArray<NSNumber *> *> *receiveNode = [node scanWithStart:@10 reduceWithIndex:^id _Nonnull(NSNumber *running, NSNumber * _Nonnull next, NSUInteger index) {
+                return @(running.integerValue * next.integerValue + index);
+            }];
+            node.value = @1;
+            node.value = @3;
+            // init 10
+            // reduce = init * next + index
+            // 10 * 1 + 0 = 10
+            // 10 * 1 + 1 = 11
+            // 11 * 3 + 2 = 35
+            expect(receiveNode.value).to(equal(@35));
+            EZRMutableNode<NSNumber *> *anotherNode = [EZRMutableNode value:@20];
+            EZRTransform *transform = receiveNode.upstreamTransforms.firstObject;
+            transform.from = anotherNode;
+            anotherNode.value = @21;
+            anotherNode.value = @23;
+            // init 10
+            // reduce = init * next + index
+            // 10 * 20 + 0 = 200
+            // 200 * 21 + 1 = 4201
+            // 4201 * 23 + 2 = 96625
+            expect(receiveNode.value).to(equal(@96625));
+        });
+        
         it(@"can be released correctly", ^{
             void (^check)(CheckReleaseTool *checkTool) = ^(CheckReleaseTool *checkTool) {
                 EZRMutableNode<NSNumber *> *node1 = [EZRMutableNode value:@0];
@@ -724,6 +841,24 @@ describe(@"EZRNode operation test", ^{
             EZRMutableNode<NSString *> *value2 = [EZRMutableNode value:@"1"];
             
             EZRNode<EZTuple2<NSNumber *, NSString *> *> *value3 = [EZRNode combine:@[value1, value2]];
+            
+            NSObject *listener = [NSObject new];
+            [value3 startListenForTestWithObj:listener];
+            
+            expect(value3.value).to(equal(EZTuple(@1, @"1")));
+            
+            value1.value = @2;
+            value2.value = @"2";
+            value1.value = @3;
+            
+            expect(value3).to(receive(@[EZTuple(@1, @"1"), EZTuple(@2, @"1"), EZTuple(@2, @"2"), EZTuple(@3, @"2")]));
+        });
+        
+        it(@"can combine using instance method", ^{
+            EZRMutableNode<NSNumber *> *value1 = [EZRMutableNode value:@1];
+            EZRMutableNode<NSString *> *value2 = [EZRMutableNode value:@"1"];
+            
+            EZRNode<EZTuple2<NSNumber *, NSString *> *> *value3 = [value1 combine:value2];
             
             NSObject *listener = [NSObject new];
             [value3 startListenForTestWithObj:listener];
@@ -840,6 +975,7 @@ describe(@"EZRNode operation test", ^{
             expect(value3.value).to(equal(@6));
             expect(value3).to(receive(@[@2, @3, @6, @12, @6]));
         });
+        
         it(@"should raise exception when set value to mapEach's upstream", ^{
             EZRMutableNode *valueA = [EZRMutableNode value:@1];
             EZRMutableNode *valueB = [EZRMutableNode value:@1];
@@ -858,6 +994,7 @@ describe(@"EZRNode operation test", ^{
                 value.upstreamNodes.firstObject.mutablify.value = @"";
             }).to(raiseException().named(EZRNodeExceptionName).reason(EZRExceptionReason_MapEachNextValueNotTuple));
         });
+        
         it(@"won't get a combined value until each upstream is not empty", ^{
             EZRMutableNode<NSNumber *> *value1 = [EZRMutableNode new];
             EZRMutableNode<NSNumber *> *value2 = [EZRMutableNode new];
@@ -897,6 +1034,24 @@ describe(@"EZRNode operation test", ^{
             EZRMutableNode *value2 = [EZRMutableNode value:@2];
             
             EZRNode *value3 = [EZRNode merge:@[value1, value2]];
+            
+            NSObject *listener = [NSObject new];
+            [value3 startListenForTestWithObj:listener];
+            
+            expect(value3.value).to(equal(@2));
+            
+            value1.value = @3;
+            value2.value = @9;
+            value1.value = @3;
+            
+            expect(value3).to(receive(@[@2, @3, @9, @3]));
+        });
+        
+        it(@"can merge using instance method", ^{
+            EZRMutableNode *value1 = [EZRMutableNode value:@1];
+            EZRMutableNode *value2 = [EZRMutableNode value:@2];
+            
+            EZRNode *value3 = [value1 merge:value2];
             
             NSObject *listener = [NSObject new];
             [value3 startListenForTestWithObj:listener];
@@ -987,6 +1142,28 @@ describe(@"EZRNode operation test", ^{
             value3.value = @"C";
             expect(zippedValue1.value).to(equal(EZTuple(@2, @"c", @"C")));
             expect(zippedValue1).to(receive(@[EZTuple(@0, @"a", @"A"),EZTuple(@1, @"b", @"B"),EZTuple(@2, @"c", @"C")]));
+        });
+        
+        it(@"can zip using instance method", ^{
+            EZRMutableNode<NSNumber *> *value1 = [EZRMutableNode value:@0];
+            EZRMutableNode<NSString *> *value2 = [EZRMutableNode value:@"a"];
+        
+            EZRNode<EZTuple2<NSNumber *, NSString *> *>*zippedValue1 = [value1 zip:value2];
+            NSObject *listener = [NSObject new];
+            [zippedValue1 startListenForTestWithObj:listener];
+            
+            expect(zippedValue1.value).to(equal(EZTuple(@0, @"a")));
+            value1.value = @1;
+            value1.value = @2;
+            value1.value = @3;
+            value2.value = @"b";
+            expect(zippedValue1.value).to(equal(EZTuple(@1, @"b")));
+            value1.value = @4;
+            value2.value = @"c";
+            
+            expect(zippedValue1.value).to(equal(EZTuple(@2, @"c")));
+            
+            expect(zippedValue1).to(receive(@[EZTuple(@0, @"a"),EZTuple(@1, @"b"),EZTuple(@2, @"c")]));
         });
         
         it(@"keeps empty until every upstream has a non-empty value", ^{
@@ -1286,6 +1463,134 @@ describe(@"EZRNode operation test", ^{
             };
             
             expectCheckTool(check).to(beReleasedCorrectly());
+        });
+    });
+    
+    context(@"switch case", ^{
+        it(@"can use switch case split value sequence", ^{
+            EZRMutableNode<NSString *> *node = [EZRMutableNode value:@"Lilei: hello!"];
+            EZRNode<EZRSwitchedNodeTuple<NSString *> *> *nodes = [node switch:^id<NSCopying> _Nonnull(NSString * _Nullable next) {
+                return [[next componentsSeparatedByString:@":"] firstObject];
+            }];
+            EZRNode<NSString *> *lileiSaid = [nodes case:@"Lilei"];
+            EZRNode<NSString *> *hanmeimeiSaid = [nodes case:@"HanMeiMei"];
+            [lileiSaid startListenForTestWithObj:self];
+            [hanmeimeiSaid startListenForTestWithObj:self];
+            node.value = @"Lilei: Hello? Anybody here?";
+            EZRNode<NSString *> *anotherlilei = [nodes case:@"Lilei"];
+            [anotherlilei startListenForTestWithObj:self];
+            node.value = @"Lilei: Hello? Anybody here Again?";
+            node.value = @"HanMeiMei: I'm Han Meimei";
+            expect(lileiSaid).to(receive(@[@"Lilei: hello!",
+                                           @"Lilei: Hello? Anybody here?",
+                                           @"Lilei: Hello? Anybody here Again?"]));
+            expect(anotherlilei).to(receive(@[@"Lilei: Hello? Anybody here?",
+                                              @"Lilei: Hello? Anybody here Again?"]));
+            expect(hanmeimeiSaid).to(receive(@[@"HanMeiMei: I'm Han Meimei"]));
+        });
+        
+        it(@"support nil key", ^{
+            EZRMutableNode<NSString *> *node = [EZRMutableNode value:@"Lilei: hello!"];
+            EZRNode<EZRSwitchedNodeTuple<id> *> *nodes = [node switchMap:^EZTuple2<id<NSCopying>,id> * _Nonnull(NSString * _Nullable next) {
+                NSArray<NSString *> *sentence = [next componentsSeparatedByString:@":"];
+                NSString *key = [sentence firstObject];
+                key = [key isEqualToString:@"Lilei"] ? nil : key;
+                return EZTuple(key, [sentence lastObject]);
+            }];
+            EZRNode<NSString *> *lileiSaid = [nodes default];
+            EZRNode<NSString *> *hanmeimeiSaid = [nodes case:@"HanMeiMei"];
+            [lileiSaid startListenForTestWithObj:self];
+            [hanmeimeiSaid startListenForTestWithObj:self];
+            node.value = @"Lilei: Hello? Anybody here?";
+            EZRNode<NSString *> *anotherlilei = [nodes case:nil];
+            [anotherlilei startListenForTestWithObj:self];
+            node.value = @"Lilei: Hello? Anybody here Again?";
+            node.value = @"HanMeiMei: I'm Han Meimei";
+            expect(lileiSaid).to(receive(@[@" hello!",
+                                           @" Hello? Anybody here?",
+                                           @" Hello? Anybody here Again?"]));
+            expect(anotherlilei).to(receive(@[@" Hello? Anybody here?",
+                                              @" Hello? Anybody here Again?"]));
+            expect(hanmeimeiSaid).to(receive(@[@" I'm Han Meimei"]));
+        });
+        
+        it(@"can split 2 value sequence from origin sequence", ^{
+            EZRMutableNode<NSString *> *node = [EZRMutableNode value:@"Lilei: hello!"];
+            
+            __block EZRNode *liLeisaid;
+            __block EZRNode *othersaid;
+
+            EZRIFResult *resultNode = [[[node if:^BOOL(NSString * _Nullable next) {
+                return [[[next componentsSeparatedByString:@":"] firstObject] isEqualToString:@"Lilei"];
+            }] then:^(EZRNode * _Nonnull node) {
+                liLeisaid = node;
+                
+            }] else:^(EZRNode * _Nonnull node) {
+                othersaid = node;
+                
+            }];
+            expect(liLeisaid).to(beIdenticalTo(resultNode.thenNode));
+            expect(othersaid).to(beIdenticalTo(resultNode.elseNode));
+        });
+        
+        it(@"can split 2 value sequence from origin sequence", ^{
+            EZRMutableNode<NSString *> *node = [EZRMutableNode value:@"Lilei: hello!"];
+            
+            __block EZRNode *liLeisaid;
+            __block EZRNode *othersaid;
+            
+            [[[node if:^BOOL(NSString * _Nullable next) {
+                return [[[next componentsSeparatedByString:@":"] firstObject] isEqualToString:@"Lilei"];
+            }] then:^(EZRNode * _Nonnull node) {
+                liLeisaid = node;
+                [node startListenForTestWithObj:self];
+            }] else:^(EZRNode * _Nonnull node) {
+                othersaid = node;
+                [node startListenForTestWithObj:self];
+            }];
+            
+            node.value = @"Lilei: Hello? Anybody here?";
+            node.value = @"HanMeiMei: This is HanMeimei";
+            node.value = @"Tony: This is Tony";
+            expect(liLeisaid).to(receive(@[@"Lilei: hello!",
+                                           @"Lilei: Hello? Anybody here?"
+                                           ]));
+            expect(othersaid).to(receive(@[@"HanMeiMei: This is HanMeimei",
+                                         @"Tony: This is Tony"
+                                         ]));
+        });
+        
+        
+        it(@"can be released correctly", ^{
+            expectCheckTool(^(CheckReleaseTool *checkTool) {
+                EZRMutableNode<NSString *> *node = [EZRMutableNode value:@"Lilei: hello!"];
+                EZRNode<EZRSwitchedNodeTuple<NSString *> *> *nodes = [node switch:^id<NSCopying> _Nonnull(NSString * _Nullable next) {
+                    return [[next componentsSeparatedByString:@":"] firstObject];
+                }];
+                EZRNode<NSString *> *lileiSaid = [nodes case:@"Lilei"];
+                EZRNode<NSString *> *hanmeimeiSaid = [nodes case:@"HanMeiMei"];
+                
+                
+                node.value = @"Lilei: Hello? Anybody here?";
+                EZRNode<NSString *> *anotherlilei = [nodes case:@"Lilei"];
+                
+                node.value = @"Lilei: Hello? Anybody here Again?";
+                node.value = @"HanMeiMei: I'm Han Meimei";
+                [checkTool checkObj:node];
+                [checkTool checkObj:nodes];
+                [checkTool checkObj:lileiSaid];
+                [checkTool checkObj:hanmeimeiSaid];
+                [checkTool checkObj:anotherlilei];
+            }).to(beReleasedCorrectly());
+        });
+        
+        it(@"should raise an exception if a node generic was incorrect", ^{
+            EZRMutableNode *node = [EZRMutableNode new];
+            EZRNode *casedNode __attribute__((unused))= [node case:@"xx"];
+            
+            expectAction(^(){
+                node.value = @"11111";
+            }).to(raiseException().named(EZRNodeExceptionName).reason(EZRExceptionReason_CasedNodeMustGenerateBySwitchOrSwitchMapOperation));
         });
     });
     

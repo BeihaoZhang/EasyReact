@@ -14,25 +14,15 @@
  * limitations under the License.
  **/
 
-#import <EasyReact/EZRTransformProtocol.h>
+#import <EasyReact/EZRTransform.h>
+#import <EasyReact/EZRTypeDefine.h>
 
-@class EZRNode;
+NS_ASSUME_NONNULL_BEGIN
 
-/**
- 此协议特指节点到节点的协议，通常用来传递上游到下游的数据变化
- */
-@protocol EZRNodeTransformProtocol <EZRTransformProtocol>
+@interface EZRSwitchMapTransform : EZRTransform
 
-/**
- 变换的下游节点
- */
-@property (atomic, weak, nullable) EZRNode *to;
-
-/**
- @param value 最新值
- @param senderList 发送值的节点的链表，可以追溯值的来源
- @param context 用户传递的上下文环境
- */
-- (void)next:(nullable id)value from:(nonnull EZRSenderList *)senderList context:(nullable id)context;
+- (instancetype)initWithSwitchMapBlock:(EZRSwitchMapBlock)block;
 
 @end
+
+NS_ASSUME_NONNULL_END

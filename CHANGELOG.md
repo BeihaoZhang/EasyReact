@@ -1,5 +1,14 @@
 # Change Log
 
+## 2.1.0 
+
+- 修复了 EZR_PATH 内部的内存泄露问题
+- 重命名 EZRNodeTransform 系列为 Edge
+- 新增 - [EZRNode combine:], - [EZRNode merge:], - [EZRNode zip:] API
+- 新增 - [EZRNode switch:], - [EZRNode switchMap:], - [EZRNode if:], - [EZRNode else:], - [EZRNode case:] API
+- 修复了 skip  take  flattenMap 重用 Transform时的保存的旧数据问题
+- 更新了 EasyTuple 1.10 和  EasySequence 1.2.1
+
 ## 2.0.0 
 
 - 使用 EasySequence 替代系统容器

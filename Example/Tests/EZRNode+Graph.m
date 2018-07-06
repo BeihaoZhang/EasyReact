@@ -26,18 +26,18 @@ describe(@"EZRNode Graph test", ^{
             EZRNode *down1 = [[EZRNode value:@"down1"] named:@"down1"];
             EZRNode *down2 = [[EZRNode value:@"down2"] named:@"down2"];
             
-            EZRNodeTransform *uptransform1 = [EZRNodeTransform new];
-            EZRNodeTransform *uptransform2 = [EZRNodeTransform new];
-            EZRNodeTransform *downtransform1 = [EZRNodeTransform new];
-            EZRNodeTransform *downtransform2 = [EZRNodeTransform new];
-            EZRNodeTransform *up1AnotherDownTransform = [EZRNodeTransform new];
+            EZRTransform *uptransform1 = [EZRTransform new];
+            EZRTransform *uptransform2 = [EZRTransform new];
+            EZRTransform *downtransform1 = [EZRTransform new];
+            EZRTransform *downtransform2 = [EZRTransform new];
+            EZRTransform *up1AnotherDownTransform = [EZRTransform new];
             [node linkTo:up1 transform:uptransform1];
             [node linkTo:up2 transform:uptransform2];
             [down1 linkTo:node transform:downtransform1];
             [down2 linkTo:node transform:downtransform2];
             [up1AnotherDown linkTo:up1 transform:up1AnotherDownTransform];
             NSArray<EZRNode *> *nodes = @[up1, up2, node, down1, down2, up1AnotherDown];
-            NSArray<EZRNodeTransform *> *transforms = @[uptransform1, uptransform2, downtransform1, downtransform2, up1AnotherDownTransform];
+            NSArray<EZRTransform *> *transforms = @[uptransform1, uptransform2, downtransform1, downtransform2, up1AnotherDownTransform];
             
             expect(node.graph).to(matchDotDSL(nodes, transforms));
         });
@@ -49,18 +49,18 @@ describe(@"EZRNode Graph test", ^{
             EZRNode *down1 = [[EZRNode value:@"down1"] named:@"down1"];
             EZRNode *down2 = [[EZRNode value:@"down2"] named:@"down2"];
             
-            EZRNodeTransform *uptransform1 = [EZRNodeTransform new];
-            EZRNodeTransform *uptransform2 = [EZRNodeTransform new];
-            EZRNodeTransform *downtransform1 = [EZRNodeTransform new];
-            EZRNodeTransform *downtransform2 = [EZRNodeTransform new];
+            EZRTransform *uptransform1 = [EZRTransform new];
+            EZRTransform *uptransform2 = [EZRTransform new];
+            EZRTransform *downtransform1 = [EZRTransform new];
+            EZRTransform *downtransform2 = [EZRTransform new];
             [node linkTo:up1 transform:uptransform1];
             [node linkTo:up2 transform:uptransform2];
             [down1 linkTo:node transform:downtransform1];
             [down2 linkTo:node transform:downtransform2];
-            EZRNodeTransform *cycletransform = [EZRNodeTransform new];
+            EZRTransform *cycletransform = [EZRTransform new];
             [up1 linkTo:down1 transform:cycletransform];
             NSArray<EZRNode *> *nodes = @[up1, up2, node, down1, down2];
-            NSArray<EZRNodeTransform *> *transforms = @[uptransform1, uptransform2, downtransform1, downtransform2, cycletransform];
+            NSArray<EZRTransform *> *transforms = @[uptransform1, uptransform2, downtransform1, downtransform2, cycletransform];
            
             expect(node.graph).to(matchDotDSL(nodes, transforms));
         });
@@ -82,12 +82,12 @@ describe(@"EZRNode Graph test", ^{
             EZRNode *down1 = [[EZRNode value:@"down1"] named:@"down1"];
             EZRNode *down2 = [[EZRNode value:@"down2"] named:@"down2"];
             
-            EZRNodeTransform *uptransform1 = [EZRNodeTransform new];
-            EZRNodeTransform *uptransform2 = [EZRNodeTransform new];
-            EZRNodeTransform *downtransform1 = [EZRNodeTransform new];
-            EZRNodeTransform *downtransform2 = [EZRNodeTransform new];
-            EZRNodeTransform *up1AnotherDownTransform = [EZRNodeTransform new];
-            EZRNodeTransform *tailTransform = [EZRNodeTransform new];
+            EZRTransform *uptransform1 = [EZRTransform new];
+            EZRTransform *uptransform2 = [EZRTransform new];
+            EZRTransform *downtransform1 = [EZRTransform new];
+            EZRTransform *downtransform2 = [EZRTransform new];
+            EZRTransform *up1AnotherDownTransform = [EZRTransform new];
+            EZRTransform *tailTransform = [EZRTransform new];
 
             [node linkTo:up1 transform:uptransform1];
             [node linkTo:up2 transform:uptransform2];
@@ -97,7 +97,7 @@ describe(@"EZRNode Graph test", ^{
             tailTransform.from = down2;
             
             NSArray<EZRNode *> *nodes = @[up1, up2, node, down1, down2, up1AnotherDown];
-            NSArray<EZRNodeTransform *> *transforms = @[uptransform1, uptransform2, downtransform1, downtransform2, up1AnotherDownTransform, tailTransform];
+            NSArray<EZRTransform *> *transforms = @[uptransform1, uptransform2, downtransform1, downtransform2, up1AnotherDownTransform, tailTransform];
             
             expect(node.graph).to(matchDotDSL(nodes, transforms));
         });
@@ -120,12 +120,12 @@ describe(@"EZRNode Graph test", ^{
             EZRNode *down1 = [[EZRNode value:@"down1"] named:@"down1"];
             EZRNode *down2 = [[EZRNode value:@"down2"] named:@"down2"];
             
-            EZRNodeTransform *uptransform1 = [EZRNodeTransform new];
-            EZRNodeTransform *uptransform2 = [EZRNodeTransform new];
-            EZRNodeTransform *downtransform1 = [EZRNodeTransform new];
-            EZRNodeTransform *downtransform2 = [EZRNodeTransform new];
-            EZRNodeTransform *up1AnotherDownTransform = [EZRNodeTransform new];
-            EZRNodeTransform *headTransform = [EZRNodeTransform new];
+            EZRTransform *uptransform1 = [EZRTransform new];
+            EZRTransform *uptransform2 = [EZRTransform new];
+            EZRTransform *downtransform1 = [EZRTransform new];
+            EZRTransform *downtransform2 = [EZRTransform new];
+            EZRTransform *up1AnotherDownTransform = [EZRTransform new];
+            EZRTransform *headTransform = [EZRTransform new];
             
             headTransform.to = up1;
             [node linkTo:up1 transform:uptransform1];
@@ -134,7 +134,7 @@ describe(@"EZRNode Graph test", ^{
             [down2 linkTo:node transform:downtransform2];
             [up1AnotherDown linkTo:up1 transform:up1AnotherDownTransform];
             NSArray<EZRNode *> *nodes = @[up1, up2, node, down1, down2, up1AnotherDown];
-            NSArray<EZRNodeTransform *> *transforms = @[headTransform, uptransform1, uptransform2, downtransform1, downtransform2, up1AnotherDownTransform];
+            NSArray<EZRTransform *> *transforms = @[headTransform, uptransform1, uptransform2, downtransform1, downtransform2, up1AnotherDownTransform];
             
             expect(node.graph).to(matchDotDSL(nodes, transforms));
         });

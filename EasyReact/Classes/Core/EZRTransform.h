@@ -14,7 +14,7 @@
  * limitations under the License.
  **/
 
-#import <EasyReact/EZRNodeTransformProtocol.h>
+#import <EasyReact/EZRTransformEdge.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  代表节点到节点的一种变换。默认实现的为直接传递值到下游，后续可根据需求扩展子类
  */
-@interface EZRNodeTransform : NSObject <EZRNodeTransformProtocol>
+@interface EZRTransform : NSObject <EZRTransformEdge>
 
 /**
  上游值发生变化时流动到下游的方法

@@ -26,7 +26,7 @@ FOUNDATION_EXPORT const unsigned char EasyReactVersionString[];
 #import <EasyReact/EZRNode.h>
 #import <EasyReact/EZRMetaMacros.h>
 #import <EasyReact/EZRMutableNode.h>
-#import <EasyReact/EZRNodeTransform.h>
+#import <EasyReact/EZRTransform.h>
 #import <EasyReact/EZREmpty.h>
 #import <EasyReact/EZRNode+Operation.h>
 #import <EasyReact/EZRNode+Mutable.h>
@@ -41,10 +41,10 @@ FOUNDATION_EXPORT const unsigned char EasyReactVersionString[];
 #import <EasyReact/EZRListenContext.h>
 #import <EasyReact/NSObject+EZR_Listen.h>
 #import <EasyReact/EZRNode+Listen.h>
-#import <EasyReact/EZRTransformProtocol.h>
-#import <EasyReact/EZRNodeTransformProtocol.h>
-#import <EasyReact/EZRListenTransformProtocol.h>
-#import <EasyReact/EZRListenTransform.h>
+#import <EasyReact/EZREdge.h>
+#import <EasyReact/EZRTransformEdge.h>
+#import <EasyReact/EZRListenEdge.h>
+#import <EasyReact/EZRListen.h>
 
 // NodeTranform.h
 #import <EasyReact/EZRCombineTransform.h>
@@ -58,6 +58,11 @@ FOUNDATION_EXPORT const unsigned char EasyReactVersionString[];
 #import <EasyReact/EZRThrottleTransform.h>
 #import <EasyReact/EZRZipTransform.h>
 #import <EasyReact/EZRZipTransformGroup.h>
+#import <EasyReact/EZRSwitchMapTransform.h>
+#import <EasyReact/EZRCaseTransform.h>
+#import <EasyReact/EZRTakeTransform.h>
+#import <EasyReact/EZRSkipTransform.h>
+#import <EasyReact/EZRScanTransform.h>
 
 // Utils
 #import <EasyReact/EZRPathTrampoline.h>

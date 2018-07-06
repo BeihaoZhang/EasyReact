@@ -21,6 +21,7 @@
 #import "EZRMetaMacrosPrivate.h"
 #import "EZRMetaMacros.h"
 #import "EZRListenContext.h"
+#import "EZRCancelableBag.h"
 @import ObjectiveC.runtime;
 @import ObjectiveC.message;
 #import <EasySequence/NSObject+EZSDeallocBell.h>
@@ -31,6 +32,7 @@
     NSMutableDictionary<NSString *, NSNumber *> *_syncFlags;
     EZR_LOCK_DEF(_keyPathNodesLock);
     EZR_LOCK_DEF(_syncFlagsLock);
+    EZRCancelableBag *_cancelBag;
 }
 
 - (instancetype)initWithTarget:(id)target {
@@ -40,6 +42,7 @@
         _syncFlags = [NSMutableDictionary dictionary];
         EZR_LOCK_INIT(_keyPathNodesLock);
         EZR_LOCK_INIT(_syncFlagsLock);
+        _cancelBag = [EZRCancelableBag bag];
         [_target addDeallocCallback:^{
             NSArray<NSString *> *keyPaths = ({
                 EZR_SCOPELOCK(self->_keyPathNodesLock);
@@ -60,7 +63,7 @@
     NSParameterAssert(keyPath);
     
     EZRMutableNode *keyPathNode = self[keyPath];
-    [keyPathNode syncWith:node];
+    [_cancelBag addCancelable:[keyPathNode syncWith:node]];
 }
 
 - (EZRMutableNode *)nodeWithKeyPath:(NSString *)keyPath {
@@ -97,9 +100,7 @@
         @ezr_weakify(self)
         [[keyPathNode listenedBy:self] withBlock:^(id  _Nullable next) {
             @ezr_strongify(self)
-            if (!self) {
-                return ;
-            }
+            if (!self) { return ; }
             if ([self needSyncWithKeyPath:keyPath]) {
                 [self setKeyPath:keyPath needSync:NO];
                 [self->_target setValue:next forKeyPath:keyPath];

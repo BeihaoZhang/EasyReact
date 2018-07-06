@@ -19,7 +19,7 @@ import Nimble
 import Quick
 import EasyReact
 
-@objc public class TestListenTransform: EZRListenTransform {
+@objc public class TestListenTransform: EZRListen {
     
     @objc public private(set) var receiveValues:[NSObject] = []
     

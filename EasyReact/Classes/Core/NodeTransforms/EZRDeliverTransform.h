@@ -14,11 +14,11 @@
  * limitations under the License.
  **/
 
-#import <EasyReact/EZRNodeTransform.h>
+#import <EasyReact/EZRTransform.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EZRDeliverTransform : EZRNodeTransform
+@interface EZRDeliverTransform : EZRTransform
 
 - (instancetype)initWithQueue:(dispatch_queue_t)queue;
 - (instancetype)init NS_UNAVAILABLE;

@@ -18,16 +18,16 @@
 #import <EasyReact/EZRMetaMacrosPrivate.h>
 #import <EasySequence/EasySequence.h>
 
-@protocol EZRListenTransformProtocol, EZRNodeTransformProtocol;
+@protocol EZRListenEdge, EZRTransformEdge;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EZRMutableNode () {
 @private
     id _value;
-    EZSOrderedSet<id<EZRNodeTransformProtocol>> *_upstreamTransforms;
-    EZSWeakOrderedSet<id<EZRNodeTransformProtocol>> *_downstreamTransforms;
-    EZSWeakOrderedSet<id<EZRListenTransformProtocol>> *_listenTransforms;
+    EZSOrderedSet<id<EZRTransformEdge>> *_upstreamTransforms;
+    EZSWeakOrderedSet<id<EZRTransformEdge>> *_downstreamTransforms;
+    EZSWeakOrderedSet<id<EZRListenEdge>> *_listenTransforms;
     EZR_LOCK_DEF(_valueLock);
 }
 

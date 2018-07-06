@@ -42,6 +42,14 @@
     return self;
 }
 
+- (void)setFrom:(EZRNode *)from {
+    if (self.from != from) {
+        [self.cancelable cancel];
+        self.cancelable = nil;
+    }
+    [super setFrom:from];
+}
+
 - (void)next:(id)value from:(EZRSenderList *)senderList context:(nullable id)context{
     if (!_block) {
         return;
@@ -51,11 +59,22 @@
         EZR_THROW(EZRNodeExceptionName, EZRExceptionReason_FlattenOrFlattenMapNextValueNotEZRNode, nil);
     }
     [self.cancelable cancel];
+    self.cancelable = nil;
+
     @ezr_weakify(self)
-    self.cancelable = [[node listenedBy:self] withBlock:^(id  _Nullable next) {
+    self.cancelable = [[node listenedBy:self] withSenderListAndContextBlock:^(id  _Nullable next, EZRSenderList * _Nonnull insideSenderList, id  _Nullable insideContext) {
         @ezr_strongify(self)
-        [self _superNext:next from:senderList context:context];
+        // 首次的传递为高阶节点传递
+        // 第二次之后的传递由当前节点传递
+        if (self.cancelable) {
+            [self _superNext:next from:insideSenderList context:insideContext];
+        }
     }];
+    if (!node.isEmpty) {
+        EZRSenderList *nextSenderList = [senderList copy];
+        [nextSenderList appendSender:node];
+        [super next:node.value from:nextSenderList context:context];
+    }
 }
 
 - (void)_superNext:(id)value from:(EZRSenderList *)senderList context:(nullable id)context{

@@ -14,24 +14,17 @@
  * limitations under the License.
  **/
 
-#import "EZRBlockListenTransform.h"
+#import <EasyReact/EasyReact.h>
 
-@implementation EZRBlockListenTransform {
-    EZRListenBlockType _block;
-}
+NS_ASSUME_NONNULL_BEGIN
 
-- (instancetype)initWithBlock:(EZRListenBlockType)block {
-    NSParameterAssert(block);
-    if (self = [super init]) {
-        _block = [block copy];
-    }
-    return self;
-}
+@interface EZRCaseTransform : EZRTransform
 
-- (void)next:(id)value from:(EZRSenderList *)senderList context:(nullable id)context {
-    if (_block) {
-        _block(value, context);
-    }
-}
+- (instancetype)initWithCaseKey:(nullable id<NSCopying>)key;
+
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 
 @end
+
+NS_ASSUME_NONNULL_END

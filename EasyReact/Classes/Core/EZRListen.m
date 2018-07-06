@@ -14,12 +14,12 @@
  * limitations under the License.
  **/
 
-#import "EZRListenTransform.h"
+#import "EZRListen.h"
 #import "EZRMetaMacrosPrivate.h"
 #import "EZRNode+ProjectPrivate.h"
 #import "EZRSenderList.h"
 
-@implementation EZRListenTransform {
+@implementation EZRListen {
     EZRNode *_from;
     __weak EZRNode *_to;
     EZR_LOCK_DEF(_fromLock);
