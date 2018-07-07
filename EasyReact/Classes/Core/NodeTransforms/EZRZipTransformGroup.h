@@ -18,11 +18,18 @@
 
 @class EZRZipTransform;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface EZRZipTransformGroup : NSObject
 
-- (instancetype)initWithTransforms:(NSArray<EZRZipTransform *> *)transforms;
+- (instancetype)initWithTransforms:(NSArray<EZRZipTransform *> *)transforms NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 
 - (id)nextValue;
 - (void)removeTransform:(EZRZipTransform *)transform;
 
 @end
+
+NS_ASSUME_NONNULL_END

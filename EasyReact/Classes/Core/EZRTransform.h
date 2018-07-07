@@ -21,15 +21,15 @@ NS_ASSUME_NONNULL_BEGIN
 @class EZRNode, EZRSenderList;
 
 /**
- 代表节点到节点的一种变换。默认实现的为直接传递值到下游，后续可根据需求扩展子类
+ EZRTransform represents a kind of transformation from node to node. The Default implementation is passing value to downstrean node directly. Category can be extended on demand afterwards
  */
 @interface EZRTransform : NSObject <EZRTransformEdge>
 
 /**
- 上游值发生变化时流动到下游的方法
- 子类自定义数据处理方式需要显示调用 super 的实现
+ The transform method how the upstream value change affects downstream node.
+ Sub class needs to call super implementation when customizing data processing method.
  
- 当你的子类实现中，不需要闭包捕获 super 的时候显示调用 super 即可，例如 EZRMapTransform。代码如下：
+ If the block didn't need to capture super in your sub class implementation, simply call super, just like EZRMapTransform. for example:
  
  <pre>@textblock
  
@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @/textblock</pre>
  
- 当你的子类实现中，需要闭包捕获 super 的时候，由于会隐式捕获 self 需要间接调用，例如 EZRFlattenTransform。代码如下：
+ If the block needed to capture super in your sub class implementation, call self indirectly due to the implicit capture, just like EZRFlattenTransform. for example:
  
  <pre>@textblock
  
@@ -63,9 +63,9 @@ NS_ASSUME_NONNULL_BEGIN
  
  @/textblock</pre>
  
- @param value 最新值
- @param senderList 发送值的节点的链表， 用于判断是否出现回环
- @param context 上游节点传递的上下问变量
+ @param value           The latest value
+ @param senderList      A list of sender node, used in judging whether a circle occurs
+ @param context         Context that comes from upstream node
  */
 - (void)next:(nullable id)value from:(EZRSenderList *)senderList context:(nullable id)context;
 

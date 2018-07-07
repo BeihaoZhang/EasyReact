@@ -14,7 +14,7 @@
  * limitations under the License.
  **/
 
-#import <EasyTuple/EasyTuple.h>
+#import <EasyFoundation/EasyFoundation.h>
 
 #define _EZRCombine(...)  ((EZ_CONCAT(EZRMapEachNode, EZ_ARG_COUNT(__VA_ARGS__)) *)[EZRNode combine:@[__VA_ARGS__]])
 

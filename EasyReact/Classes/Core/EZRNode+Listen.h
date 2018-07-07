@@ -21,12 +21,11 @@
 @interface EZRNode<T> (Listen)
 
 /**
+ Listened by listener, able to add additional action through the method of returned EZRListenContext object.
+ If additional actions were added, the current node is holded by listener, the holding relationship will be released when the listener is being destroyed.
 
-被监听者监听, 通过返回的EZRListenContex对象的方法可以添加额外的动作
-如果有额外的动作被添加 则当前节点被监听者对象所持有。在当前监听者对象销毁的时候会自动释放当前节点的的持有关系
-
-@param listener 监听者
-@return 可以附加动作的EZRListenContext实例
+ @param listener    Listener
+ @return            EZRListenContext instance which can attach actions
 */
 - (EZRListenContext<T> *)listenedBy:(id)listener;
 

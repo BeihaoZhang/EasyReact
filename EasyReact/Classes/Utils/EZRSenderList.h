@@ -16,10 +16,21 @@
 
 @import Foundation;
 
-@interface EZRSenderList : NSObject <NSCopying>
+NS_ASSUME_NONNULL_BEGIN
 
-- (void)appendSender:(id)value;
+@interface EZRSenderList : NSObject
+
+@property (nonatomic, readonly, strong) id value;
+@property (nonatomic, readonly, strong) EZRSenderList *prev;
+
+- (instancetype)init NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithSender:(id)value NS_DESIGNATED_INITIALIZER;
++ (instancetype)senderListWithSender:(id)value;
++ (instancetype)senderListWithArray:(NSArray *)array;
+
+- (EZRSenderList *)appendNewSender:(id)value;
 - (BOOL)contains:(id)obj;
 
-
 @end
+
+NS_ASSUME_NONNULL_END

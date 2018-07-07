@@ -14,46 +14,60 @@
  * limitations under the License.
  **/
 
-#import <EasyTuple/EasyTuple.h>
-#import <EasySequence/EasySequence.h>
+#import <EasyFoundation/EasyFoundation.h>
 #import "EZRCombineTransformGroup.h"
 #import "EZRCombineTransform.h"
 #import "EZRMetaMacrosPrivate.h"
 #import "EZREmpty.h"
 #import "EZRMetaMacros.h"
 
+@interface EZRCombineTransformGroup ()
+
+@property (atomic, strong) NSArray<EZSWeakReference<EZRCombineTransform *> *> *transforms;
+
+@end
+
 @implementation EZRCombineTransformGroup {
     NSUInteger _transformsCount;
-    EZSWeakArray<EZRCombineTransform *> *_transforms;
 }
 
 - (instancetype)initWithTransforms:(NSArray<EZRCombineTransform *> *)transforms {
     NSParameterAssert(transforms);
     if (self = [super init]) {
         _transformsCount = transforms.count;
-        _transforms = [[EZSWeakArray alloc] initWithNSArray:transforms];
-        [EZS_SequenceWithType(EZRCombineTransform *, transforms) forEach:^(EZRCombineTransform * _Nonnull item) {
+        _transforms = [[EZS_Sequence(transforms) map:^EZSWeakReference<EZRCombineTransform *> * _Nonnull(EZRCombineTransform * _Nonnull item) {
             item.group = self;
-        }];
+            return [EZSWeakReference reference:item];
+        }] as:NSMutableArray.class]; // Never changed, so converting to mutable array is faster.
     }
     return self;
 }
 
 - (id)nextValue {
-    if (_transforms.count != _transformsCount) {
+    if (self.transforms.count != _transformsCount) {
         return EZREmpty.empty;
     }
-    EZSequence *seq = [EZS_Sequence(_transforms) map:^id _Nonnull(EZRCombineTransform *item) {
-        return item.lastValue ? item.lastValue : NSNull.null;
-    }];
-    if ([seq any:EZS_isEqual(EZREmpty.empty)]) {
-        return EZREmpty.empty;
+    
+    EZTupleBase *tuple = [EZTupleBase tupleWithCount:_transformsCount];
+    NSUInteger index = 0;
+    for (EZSWeakReference<EZRCombineTransform *> * _Nonnull obj in self.transforms) {
+        EZRCombineTransform *transform = obj.reference;
+        if (transform == nil) {
+            self.transforms = nil;
+            return EZREmpty.empty;
+        }
+        id last = transform.lastValue;
+        if (last == EZREmpty.empty) {
+            return EZREmpty.empty;
+        } else {
+            tuple[index++] = last;
+        }
     }
-    return [seq as:EZTupleBase.class];
+    return tuple;
 }
 
 - (void)removeTransform:(EZRCombineTransform *)transform { 
-    [_transforms removeObject:transform];
+    self.transforms = nil;
 }
 
 @end

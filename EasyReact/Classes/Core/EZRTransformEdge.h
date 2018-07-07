@@ -15,24 +15,28 @@
  **/
 
 #import <EasyReact/EZREdge.h>
+#import <EasyReact/EZRNextReceiver.h>
 
 @class EZRNode;
 
 /**
- 此协议特指节点到节点的协议，通常用来传递上游到下游的数据变化
+ This protocol specifies node to node transformation. It is usually used to passing the changes of data from upstream to downstream.
  */
-@protocol EZRTransformEdge <EZREdge>
+@protocol EZRTransformEdge <EZREdge, EZRNextReceiver>
 
 /**
- 变换的下游节点
+ The upstream value of the EZRTransformEdge
+ */
+@property (atomic, strong, nullable) EZRNode *from;
+
+/**
+ The downstream value of the EZRTransformEdge
  */
 @property (atomic, weak, nullable) EZRNode *to;
 
 /**
- @param value 最新值
- @param senderList 发送值的节点的链表，可以追溯值的来源
- @param context 用户传递的上下文环境
+ Represent the next instance which can receive the value senderlist and context
  */
-- (void)next:(nullable id)value from:(nonnull EZRSenderList *)senderList context:(nullable id)context;
+@property (atomic, weak, nullable) id<EZRNextReceiver> nextReceiver;
 
 @end

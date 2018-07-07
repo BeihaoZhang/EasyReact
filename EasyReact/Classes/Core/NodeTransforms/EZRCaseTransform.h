@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EZRCaseTransform : EZRTransform
 
-- (instancetype)initWithCaseKey:(nullable id<NSCopying>)key;
+- (instancetype)initWithCaseKey:(nullable id<NSCopying>)key NS_DESIGNATED_INITIALIZER;
 
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;

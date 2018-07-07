@@ -22,8 +22,13 @@
 #import "EZRMetaMacrosPrivate.h"
 #import "EZRMetaMacros.h"
 
+@interface EZRZipTransformGroup ()
+
+@property (atomic, strong) NSArray<EZSWeakReference<EZRZipTransform *> *> *transforms;
+
+@end
+
 @implementation EZRZipTransformGroup {
-    EZSWeakArray<EZRZipTransform *> *_transforms;
     NSUInteger _transformsCount;
 }
 
@@ -31,34 +36,46 @@
     NSParameterAssert(transforms);
     if (self = [super init]) {
         _transformsCount = transforms.count;
-        _transforms = [[EZSWeakArray alloc] initWithNSArray:transforms];
-        [EZS_SequenceWithType(EZRZipTransform *, transforms) forEach:^(EZRZipTransform * _Nonnull item) {
+        _transforms = [[EZS_Sequence(transforms) map:^EZSWeakReference<EZRZipTransform *> * _Nonnull(EZRZipTransform * _Nonnull item) {
             item.group = self;
-        }];
+            return [EZSWeakReference reference:item];
+        }] as:NSMutableArray.class]; // Never chang, so converting to mutable array is faster.
     }
     return self;
 }
 
 - (id)nextValue {
-    if (_transforms.count != _transformsCount) {
+    if (self.transforms.count != _transformsCount) {
         return EZREmpty.empty;
     }
     
-    BOOL (^queueHasNotValue)(EZSQueue * _Nonnull item) = ^BOOL (EZSQueue * _Nonnull item) {
-        return item.isEmpty || item.front == EZREmpty.empty ;
-    };
-    EZSequence<EZSQueue *> *seq = [EZS_Sequence(_transforms) map:EZS_propertyWith(EZS_KeyPath(EZRZipTransform, nextQueue))];
-    if (![seq any:queueHasNotValue]) {
-        return [[seq map:^id (EZSQueue * item) {
-            id front = [item dequeue];
-            return front ?: NSNull.null;
-        }] as:EZTupleBase.class];
+    EZTupleBase *tuple = [EZTupleBase tupleWithCount:_transformsCount];
+    NSUInteger index = 0;
+    for (EZSWeakReference<EZRZipTransform *> * _Nonnull obj in self.transforms) {
+        EZRZipTransform *transform = obj.reference;
+        if EZR_Unlikely(obj.reference == nil) {
+            self.transforms = nil;
+            return EZREmpty.empty;
+        }
+        EZSQueue *queue = transform.nextQueue;
+        if (queue.empty) {
+            return EZREmpty.empty;
+        }
+        id front = queue.front;
+        if EZR_Unlikely(front == EZREmpty.empty) {
+            return EZREmpty.empty;
+        } else {
+            tuple[index++] = front;
+        }
     }
-    return EZREmpty.empty;
+    for (EZSWeakReference<EZRZipTransform *> * _Nonnull obj in self.transforms) {
+        [obj.reference.nextQueue dequeue];
+    }
+    return tuple;
 }
 
 - (void)removeTransform:(EZRZipTransform *)transform {
-    [_transforms removeObject:transform];
+    self.transforms = nil;
 }
 
 @end

@@ -34,8 +34,8 @@
 #import "EZRNode+ProjectPrivate.h"
 #import "EZRSenderList.h"
 #import "EZRSwitchMapTransform.h"
-#import <EasySequence/EasySequence.h>
 #import "EZRCaseTransform.h"
+#import <EasyFoundation/EasyFoundation.h>
 
 @import ObjectiveC.runtime;
 
@@ -228,11 +228,8 @@ NSString * const EZRExceptionReason_CasedNodeMustGenerateBySwitchOrSwitchMapOper
     
     id nextValue = [group nextValue];
     if (nextValue != EZREmpty.empty) {
-        EZRSenderList *senderList = [EZRSenderList new];
-        [EZS_Sequence(nodes) forEach:^(id  _Nonnull item) {
-            [senderList appendSender:item];
-        }];
-        [returnedNode next:nextValue from:senderList context:NULL];
+        EZRSenderList *senderList = [EZRSenderList senderListWithArray:nodes];
+        [returnedNode next:nextValue from:senderList context:nil];
     }
     
     return returnedNode;
@@ -256,11 +253,8 @@ NSString * const EZRExceptionReason_CasedNodeMustGenerateBySwitchOrSwitchMapOper
     
     id nextValue = [group nextValue];
     if (nextValue != EZREmpty.empty) {
-        EZRSenderList *senderList = [EZRSenderList new];
-        [EZS_Sequence(nodes) forEach:^(id  _Nonnull item) {
-            [senderList appendSender:item];
-        }];
-        [returnedNode next:nextValue from:senderList context:NULL];
+        EZRSenderList *senderList = [EZRSenderList senderListWithArray:nodes];
+        [returnedNode next:nextValue from:senderList context:nil];
     }
     
     return returnedNode;

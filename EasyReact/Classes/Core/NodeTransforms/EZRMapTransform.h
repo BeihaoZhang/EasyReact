@@ -21,7 +21,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EZRMapTransform : EZRTransform
 
-- (instancetype)initWithMapBlock:(EZRMapBlock)block;
+- (instancetype)initWithMapBlock:(EZRMapBlock)block NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 
 @end
 

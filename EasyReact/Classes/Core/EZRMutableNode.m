@@ -26,16 +26,21 @@
 #import "EZRMetaMacros.h"
 #import "EZRBlockCancelable.h"
 #import "EZRTransform.h"
+#import "EZRNextReceiver.h"
 #import <objc/runtime.h>
 
 NSString *EZRExceptionReason_CannotModifyEZRNode = @"EZRExceptionReason_CannotModifyEZRNode";
 
 static inline EZSFliterBlock _EZR_PropertyExists(NSString *keyPath) {
     return ^BOOL (id item) {
-        id property = [item valueForKey:keyPath];
+        id property = [item valueForKeyPath:keyPath];
         return !!property;
     };
 }
+
+@interface EZRMutableNode () <EZRNextReceiver>
+
+@end
 
 @implementation EZRMutableNode
 
@@ -65,10 +70,13 @@ static inline EZSFliterBlock _EZR_PropertyExists(NSString *keyPath) {
     if (self = [super initDirectly]) {
         _value = value;
         _mutable = isMutable;
-        _listenTransforms = [EZSWeakOrderedSet new];
-        _upstreamTransforms = [EZSOrderedSet new];
-        _downstreamTransforms = [EZSWeakOrderedSet new];
+        _privateListenEdges = @[];
+        _privateUpstreamTransforms = @[];
+        _privateDownstreamTransforms = @[];
         EZR_LOCK_INIT(_valueLock);
+        EZR_LOCK_INIT(_upstreamLock);
+        EZR_LOCK_INIT(_downstreamLock);
+        EZR_LOCK_INIT(_listenEdgeLock);
     }
     return self;
 }
@@ -99,7 +107,7 @@ static inline EZSFliterBlock _EZR_PropertyExists(NSString *keyPath) {
 }
 
 - (void)setValue:(id)value context:(nullable id)context {
-    if (!self.isMutable) {
+    if EZR_LikelyNO(!self.isMutable) {
         EZR_THROW(EZRNodeExceptionName, EZRExceptionReason_CannotModifyEZRNode, nil);
     }
     [self next:value from:[EZRSenderList new] context:context];
@@ -117,19 +125,22 @@ static inline EZSFliterBlock _EZR_PropertyExists(NSString *keyPath) {
         _value = value;
     }
     
-    if (value == EZREmpty.empty) {
+    if EZR_LikelyNO(value == EZREmpty.empty) {
         return;
     }
 
-    EZRSenderList *newQueue = senderList.copy;
-    [newQueue appendSender:self];
-
-    EZSequence *canPushValueDownstreams = [EZS_Sequence(_downstreamTransforms) reject:^BOOL(id<EZRTransformEdge> item) {
-        return [newQueue contains:item.to];
-    }];
-    [[EZS_Sequence(_listenTransforms) concat:canPushValueDownstreams] forEach:^(id<EZRTransformEdge> item) {
-        [item next:value from:newQueue context:context];
-    }];
+    EZRSenderList *newQueue = [senderList appendNewSender:self];
+    
+    for (EZSWeakReference<id<EZRListenEdge>> *item in self.privateListenEdges) {
+        [item.reference next:value from:newQueue context:context];
+    }
+    
+    for (EZSWeakReference<id<EZRTransformEdge>> *reference in self.privateDownstreamTransforms) {
+        id<EZRTransformEdge> item = reference.reference;
+        if EZR_LikelyYES(![senderList contains:item.to]) {
+            [item next:value from:newQueue context:context];
+        }
+    }
 }
 
 - (id)value {
@@ -143,40 +154,57 @@ static inline EZSFliterBlock _EZR_PropertyExists(NSString *keyPath) {
 
 #pragma mark listener
 
-- (NSArray<id<EZRListenEdge>> *)listenTransforms {
-    return _listenTransforms.allObjects;
+- (NSArray<id<EZRListenEdge>> *)listenEdges {
+    return [[EZS_Sequence(self.privateListenEdges) map:EZS_valueForKeypath(@"reference")] as:NSArray.class];
 }
 
 - (BOOL)hasListener {
-    return [EZS_Sequence(_listenTransforms) any:_EZR_PropertyExists(EZS_KeyPath(EZRTransform, to))];
+    return [EZS_Sequence(self.privateListenEdges) any:_EZR_PropertyExists(@"reference.to")];
 }
 
-- (void)addListenTransform:(id<EZRListenEdge>)listenTransform {
-    NSParameterAssert(listenTransform);
-    if (!listenTransform) {
+- (void)addListenEdge:(id<EZRListenEdge>)listenEdge {
+    NSParameterAssert(listenEdge);
+    if EZR_LikelyNO(!listenEdge) {
         return ;
     }
-    [_listenTransforms addObject:listenTransform];
+    for (EZSWeakReference<id<EZRListenEdge>> * _Nonnull item in self.privateListenEdges) {
+        if EZR_LikelyNO(item.reference == listenEdge) {
+            return;
+        }
+    }
+    EZR_SCOPELOCK(_listenEdgeLock);
+    self.privateListenEdges = [self.privateListenEdges arrayByAddingObject:[EZSWeakReference reference:listenEdge]];
 }
 
-- (void)removeListenTransform:(id<EZRListenEdge>)listenTransform {
-    [_listenTransforms removeObject:listenTransform];
+- (void)removeListenEdge:(id<EZRListenEdge>)listenEdge {
+    NSParameterAssert(listenEdge);
+    EZR_SCOPELOCK(_listenEdgeLock);
+    NSUInteger removeIndex = 0;
+    for (EZSWeakReference<id<EZRListenEdge>> *reference in self.privateListenEdges) {
+        if (reference.reference == listenEdge) {
+            NSMutableArray *listenEdges = [self.privateListenEdges mutableCopy];
+            [listenEdges removeObjectAtIndex:removeIndex];
+            self.privateListenEdges = listenEdges;
+            return;
+        }
+        removeIndex++;
+    }
 }
 
 #pragma mark downstream
 
 - (NSArray<EZRNode *> *)downstreamNodes {
-    return [[[EZS_Sequence(_downstreamTransforms) select:_EZR_PropertyExists(EZS_KeyPath(EZRTransform, to))]
-             map:EZS_propertyWith(EZS_KeyPath(EZRTransform, to))]
+    return [[[EZS_Sequence(self.privateDownstreamTransforms) select:_EZR_PropertyExists(@"reference.to")]
+             map:EZS_valueForKeypath(@"reference.to")]
             as:NSArray.class];
 }
 
 - (NSArray<id<EZRTransformEdge>> *)downstreamTransforms {
-    return _downstreamTransforms.allObjects;
+    return [[EZS_Sequence(self.privateDownstreamTransforms) map:EZS_valueForKeypath(@"reference")] as:NSArray.class];
 }
 
 - (BOOL)hasDownstreamNode {
-    return [EZS_Sequence(_downstreamTransforms) any:_EZR_PropertyExists(EZS_KeyPath(EZRTransform, to))];
+    return [EZS_Sequence(self.privateDownstreamTransforms) any:_EZR_PropertyExists(@"reference.to")];
 }
 
 - (id<EZRCancelable>)linkTo:(EZRMutableNode *)node transform:(id<EZRTransformEdge>)transform {
@@ -214,15 +242,16 @@ static inline EZSFliterBlock _EZR_PropertyExists(NSString *keyPath) {
 }
 
 - (NSArray<id<EZRTransformEdge>> *)upstreamTransformsFromNode:(EZRNode *)from {
-    return [[EZS_Sequence(self.upstreamTransforms) select:^BOOL(id<EZRTransformEdge>  _Nonnull value) {
+    return [[EZS_Sequence(self.privateUpstreamTransforms) select:^BOOL(id<EZRTransformEdge>  _Nonnull value) {
         return value.from == from;
     }] as:NSArray.class];
 }
 
 - (NSArray<id<EZRTransformEdge>> *)downstreamTransformsToNode:(EZRNode *)to {
-    return [[EZS_Sequence(self.downstreamTransforms) select:^BOOL(id<EZRTransformEdge>  _Nonnull value) {
-        return value.to == to;
-    }] as:NSArray.class];
+    return [[[EZS_Sequence(self.privateDownstreamTransforms) select:^BOOL(EZSWeakReference<id<EZRTransformEdge>> * _Nonnull value) {
+        return value.reference.to == to;
+    }] map:EZS_valueForKeypath(@"reference")]
+            as:NSArray.class];
 }
 
 - (void)removeTransform:(id<EZRTransformEdge>)transform {
@@ -232,8 +261,8 @@ static inline EZSFliterBlock _EZR_PropertyExists(NSString *keyPath) {
 }
 
 - (void)removeDownstreamNodes {
-    [EZS_Sequence(self.downstreamTransforms) forEach:^(id<EZRTransformEdge>  _Nonnull value) {
-        [self removeTransform:value];
+    [EZS_Sequence(self.privateDownstreamTransforms) forEach:^(EZSWeakReference<id<EZRTransformEdge>> * _Nonnull value) {
+        [self removeTransform:value.reference];
     }];
 }
 
@@ -243,7 +272,7 @@ static inline EZSFliterBlock _EZR_PropertyExists(NSString *keyPath) {
 }
 
 - (void)removeUpstreamNodes {
-    [EZS_Sequence(self.upstreamTransforms) forEach:^(id<EZRTransformEdge>  _Nonnull value) {
+    [EZS_Sequence(self.privateUpstreamTransforms) forEach:^(id<EZRTransformEdge>  _Nonnull value) {
         [self removeTransform:value];
     }];
 }
@@ -251,35 +280,72 @@ static inline EZSFliterBlock _EZR_PropertyExists(NSString *keyPath) {
 #pragma mark upstream
 
 - (NSArray<EZRNode *> *)upstreamNodes {
-    return [[[EZS_Sequence(_upstreamTransforms) select:_EZR_PropertyExists(EZS_KeyPath(EZRTransform, from))]
-             map:EZS_propertyWith(EZS_KeyPath(EZRTransform, from))]
+    return [[[EZS_Sequence(self.privateUpstreamTransforms) select:_EZR_PropertyExists(EZS_KeyPath(EZRTransform, from))]
+             map:EZS_valueForKeypath(EZS_KeyPath(EZRTransform, from))]
             as:NSArray.class];
 }
 
 - (NSArray<id<EZRTransformEdge>> *)upstreamTransforms {
-    return _upstreamTransforms.allObjects;
+    return self.privateUpstreamTransforms;
 }
 
 - (BOOL)hasUpstreamNode {
-    return [EZS_Sequence(_upstreamTransforms) any:_EZR_PropertyExists(EZS_KeyPath(EZRTransform, from))];
+    return [EZS_Sequence(self.privateUpstreamTransforms) any:_EZR_PropertyExists(EZS_KeyPath(EZRTransform, from))];
 }
 
 #pragma mark - operator data structure
 
-- (void)addUpstreamTransformData:(id<EZRTransformEdge>)transform {
-    [_upstreamTransforms addObject:transform];
+- (id<EZRNextReceiver>)addUpstreamTransformData:(id<EZRTransformEdge>)transform {
+    NSParameterAssert(transform);
+    if (!transform) {
+        return nil;
+    }
+    BOOL exists = [EZS_Sequence(self.privateUpstreamTransforms) any:^BOOL(id<EZRTransformEdge> _Nonnull item) {
+        return item == transform;
+    }];
+    if (!exists) {
+        EZR_SCOPELOCK(_upstreamLock);
+        self.privateUpstreamTransforms = [self.privateUpstreamTransforms arrayByAddingObject:transform];
+    }
+
+    return self;
 }
 
 - (void)addDownstreamTransformData:(id<EZRTransformEdge>)transform {
-    [_downstreamTransforms addObject:transform];
+    NSParameterAssert(transform);
+    if (!transform) {
+        return ;
+    }
+    BOOL exists = [EZS_Sequence(self.privateDownstreamTransforms) any:^BOOL(EZSWeakReference<id<EZRTransformEdge>> * _Nonnull item) {
+        return item.reference == transform;
+    }];
+    if (!exists) {
+        EZR_SCOPELOCK(_downstreamLock);
+        self.privateDownstreamTransforms = [self.privateDownstreamTransforms arrayByAddingObject:[EZSWeakReference reference:transform]];
+    }
 }
 
 - (void)removeUpstreamTransformData:(id<EZRTransformEdge>)transform {
-    [_upstreamTransforms removeObject:transform];
+    NSParameterAssert(transform);
+    EZR_SCOPELOCK(_upstreamLock);
+    NSMutableArray *upstreamTransforms = [self.privateUpstreamTransforms mutableCopy];
+    [upstreamTransforms removeObject:transform];
+    self.privateUpstreamTransforms = upstreamTransforms;
 }
 
 - (void)removeDownstreamTransformData:(id<EZRTransformEdge>)transform {
-    [_downstreamTransforms removeObject:transform];
+    NSParameterAssert(transform);
+    EZR_SCOPELOCK(_downstreamLock);
+    NSUInteger removeIndex = 0;
+    for (EZSWeakReference<id<EZRTransformEdge>> *reference in self.privateDownstreamTransforms) {
+        if (reference.reference == transform) {
+            NSMutableArray *downstreamTransforms = [self.privateDownstreamTransforms mutableCopy];
+            [downstreamTransforms removeObjectAtIndex:removeIndex];
+            self.privateDownstreamTransforms = downstreamTransforms;
+            return;
+        }
+        removeIndex++;
+    }
 }
 
 #pragma mark others

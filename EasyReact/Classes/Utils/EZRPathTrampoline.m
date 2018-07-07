@@ -24,7 +24,7 @@
 #import "EZRCancelableBag.h"
 @import ObjectiveC.runtime;
 @import ObjectiveC.message;
-#import <EasySequence/NSObject+EZSDeallocBell.h>
+#import <EasyFoundation/EasyFoundation.h>
 
 @implementation EZRPathTrampoline {
     __unsafe_unretained NSObject *_target;

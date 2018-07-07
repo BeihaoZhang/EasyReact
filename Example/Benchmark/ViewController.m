@@ -33,7 +33,7 @@
     [super viewDidLoad];
 
     Benchmark *benchmark = [Benchmark new];
-    benchmark.benchmarkTargets = @[[EZRBenchmarkTarget new], [RACBenchmarkTarget new], [RXSwiftBenchmarkTarget new]];
+    benchmark.benchmarkTargets = @[[EZRBenchmarkTarget new], [RACBenchmarkTarget new]];
     NSUInteger listenerCount = 10;
     NSUInteger changeTimes = 1000;
     NSArray<BenchmarkTest *> *tests = @[

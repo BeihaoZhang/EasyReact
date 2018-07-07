@@ -65,24 +65,28 @@
         EZR_SCOPELOCK(_fromLock);
         EZRNode *lastFrom = _from;
         if (lastFrom) {
-            [lastFrom removeListenTransform:self];
+            [lastFrom removeListenEdge:self];
             _from = nil;
         }
         if (!from) {
             return;
         }
         _from = from;
-        [_from addListenTransform:self];
+        [_from addListenEdge:self];
     }
     [self pushValueIfNeeded];
 }
 
 - (void)pushValueIfNeeded {
     if (self.from && self.to && (!self.from.isEmpty)) {
-        EZRSenderList *senderList = [EZRSenderList new];
-        [senderList appendSender:self.from];
-        [self next:self.from.value from:senderList context:NULL];
+        [self next:self.from.value from:[EZRSenderList senderListWithSender:self.from] context:nil];
     }
+}
+
+- (void)dealloc {
+    if (_from) {
+        [_from removeListenEdge:self];
+    }   
 }
 
 @end

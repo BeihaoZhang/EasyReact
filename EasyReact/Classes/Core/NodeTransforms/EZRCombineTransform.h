@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface EZRCombineTransform : EZRTransform
 
 @property (atomic, readwrite, strong, nullable) EZRCombineTransformGroup *group;
-@property (atomic, readonly, strong) id lastValue;
+@property (atomic, readonly, strong, nullable) id lastValue;
 
 @end
 

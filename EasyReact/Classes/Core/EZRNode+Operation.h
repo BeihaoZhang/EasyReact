@@ -16,7 +16,7 @@
 
 #import <EasyReact/EZRNode.h>
 #import <EasyReact/EZRMetaMacros.h>
-#import <EasyTuple/EasyTuple.h>
+#import <EasyFoundation/EasyFoundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -27,247 +27,266 @@ FOUNDATION_EXTERN NSString * const EZRExceptionReason_CasedNodeMustGenerateBySwi
 
 @interface EZRNode<T: id> (Operation)
 
-#pragma mark For single upstream
+#pragma mark - For single upstream
 
 /**
- 此操作作用为复制。fork操作会返回新的节点, 此节点会作为原节点的下游。
+ This operation is a copy action. Fork operation will return a new node as the receiver's downstream.
 
- @return 新的node, value和原节点保持一致。
+ @return    New node, whose value keeping same as the receiver
  */
 - (EZRNode<T> *)fork;
 
 /**
- 此操作作用为映射。map操作会返回新的节点，此节点会作为原节点的下游。原节点每一次变化时调用block, 通过block处理每一次变化时的值并得到一个新的值作为这个新节点的value。
+ Map operation will return a new node as the receiver's downstream. The block will be called each time the receiver changes, and a new value will be assigned to the returned node after executing the block and processing the changing value of the receiver.
 
- @param block map处理block。
- @return 新的node，value为block的返回值。
+ @param block   Processing block of map operation
+ @return        New node, whose value is the return value of the block
  */
 - (EZRNode *)map:(id _Nullable (^)(T _Nullable next))block;
 
 /**
- 此操作作用为过滤。filter操作会返回新的节点, 此节点会作为原节点的下游。原节点每一次变化时调用block，通过block处理每一次变化时的值并返回一个BOOL类型来决定新的节点是否接收这个值。如果此值被接收，则作为新节点的值。
+ Filters operation will return a new node as the receiver's downstream. The block will be called each time the receiver changes, processing the changing value of the receiver and returning a BOOL value deciding whether new node will receive this value. If this value is received, it will be the value of the new node.
 
- @param block filter处理的block。
- @return 新的node, 当block返回YES时，value和原节点值相同，否则value不变。
+ @param block   Processing block of filter operation
+ @return        New node, whose value will equal to receiver's value if block returns YES. Otherwise, value won't change.
  */
 - (EZRNode<T> *)filter:(BOOL (^)(T _Nullable next))block;
 
 /**
- 此操作作用为跳过前N次的值。skip操作会返回新的节点, 此节点会作为原节点的下游。
+ Skips the first N times value. Skip operation will return a new node as the receiver's downstream.
 
- @param number 跳过(忽略)的数量
- @return 新的node, 当原节点的值变化超过`number`次之后，新的node的值和原节点的值保持一致。
+ @param number  The number of values needed to be skipped(ignored)
+ @return        New node, whose value will be same as the receiver's value after the first 'number' times changes of the receiver
  */
 - (EZRNode<T> *)skip:(NSUInteger)number;
 
 /**
- 此操作作用为取前N次的值。take操作会返回新的节点, 此节点会作为原节点的下游。
+ Takes the first N times value. Take operation will return a new node as the receiver's downstream.
 
- @param number 取值的数量
- @return 新的node, 当原节点的值变化数量在`number`次之内，新的node的值和原节点的值保持一致。
+ @param number  The number of values needed to be taken
+ @return        New node, whose value will be same as the receiver's value within the first 'number' times changes of the receiver
  */
 - (EZRNode<T> *)take:(NSUInteger)number;
 
 /**
- 此操作作用为忽略指定的value。ignore操作会返回新的节点, 此节点会作为原节点的下游。
+ Ignores the specific value. Ignore operation will return a new node as the receiver's downstream.
 
- @param ignoreValue 要忽略的value
- @return 新的node, 当原节点的值为`ignoreValue`此node的值不变，否则新的node的值和原节点的值保持一致。
+ @param ignoreValue     Value needed to be ignored
+ @return                New node, whose value will keep unchanged if the receiver's value equals to 'ignoreValue', otherwise the value of new node will keep same with the receiver's value
  */
 - (EZRNode<T> *)ignore:(nullable T)ignoreValue;
 
 /**
- 此操作作用为选择指定的value。select操作会返回新的节点, 此节点会作为原节点的下游。
+ Selects the specific value. Select operation will return a new node as the receiver's downstream.
 
- @param selectedValue 要选择的value
- @return 新的node, 当原节点的值为`selectedValue`此node的和原节点的值保持一致，否则value不变。
+ @param selectedValue   The value needed to be selected
+ @return                New node, whose value will keep the same with the receiver's value if the receiver's value equals to 'selectedValue', otherwise, the value of new node will keep unchanged.
  */
 - (EZRNode<T> *)select:(nullable T)selectedValue;
 
 /**
- 此操作作用为用指定的value替换原节点传来的值。mapReplace操作会返回新的节点, 此节点会作为原节点的下游。
+ Uses the specific value instead of the value passing from the receiver. MapReplace operation will return a new node as the receiver's downstream.
 
- @param mappedValue 指定的用于替换原值的value
- @return 新的node, 当原节点发生变化时，value为`mappedValue`。
+ @param mappedValue     The value used to replace the value passing from the receiver.
+ @return                New node, whose value will be 'mappedValue' when the receiver's value changes.
  */
-- (EZRNode<T> *)mapReplace:(nullable id)mappedValue;
+- (EZRNode *)mapReplace:(nullable id)mappedValue;
 
 /**
- 此操作作用为只接收不连续重复的值。distinctUntilChanged操作会返回新的节点, 此节点会作为原节点的下游。
+ Only receives value that not repeated continuously. DistinctUntilChanged operation will return a new node as the receiver's downstream.
 
- @return 新的node，当原节点传来的值和此node当前值不同时，新的node的值才会发生变化。
+ @return        New node, whose value will only change when the value passing from the receiver is diffrent from current value.
  */
 - (EZRNode<T> *)distinctUntilChanged;
 
 /**
- 此操作用于处理node本身。
+ This operation is used to process the node itself.
 
- @param thenBlock 要处理的block，参数`node`为调用者本身。
- @return 原node。
+ @param thenBlock   Processing block, the parameter 'node' is the caller itself.
+ @return            The receiver
  */
 - (EZRNode<T> *)then:(void(NS_NOESCAPE^)(EZRNode<T> *node))thenBlock;
 
 /**
- 此操作用于在指定队列传输value。deliverOn操作会返回新的节点, 此节点会作为原节点的下游。
+ This operation is used to transmit value through the specific queue. DeliverOn operation will return a new node as the receiver's downstream.
 
- @param queue 指定的队列，用于传输value。
- @return 新的node, value和原节点保持一致。
+ @param queue       The specific queue, using to transmit value
+ @return            New value, whose value keeps the same with the receiver's value
  */
 - (EZRNode<T> *)deliverOn:(dispatch_queue_t)queue;
 
 /**
- 此操作用于在主队列传输value。deliverOnMainQueue操作会返回新的节点, 此节点会作为原节点的下游。
+ This operation is used to transmit value through the main queue. DeliverOnMainQueue operation will return a new node as the receiver's downstream.
 
- @return 新的node, value和原节点保持一致。
+ @return            New value, whose value keeps the same with the receiver's value
  */
 - (EZRNode<T> *)deliverOnMainQueue;
+
+/**
+ Synchronizes the current value with another value.
+ The other EZRNode's value will be set to the current EZRNode's value even if the current value is empty.
+
+ @note Both current EZRNode and othEZRNode must response to -(void)setValue: method, otherwise you will receive an exception while syncing.
+ 
+ @param othEZRNode  The other EZRNode you want to sync.
+ @return            A cancelable object which is able to stop syncing.
+ */
+- (id<EZRCancelable>)syncWith:(EZRNode<T> *)othEZRNode;
 
 /**
  Sync the current value to another value.
  The other EZRNode's value will be set to the current EZRNode's value even if the current value is empty.
 
- @note Both current EZRNode and othEZRNode must response to -(void)setValue: method, otherwise you will receive an exception while syncing.
- @param othEZRNode The other EZRNode you want to sync.
- @return a cancelable object which is able to stop syncing.
+ @param othEZRNode  The other EZRNode you want to sync.
+ @param transform   Current nodes's value will use transform to other node.
+ @param revert      The other node's value will use revert to current node.
+ @return            A cancelable object which is able to stop syncing.
  */
-- (id<EZRCancelable>)syncWith:(EZRNode<T> *)othEZRNode;
 - (id<EZRCancelable>)syncWith:(EZRNode *)othEZRNode transform:(id (^)(T source))transform revert:(T (^)(id target))revert;
 
 /**
- 此操作用于给node映射后降阶。flattenMap操作会返回新的节点, 此节点会作为原节点的下游。原节点的value经过block处理map为node后，再降阶处理。
+ The operation used to reduce order after mapping node. FlattenMap operation will return a new node as the receiver's downstream. The value of the receiver will transfer to a node after block execution, and then be reduced order.
 
- @param block map处理block，接收一个value，返回一个node，再用于降阶。
- @return 新的node，value为map后返回的节点的value.
+ @param block   Processing block of map, receiving a value and returning a node for reducing order.
+ @return        New node, whose value is the returned node's value of mapping block
  */
 - (EZRNode *)flattenMap:(EZRNode * _Nullable (^)(T _Nullable next))block;
 
-
 /**
- 此操作用于给node降阶。flatten操作会返回新的节点, 此节点会作为原节点的下游。当原节点的value为EZRNode时，新的节点值发生变化，等于原节点的value的value。
+ The operation used to reduce order of node. Flatten operation will return a new node as the receiver's downstream. When the receiver's value is a EZRNode, the value of new node will change, and will equal to the value of the receiver's value.
 
- @return 新的node。
+ @return        New node
  */
 - (EZRNode *)flatten;
 
 /**
  Changes value if and only if the value does not change again in `interval` seconds.
+ 
  @discusstion If a value does not last for `interval` seconds, its listeners / downstreamNodes will not receive this value.
  An throttled empty value will not notify its listeners or downdstreams no matter how long it remains empty.
  The listener or downstream blocks will always be invoked in the main queue.
  If you want to dispatch those blocks to a specified queue, use `-throttle:queue:` method.
+ 
  @note It is NOT a real time mechanism, just like an NSTimer.
- @param timeInterval The time interval in seconds, MUST be greater than 0.
- @return A new EZRNode which change its value iff the value lasts for a given interval.
+ 
+ @param timeInterval    The time interval in seconds, MUST be greater than 0.
+ @return                A new EZRNode which change its value if and only if the value lasts for a given interval.
  */
 - (EZRNode<T> *)throttleOnMainQueue:(NSTimeInterval)timeInterval;
 
 /**
  Changes value if and only if the value does not change again in `interval` seconds.
+ 
  @discusstion If a value does not last for `interval` seconds, its listeners / downstreamNodes will not receive this value.
  An throttled empty value will not notify its listeners or downdstreams no matter how long it remains empty.
+ 
  @note It is NOT a real time mechanism, just like an NSTimer.
- @param timeInterval The time interval in seconds, MUST be greater than 0.
- @param queue The queue which listener block will be invoked in.
- @return A new EZRNode which change its value iff the value lasts for a given interval.
+ 
+ @param timeInterval    The time interval in seconds, MUST be greater than 0.
+ @param queue           The queue which listener block will be invoked in.
+ @return                A new EZRNode which change its value if and only if the value lasts for a given interval.
  */
 - (EZRNode<T> *)throttle:(NSTimeInterval)timeInterval queue:(dispatch_queue_t)queue;
 
 /**
- 此操作作用为在指定队列延迟传递原node的值。delay操作会返回新的节点, 此节点会作为原节点的下游。
+ Delays the passing value from the receiver in specific queue. Delay operation will return a new node as the receiver's downstream.
 
- @param timeInterval 延迟时间，单位为秒。
- @param queue 指定的队列，用于传递value。
- @return 新的node，value和原节点保持一致。
+ @param timeInterval    Delayed time interval, in second
+ @param queue           The specific queue for passing value
+ @return                New node, whose value equals to the receiver's value.
  */
 - (EZRNode<T> *)delay:(NSTimeInterval)timeInterval queue:(dispatch_queue_t)queue;
 
 /**
- 此操作作用为在主队列延迟传递原node的值。delay操作会返回新的节点, 此节点会作为原节点的下游。
+ Delays the passing value from the receiver in the main queue. Delay operation will return a new node as the receiver's downstream.
 
- @param timeInterval 延迟时间，单位为秒。
- @return 新的node，value和原节点保持一致。
+ @param timeInterval    Delayed time interval, in second
+ @return                New node, whose value equals to the receiver's value.
  */
-- (EZRNode<T> *)delayOnMainQueue:(NSTimeInterval)timeInterval ;
+- (EZRNode<T> *)delayOnMainQueue:(NSTimeInterval)timeInterval;
 
 /**
- 此操作作用为reduce node每一次变化时的值。scan操作会返回新的节点, 此节点会作为原节点的下游。每次一node变化时，调用reduceBlock, 返回一个running值，供下次变化时再次传入reduceBlock。
+ Reduces the changing value of node each time. Scan operation will return a new node as the receiver's downstream. Each time the node changes, 'reduceBlock' will be called and will return a running value for passing to the 'reduceBlock' again at next change.
  
- @param startingValue 起始值。
- @param reduceBlock reduce操作的block。参数如下：
+ @param startingValue   Beginning Value
+ @param reduceBlock     Block for reducing, with parameters:
     <pre>@textblock
-         running     - 上一次reduce的结果
-         next        - 当前node的值
+         running     - Reducing result last time
+         next        - Current value of node
     @/textblock</pre>
- @return 新的node，value为running值。
+ @return                New node, whose value is running value.
  */
 - (EZRNode *)scanWithStart:(nullable id)startingValue reduce:(id (^)(id _Nullable running, T _Nullable next))reduceBlock;
 
 /**
- 此操作作用为reduce node每一次变化时的值。scan操作会返回新的节点, 此节点会作为原节点的下游。每次一node变化时，调用reduceBlock, 返回一个running值，供下次变化时再次传入reduceBlock。
+ Reduces the changing value of node each time. Scan operation will return a new node as the receiver's downstream. Each time the node changes, 'reduceBlock' will be called and will return a running value for passing to the 'reduceBlock' again  at next change.
 
- @param startingValue 起始值。
- @param reduceBlock reduce操作的block。参数如下：
+ @param startingValue   Beginning Value
+ @param reduceBlock     Block for reducing, with parameters:
      <pre>@textblock
-         running     - 上一次reduce的结果
-         next        - 当前node的值
-         index       - 次数
+         running     - Reducing result last time
+         next        - Current value of node
+         index       - index of the value changes, starts from 0.
      @/textblock</pre>
- @return 新的node，value为running值。
+ @return                New node, whose value is running value.
  */
 - (EZRNode *)scanWithStart:(nullable id)startingValue reduceWithIndex:(id (^)(id _Nullable running, T _Nullable next, NSUInteger index))reduceBlock;
 
 #pragma mark For multipart upstreamNodes
 
 /**
- 此操作作用为合并多个node，产生一个新的节点，便于一次性处理多个node的结果。combine操作会返回新的节点，此节点会作为多个原节点的下游。当各个node的值都不为EZREmpty时，新节点的值发生变化。
+ Combines mutiple nodes into one node, for the convenience of processing mutiple nodes in one time. Combine operation will return a new node as the muliple nodes' downstream. The new node value will change when none of the muliple nodes' values is EZREmpty.
 
- @param nodes 要合并的多个node。
- @return 新的node，值为ZTupleBase类型，即各个原node的value组成的元组。
+ @param nodes       Nodes that will be combined
+ @return            New node, which is kind of EZTupleBase, is a tuple consitituted by muliple nodes.
  */
 + (EZRNode<__kindof EZTupleBase *> *)combine:(NSArray<EZRNode *> *)nodes;
 
 /**
- 此操作将当期节点和传递进来的节点做合并， 效果等同 [EZRNode combine:@[self, node]]
+ Combines the receiver and the passing node together, same as [EZRNode combine:@[self, node]]
 
- @param node 将要合并的node
- @return 新的node，值为ZTupleBase类型，即当前node和传递来的node的value组成的元组。
+ @param node        Node that will be combined
+ @return            New node, which is kind of EZTupleBase, is a tuple consitituted by the receiver and passing node.
  */
 - (EZRNode<EZTuple2<T, id> *> *)combine:(EZRNode *)node;
-/**
- 此操作作用为合并多个node，产生一个新的节点，便于把多个node当成一个node来用。merge操作会返回新的节点, 此节点会作为多个原节点的下游。当多个node的任何一个node变化时，新的节点的值发生变化。
 
- @param nodes 要合并的多个node。
- @return 新的node。
+/**
+ Merges mutiple nodes into one node, for the convenience of processing mutiple nodes in one time. Merge operation will return a new node as mutiple nodes' downstream. If any of those nodes changes, the value of new node will change.
+ 
+ @param nodes       Node that will be merged
+ @return            New node
  */
 + (EZRNode *)merge:(NSArray<EZRNode *> *)nodes;
 
 /**
- 此操作将当期节点和传递进来的节点做合并操作， 效果等同 [EZRNode merge:@[self, node]]
+ Merges the current node and the passing node together, same as [EZRNode merge:@[self, node]]
 
- @param node 将要合并的node
- @return 新的node。
+ @param node        Node that will be merged
+ @return            New node
  */
 - (EZRNode *)merge:(EZRNode *)node;
 
 /**
  Zips several EZRNodes into one.
+ 
  @discussion The value of the zipped value is an EZRNode which contains an array of values.
  The content of the array is the k-th (k >= 1) value of all the sources.
  If any value in the sources is empty, the initial value of the zipped value will be empty as well.
  Any nil value from the sources will be converted to NSNull.null since an array MUST NOT contain a nil.
- The array will change its content iff all the sources have recieved at least one new value.
+ The array will change its content if and only if all the sources have recieved at least one new value.
  You can add / remove upstreamNodes after creating the zipped value.
  The zipped value will be re-calculated after adding / removing an upstream.
- @param nodes An array of source EZRNodes. It should NOT be empty.
- @return An EZRNode contains an array of zipped values.
+ 
+ @param nodes       An array of source EZRNodes. It should NOT be empty.
+ @return            An EZRNode contains an array of zipped values.
  */
 + (EZRNode<__kindof EZTupleBase *> *)zip:(NSArray<EZRNode *> *)nodes;
 
 /**
- 此操作将当期节点和传递进来的节点做zip打包， 效果等同 [EZRNode zip:@[self, node]]
+ Zips current node with the passing node together, same as [EZRNode zip:@[self, node]]
 
- @param node 将要打包的节点
- @return 新的node
+ @param node        EZRNode that will be zipped with current node
+ @return            New EZRNode
  */
 - (EZRNode<EZTuple2<T, id> *> *)zip:(EZRNode *)node;
 
@@ -297,20 +316,48 @@ EZTNamedTupleDef(EZRSwitchedNodeTuple, T)
 
 @end
 
-
 @interface EZRNode<T: id> (SwitchCase)
 
+/**
+ Using the return key of 'switchBlock' to group the future values of current node. If there is no corresponding downstream node for current key, a new node will be created. it is usually used to separate various return nodes, and we can get the specific key value node through 'if', 'case', 'default' operation afterwards.
+
+ @param switchBlock         Block used for grouping
+ @return                    EZRNode whose value is kind of EZRSwitchedNodeTuple
+ */
 - (EZRNode<EZRSwitchedNodeTuple<T> *> *)switch:(id<NSCopying> _Nullable (^)(T _Nullable next))switchBlock;
 
+
+/**
+ Using the return key of 'switchBlock' to group the future values of current node. If there is no corresponding downstream node for current key, a new node will be created. it is usually used to separate various return nodes, and wen can get the specific key value node through 'if', 'case', 'default' operation afterwards.
+ 
+ @param switchMapBlock      Block used for grouping
+ @return                    EZRNode whose value is kind of EZRSwitchedNodeTuple
+ */
 - (EZRNode<EZRSwitchedNodeTuple<id> *> *)switchMap:(EZTuple2<id<NSCopying>, id> *(^)(T _Nullable next))switchMapBlock;
 
+/**
+ Filters the node created by - [EZRNode switch:] or - [EZRNode switchMap:] into the one that corresponds to specific key.
+
+ @param key         Specific key
+ @return            Node whose value corresponds to specific key.
+ */
 - (EZRNode *)case:(nullable id<NSCopying>)key;
 
+/**
+ Separates current node into node that satisfies condition and node not satisfies. like [[EZRNode switch:] case:@YES] and [[EZRNode switch:] case:@NO]
+
+ @param block       Judge rules for separating node
+ @return            Tuple of node after separation
+ */
 - (EZRIFResult<T> *)if:(BOOL (^)(T _Nullable next))block;
 
+/**
+ Operation that matches nil. nil could be also used as key
+
+ @return            Node using nil as key
+ */
 - (EZRNode *)default;
 
 @end
 
 NS_ASSUME_NONNULL_END
-

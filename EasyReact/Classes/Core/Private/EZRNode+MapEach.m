@@ -14,7 +14,7 @@
  * limitations under the License.
  **/
 
-#import <EasyTuple/EasyTuple.h>
+#import <EasyFoundation/EasyFoundation.h>
 #import "EZRMetaMacros.h"
 #import "EZRNode+MapEach.h"
 #import "EZRTypeDefine.h"

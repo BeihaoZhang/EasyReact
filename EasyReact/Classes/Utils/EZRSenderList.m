@@ -15,32 +15,49 @@
  **/
 
 #import "EZRSenderList.h"
-#import <EasySequence/EZSQueue.h>
 
-@implementation EZRSenderList {
-    @private
-    EZSQueue *_queue;
-}
-
-- (id)copyWithZone:(NSZone *)zone {
-    EZRSenderList *newList = [[self class] allocWithZone:zone];
-    newList->_queue = _queue.copy;
-    return newList;
-}
+@implementation EZRSenderList
 
 - (instancetype)init {
     if (self = [super init]) {
-        _queue = EZSQueue.new;
     }
     return self;
 }
 
-- (void)appendSender:(id)value {
-    [_queue enqueue:value];
+- (instancetype)initWithSender:(id)value {
+    if (self = [super init]) {
+        _value = value;
+    }
+    return self;
+}
+
++ (instancetype)senderListWithSender:(id)value {
+    return [[self alloc] initWithSender:value];
+}
+
++ (instancetype)senderListWithArray:(NSArray *)array {
+    EZRSenderList *list = [EZRSenderList new];
+    for (id value in array) {
+        list = [list appendNewSender:value];
+    }
+    return list;
+}
+
+- (instancetype)appendNewSender:(id)value {
+    EZRSenderList *newSenderList = [EZRSenderList senderListWithSender:value];
+    newSenderList->_prev = self;
+    return newSenderList;
 }
 
 - (BOOL)contains:(id)obj {
-    return [_queue contains:obj];
+    EZRSenderList *list = self;
+    while (list) {
+        if (list.value == obj) {
+            return YES;
+        }
+        list = list.prev;
+    }
+    return NO;
 }
 
 @end

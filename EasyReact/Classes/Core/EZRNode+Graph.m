@@ -17,7 +17,7 @@
 #import "EZRNode+Graph.h"
 #import "EZRTransformEdge.h"
 #import "EZRNode+Traversal.h"
-#import <EasySequence/EasySequence.h>
+#import <EasyFoundation/EasyFoundation.h>
 
 @interface EZRNode (DotLanguage)
 

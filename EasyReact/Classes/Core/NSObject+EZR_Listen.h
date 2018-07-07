@@ -14,7 +14,7 @@
  * limitations under the License.
  **/
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 @class EZRNode, EZRListenContext;
 
@@ -23,21 +23,21 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSObject (EZR_Listen)
 
 /**
+ Observes a EZRNode, and uses the return EZRListenContex object to add additional action.
+ If additional actions were added, the EZRNode is holded by current object. The holding relationship will be released when the current object is being destroyed.
+ Since Objective-C do not support method genericity, so this method is not able to transmit genericity to EZRListenContext instance.
+ We suggest using 'ListenedBy:' method defined in EZRNode+Listen, which is able to transmit genericity, for the convenience of type inferences for later API.
  
- 监听 一个EZRNode, 通过返回的EZRListenContex对象的方法可以添加额外的动作
- 如果有额外的动作被添加 则此 EZRNode 被当前对象所持有。在当前对象销毁的时候会自动释放 EZRNode 的持有关系
- 由于 Objective-C 不支持方法泛型， 所以此方法无法传递泛型给 EZRListenContext的实例,
- 建议使用 ERNode+Listen 中定义的 `ListenedBy:`方法，可以传递泛型。方便后续API 泛型推断。
- 
- @param node 被监听的Node
- @return 可以附加动作的EZRListenContext实例
+ @see - [EZRNode+Listen ListenedBy:]
+ @param node        Node being listened
+ @return            EZRListenContext instance that can be attached additional actions
  */
 - (EZRListenContext *)listen:(EZRNode *)node;
 
 /**
- 可以对Node停止观察
+ Stops observing node
 
- @param node 被观察的节点
+ @param node        Node being listened
  */
 - (void)stopListen:(EZRNode *)node;
 

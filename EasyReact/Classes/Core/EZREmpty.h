@@ -14,19 +14,19 @@
  * limitations under the License.
  **/
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 /**
- 此类为EasyReact框架中的哨兵对象
- EZRNode 是支持 nil 也就是空对象的。所以需要EZREmpty来代表语义上的空。
- 如果将当前对象赋值给节点，则会阻断节点向下游节点的传播
+ A value object that defines empty.
+ @discusstion EZRNode supports nil, so we needs EZREmpty to represent empty semantically
+ Assigning the EZREmpty object to a node will stop data transmission to downstream nodes
  */
 @interface EZREmpty : NSObject
 
 /**
- 获取哨兵对象的实例，此类是单例。
+ Returns an instance to represent empty value.
 
- @return 哨兵对象的单实例。
+ @return    instance of the sentry object
  */
 + (instancetype)empty;
 

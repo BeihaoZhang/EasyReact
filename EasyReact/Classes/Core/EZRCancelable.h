@@ -19,7 +19,7 @@
 @required
 
 /**
- 用于执行取消操作
+ Executes the cancel action
  */
 - (void)cancel;
 

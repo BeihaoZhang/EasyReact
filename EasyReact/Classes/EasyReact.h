@@ -14,7 +14,7 @@
  * limitations under the License.
  **/
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 //! Project version number for Expecta.
 FOUNDATION_EXPORT double EasyReactVersionNumber;
@@ -45,6 +45,7 @@ FOUNDATION_EXPORT const unsigned char EasyReactVersionString[];
 #import <EasyReact/EZRTransformEdge.h>
 #import <EasyReact/EZRListenEdge.h>
 #import <EasyReact/EZRListen.h>
+#import <EasyReact/EZRNextReceiver.h>
 
 // NodeTranform.h
 #import <EasyReact/EZRCombineTransform.h>
@@ -67,7 +68,6 @@ FOUNDATION_EXPORT const unsigned char EasyReactVersionString[];
 // Utils
 #import <EasyReact/EZRPathTrampoline.h>
 #import <EasyReact/EZRSenderList.h>
-#import <EasyReact/EZTupleBase+EZRTransfer.h>
 
 // Categories
 #import <EasyReact/NSObject+EZR_Extension.h>

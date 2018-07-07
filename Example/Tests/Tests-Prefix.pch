@@ -2,7 +2,7 @@
 
 #ifdef __OBJC__
 
-#import <EasyTuple/EasyTuple.h>
+#import <EasyFoundation/EasyFoundation.h>
 #import "TestKVOClass.h"
 #import "CustomMatchers.h"
 #import "EasyReact_Tests-Swift.h"

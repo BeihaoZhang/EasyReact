@@ -26,157 +26,160 @@ extern NSString *EZRExceptionReason_CannotModifyEZRNode;
 @class EZRListenContext<T>;
 
 /**
- EZRNode 是整个EasyReact 中最关键的一个类，代表一个节点，这个节点拥有一个值，并且可以在后期变化这个值。当值发生变化的时候，监听这个节点的监听者们就可以拿到最新值，并且节点与节点之间可以通过变换 (EZRTransformProtocol) 来连接，当一个节点值变化的时候，其他与之相连的节点会根据变换来改变自己的值。
+ EZRNode is the most important class in the whole EasyReact, it represents a node which has a value, and can change this value afterwards. When the value is being changed, listeners which listen to this node can receive the new value. Nodes can connect to others with EZRTransformEdge. When a node's value changes, other connected nodes will change their values due to the transformation.
  */
 @interface EZRNode<__covariant T: id> : NSObject
 
 /**
- 节点的名字，方便调试和生成节点的拓扑图
+ The name associated with the receiver, if any. Used for debugging or producing topological graph in convenience.
  */
 @property (nonatomic, readwrite, strong, nullable) NSString *name;
 
 /**
- 节点的值，目前只支持强引用。
- 节点值的获取是线程安全的。
+ A thread-safe object that defines the value of the receiver.
  */
 @property (atomic, readonly, strong, nullable) T value;
 
 /**
- 节点的状态,代表节点当前是否是可修改的
+ A Boolean value that indicates whether the receiver is mutable.
  */
 @property (atomic, readonly, assign, getter=isMutable) BOOL mutable;
 
 /**
- 上游节点
+ An array of the receiver's upstream nodes.
  */
 @property (atomic, readonly, copy) NSArray<EZRNode *> *upstreamNodes;
 
 /**
- 下游节点
+ An array of the receiver's downstream nodes.
  */
 @property (atomic, readonly, copy) NSArray<EZRNode *> *downstreamNodes;
 
 /**
- 上游变换
+ An array of the receiver's upstream transformations.
  */
 @property (atomic, readonly, copy) NSArray<id<EZRTransformEdge>> *upstreamTransforms;
 
 /**
- 下游变换
+ An array of the receiver's downstream transformations.
  */
 @property (atomic, readonly, copy) NSArray<id<EZRTransformEdge>> *downstreamTransforms;
 
 /**
- 是否拥有上游节点
+ A boolean value that indicates whether the receiver has upstream node.
  */
 @property (atomic, readonly, assign) BOOL hasUpstreamNode;
 
 /**
- 是否拥有下游节点
+ A boolean value that indicates whether the receiver has downstream node.
  */
 @property (atomic, readonly, assign) BOOL hasDownstreamNode;
 
 /**
- 是否有人监听
+ A Boolean value that indicates whether the receiver has a listener.
  */
 @property (atomic, readonly, assign) BOOL hasListener;
 
 /**
- 是否是空值，空值是 EZREmpty.empty 而不是 nil。空值的特点是空值不会触发监听者，也不会让下游节点产生变化。
+ A Boolean value that indicates whether the node is equal to EZREmpty.empty
+ The feature of empty is that EZREmpty.empty will not trigger listeners, nor change the downstream nodes.
  */
 @property (atomic, readonly, assign, getter=isEmpty) BOOL empty;
 
 /**
- 指定初始化器，用于初始化一个节点。这时值为 EZREmtpy.empty
+ Initializes a new node with EZREmpty.empty
 
- @return 新的节点实例
+ @return        New node instance
  */
 - (instancetype)init;
-/**
- 初始化一个节点并给定初始值
 
- @param value 初始值
- @return 新的节点实例
+/**
+ Initializes a node with the given value
+
+ @param value   Initial value
+ @return        New node instance
  */
 - (instancetype)initWithValue:(nullable T)value NS_DESIGNATED_INITIALIZER;
 
 /**
- 生成一个新的节点并给定初始值
+ Returns a node with a given value
 
- @param value 初始值
- @return 新的节点实例
+ @param value   Initial value
+ @return        New node instance
  */
 + (instancetype)value:(nullable T)value;
 
 /**
- 给新的节点的名字赋值
+ Returns the receiver instance named by using a given name.
 
- @param name 名字
- @return 节点实例
+ @param name    Name
+ @return        Node instance
  */
 - (instancetype)named:(NSString *)name;
 
 /**
- 给新的节点的名字赋值
+ Returns the receiver instance named by using a given format string.
 
- @param format 格式化字符串
- @param ... 可变参数
- @return 节点实例
+ @param format  Formatted string
+ @param ...     Variadic parameter lists
+ @return        Node instance
  */
 - (instancetype)namedWithFormat:(NSString *)format, ...;
 
 /**
- 连接到上游节点，并且与上游节点的值用 transform 来变换。
+ Links to a given upstream node using a specific transformation. The receiver will be the downstream node.
 
- @param node 想要连接的上游节点
- @param transform 与上游节点值的变换
- @return 可以取消连接的 Cancelable 对象
+ @param node        Upstream node which wants to link to
+ @param transform   Transforming action between upstream node
+ @return            EZRCancelable object whose link can be cancelable
  */
 - (id<EZRCancelable>)linkTo:(EZRNode *)node transform:(id<EZRTransformEdge>)transform;
 
 /**
- 连接到上游节点，并且保持与上游节点值相同。
+ Links to a given upstream node. The receiver will be the downstream node and will keep the same value with the given upstream node
 
- @param node 想要连接的上游节点
- @return 可以取消连接的 Cancelable 对象
+ @param node    Upstream node which wants to link to
+ @return        EZRCancelable object whose link can be cancelable
  */
 - (id<EZRCancelable>)linkTo:(EZRNode *)node;
 
 /**
- 从上游节点查找与当前节点相连接的边 如果上游节点和自己不存在关系则查找出来的数组内容为空
+ Finds the receiver's downstream transformations those linked to a given node. If not found, an empty array will be returned.
 
- @param to 下游节点
- @return 下游边的数组
+ @param to      Downstream node
+ @return        Array of downstream edges
  */
 - (NSArray<id<EZRTransformEdge>> *)downstreamTransformsToNode:(EZRNode *)to;
 
 /**
- 从下游节点查找与当前节点相连接的边 如果上游节点和自己不存在关系则查找出来的数组内容为空
+ Finds the receiver's upstream transformations those linked to a given node. If not found, an empty array will be returned.
 
- @param from 上游节点
- @return 上游边的数组
+ @param from    Upstream node
+ @return        Array of upstream edges
  */
 - (NSArray<id<EZRTransformEdge>> *)upstreamTransformsFromNode:(EZRNode *)from;
-/**
- 移除下游节点，与此节点连接的变换也会一并移除。
 
- @param downstream 要移除的节点
+/**
+ Removes a specific downstream node, if any. The transformation connected to the specific downstream node will be removed also.
+
+ @param downstream  The downstream node that will be removed
  */
 - (void)removeDownstreamNode:(EZRNode *)downstream;
 
 /**
- 移除所有下游节点
+ Removes all downstream nodes of the receiver
  */
 - (void)removeDownstreamNodes;
 
 /**
- 移除上游节点，与此节点连接的变换也会一并移除。
+ Removes a specific upstream node, if any. The transformation connected to the specific upstream node will be removed also.
  
- @param upstream 要移除的节点
+ @param upstream    The upstream node that will be removed
  */
 - (void)removeUpstreamNode:(EZRNode *)upstream;
+
 /**
- 移除所有上游节点
+ Removes all upstream nodes of the receiver
  */
 - (void)removeUpstreamNodes;
 

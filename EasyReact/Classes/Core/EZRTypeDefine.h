@@ -14,7 +14,7 @@
  * limitations under the License.
  **/
 
-#import <EasyTuple/EasyTuple.h>
+#import <EasyFoundation/EasyFoundation.h>
 @import Foundation;
 
 @class EZRNode;

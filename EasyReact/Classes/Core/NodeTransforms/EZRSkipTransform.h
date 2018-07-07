@@ -16,6 +16,8 @@
 
 #import <EasyReact/EasyReact.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface EZRSkipTransform : EZRTransform
 
 - (instancetype)initWithNumber:(NSUInteger)needSkipTimes NS_DESIGNATED_INITIALIZER;
@@ -24,3 +26,5 @@
 + (instancetype)new NS_UNAVAILABLE;
 
 @end
+
+NS_ASSUME_NONNULL_END

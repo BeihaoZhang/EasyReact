@@ -69,9 +69,7 @@ static BOOL EZR_instanceEqual(id left, id right) {
             }
         }];
         if (!next.second.isEmpty) {
-            EZRSenderList *nextSenderList = [senderList copy];
-            [nextSenderList appendSender:next.second];
-            [super next:next.second.value from:nextSenderList context:context];
+            [super next:next.second.value from:[senderList appendNewSender:next.second] context:context];
         }
     }
 }

@@ -15,7 +15,7 @@
  **/
 
 #import <EasyReact/EZRTransform.h>
-#import <EasySequence/EasySequence.h>
+#import <EasyFoundation/EasyFoundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

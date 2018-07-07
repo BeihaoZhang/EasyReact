@@ -20,7 +20,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EZRDelayTransform : EZRTransform
 
-- (instancetype)initWithDelay:(NSTimeInterval)timeInterval queue:(dispatch_queue_t)queue;
+- (instancetype)initWithDelay:(NSTimeInterval)timeInterval queue:(dispatch_queue_t)queue NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 
 @end
 

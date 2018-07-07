@@ -19,7 +19,7 @@ import Nimble
 import Quick
 import EasyReact
 
-@objc public class TestListenTransform: EZRListen {
+@objc public class TestListenEdge: EZRListen {
     
     @objc public private(set) var receiveValues:[NSObject] = []
     
@@ -36,19 +36,19 @@ import EasyReact
 var privatetestListenerKey: Void?
 @objc public extension EZRNode {
     
-    public var testListenTransform: TestListenTransform? {
+    public var testListenEdge: TestListenEdge? {
         set {
             objc_setAssociatedObject(self, &privatetestListenerKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
         }
         get {
-            return objc_getAssociatedObject(self, &privatetestListenerKey) as? TestListenTransform
+            return objc_getAssociatedObject(self, &privatetestListenerKey) as? TestListenEdge
         }
     }
 
     public func startListenForTest(obj: AnyObject) {
-        let transform = TestListenTransform()
-        testListenTransform = transform
-        listened(by: obj).withListenTransform(transform)
+        let edge = TestListenEdge()
+        testListenEdge = edge
+        listened(by: obj).withListenEdge(edge)
     }
     
 }
@@ -61,7 +61,7 @@ public func receive(_ expectedValues: [NSObject] ) -> Predicate<EZRNode<NSObject
                                    message: msg.appended(message: "the actual value is not an EZRNode<NSObject>"))
         }
         
-        guard let listener = node.testListenTransform else {
+        guard let listener = node.testListenEdge else {
             return PredicateResult(bool: false,
                                    message: msg.appended(message: "the actual value not be listened please use start listen before check"))
         }

@@ -14,7 +14,7 @@
  * limitations under the License.
  **/
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 @interface TestKVOClass<T: id, P: id, Q: id> : NSObject
 

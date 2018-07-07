@@ -14,43 +14,32 @@
  * limitations under the License.
  **/
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 @class EZRNode, EZRSenderList;
 
 /**
- 此协议是 EasyReact用来代表图论中一条有向边的协议。
- 此边拥有来源和目的对象，其中来源是 EZRNode 的实例
- 目的对象可能是任意类型对象。
- 通常使用 EZRTransformEdge 来代表节点和节点之间的关系
- 或者是 EZRListenEdge 来代表节点和监听者之间的关系
+ This protocol represents a directed edge in Graph Theory for EasyReact.
+ EZREdge owns source and target object, when source and target object could be any kind of class.
+ Normally, we use EZRTransformEdge to represent the relationship between nodes themsleves and use EZRListenEdge to represent the relationship between node and listener
  */
 @protocol EZREdge <NSObject>
 
 @required;
 
 /**
- 变换的名字，用于调试的数据可视化
+ Name of the directed edge, used for data visualized debugging function
  */
 @property (nonatomic, readwrite, copy, nullable) NSString *name;
 
 /**
- 变换的上游节点，当同时有值时会发生数据传递
+ Upstream node where the edge comes from, data transmission will happen when both upstream and downstream node have values
  */
-@property (atomic, strong, nullable) EZRNode *from;
+@property (atomic, strong, nullable) id from;
 
 /**
- 变换的下游节点， 当同时有值时会发生数据传递
+ Downstream node where the edge directs to, data transmission will happen when both upstream and downstream node have values
  */
 @property (atomic, weak, nullable) id to;
-
-/**
- 上游传递到下游的数据流动方法
-
- @param value 最新值
- @param senderList 发送值的节点的链表，可以追溯值的来源
- @param context 用户传递的上下文环境
- */
-- (void)next:(nullable id)value from:(nonnull EZRSenderList *)senderList context:(nullable id)context;
 
 @end

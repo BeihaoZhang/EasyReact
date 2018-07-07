@@ -16,7 +16,7 @@
 
 #import <EasyReact/EZRMutableNode.h>
 #import <EasyReact/EZRMetaMacrosPrivate.h>
-#import <EasySequence/EasySequence.h>
+#import <EasyFoundation/EasyFoundation.h>
 
 @protocol EZRListenEdge, EZRTransformEdge;
 
@@ -25,13 +25,16 @@ NS_ASSUME_NONNULL_BEGIN
 @interface EZRMutableNode () {
 @private
     id _value;
-    EZSOrderedSet<id<EZRTransformEdge>> *_upstreamTransforms;
-    EZSWeakOrderedSet<id<EZRTransformEdge>> *_downstreamTransforms;
-    EZSWeakOrderedSet<id<EZRListenEdge>> *_listenTransforms;
     EZR_LOCK_DEF(_valueLock);
+    EZR_LOCK_DEF(_upstreamLock);
+    EZR_LOCK_DEF(_downstreamLock);
+    EZR_LOCK_DEF(_listenEdgeLock);
 }
 
 @property (atomic, assign, getter=isMutable) BOOL mutable;
+@property (atomic, copy) NSArray<id<EZRTransformEdge>> *privateUpstreamTransforms;
+@property (atomic, copy) NSArray<EZSWeakReference<id<EZRTransformEdge>> *> *privateDownstreamTransforms;
+@property (atomic, copy) NSArray<EZSWeakReference<id<EZRListenEdge>> *> *privateListenEdges;
 
 @end
 

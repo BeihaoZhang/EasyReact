@@ -16,8 +16,8 @@
 
 QuickSpecBegin(EZRNodeValue)
 
-describe(@"EZRNode default value test", ^{
-    context(@"value with Default value", ^{
+describe(@"EZRNode", ^{
+    context(@"- valueWithDefault: method,", ^{
         it(@"can fetch a default value if value is empty", ^{
             EZRNode<NSNumber *> *testNode = [EZRNode new];
             NSNumber *value = testNode.value;
@@ -32,7 +32,7 @@ describe(@"EZRNode default value test", ^{
         });
     });
     
-    context(@"getValue:processBlock", ^{
+    context(@"- getValue: method,", ^{
         it(@"can process value if node is not empty", ^{
             EZRNode<NSNumber *> *testNode = [EZRNode new];
             

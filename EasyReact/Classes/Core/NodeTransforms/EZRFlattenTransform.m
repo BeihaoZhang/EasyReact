@@ -64,16 +64,14 @@
     @ezr_weakify(self)
     self.cancelable = [[node listenedBy:self] withSenderListAndContextBlock:^(id  _Nullable next, EZRSenderList * _Nonnull insideSenderList, id  _Nullable insideContext) {
         @ezr_strongify(self)
-        // 首次的传递为高阶节点传递
-        // 第二次之后的传递由当前节点传递
+        // The first transmit is from high-order node
+        // Transmits will be from current node since the second time
         if (self.cancelable) {
             [self _superNext:next from:insideSenderList context:insideContext];
         }
     }];
     if (!node.isEmpty) {
-        EZRSenderList *nextSenderList = [senderList copy];
-        [nextSenderList appendSender:node];
-        [super next:node.value from:nextSenderList context:context];
+        [super next:node.value from:[senderList appendNewSender:node] context:context];
     }
 }
 

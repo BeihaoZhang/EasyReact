@@ -15,7 +15,16 @@
  **/
 
 #import <EasyReact/EZREdge.h>
+#import <EasyReact/EZRNextReceiver.h>
 
-@protocol EZRListenEdge <EZREdge>
+/**
+ A protocol represents the directed edge from node to listener.
+ */
+@protocol EZRListenEdge <EZREdge, EZRNextReceiver>
+
+/**
+ The upstream value of the EZRTransformEdge
+ */
+@property (atomic, strong, nullable) EZRNode *from;
 
 @end

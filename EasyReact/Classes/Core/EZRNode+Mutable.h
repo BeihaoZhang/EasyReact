@@ -21,9 +21,10 @@
 @interface EZRNode<T> (Mutable)
 
 /**
- 将当前节点状态修改为可变。当前节点和返回的新节点是一个实例
+ Modifies the receiver into mutable status
+ @note The returned node is the same instance with the receiver.
 
- @return 可变的节点
+ @return    Mutable node
  */
 - (EZRMutableNode<T> *)mutablify;
 

@@ -24,21 +24,21 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSObject (EZR_Extension)
 
 /**
- 实现了下标方法的对象，用于扩展Fondation类型下对属性的KVO，将其转换为ERZNode。
+ Object which implements subscript method, used for extending the KVO and KVC of the Foundation object's property and transforming into ERZNode
  */
 @property (nonatomic, readonly, strong) EZRPathTrampoline *ezr_path;
 
 /**
- 用当前对象生成一个不可变节点对象
+ Generates an immutable node object using current object
 
- @return 初始值是当前对象的不可变节点
+ @return    Immutable object whose initial value is current object
  */
 - (EZRNode *)ezr_toNode;
 
 /**
- 用当前对象生成一个可变节点对象
+ Generates a mutable node object using current object
 
- @return 初始值是当前对象的可变节点
+ @return    Mutable object whose initial value is current object
  */
 - (EZRMutableNode *)ezr_toMutableNode;
 

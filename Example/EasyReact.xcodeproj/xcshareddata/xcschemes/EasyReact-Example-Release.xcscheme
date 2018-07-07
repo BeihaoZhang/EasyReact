@@ -33,7 +33,7 @@
       <CodeCoverageTargets>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "81340BCCF1425CA030053D8BB845EA40"
+            BlueprintIdentifier = "83C30A796BF40E1CD7CF900B67F3BC96"
             BuildableName = "EasyReact.framework"
             BlueprintName = "EasyReact"
             ReferencedContainer = "container:Pods/Pods.xcodeproj">

@@ -66,7 +66,7 @@
 - (id<EZRCancelable>)withSenderListAndContextBlock:(void (^)(id _Nullable, EZRSenderList * _Nonnull, id _Nullable))block {
     NSParameterAssert(block);
     EZRBlockListen *handler = [[EZRBlockListen alloc] initWithBlock:block];
-    return [self withListenTransform:handler];
+    return [self withListenEdge:handler];
 }
 
 - (id<EZRCancelable>)withBlock:(void (^)(id _Nullable))block on:(dispatch_queue_t)queue {
@@ -96,7 +96,7 @@
     NSParameterAssert(queue);
     if (block && queue) {
         EZRDeliveredListen *handler = [[EZRDeliveredListen alloc] initWithBlock:block on:queue];
-        return [self withListenTransform:handler];
+        return [self withListenEdge:handler];
     }
     return [[EZRBlockCancelable alloc] initWithBlock:^{}];
 }
@@ -109,17 +109,17 @@
     return [self withContextBlock:block on:dispatch_get_main_queue()];
 }
 
-- (id<EZRCancelable>)withListenTransform:(id<EZRListenEdge>)listenTransform {
-    NSParameterAssert(listenTransform);
+- (id<EZRCancelable>)withListenEdge:(id<EZRListenEdge>)listenEdge {
+    NSParameterAssert(listenEdge);
     EZRNode *strongNode = _node;
-    if (listenTransform && strongNode) {
-        listenTransform.from = strongNode;
-        listenTransform.to = _listener;
-        [_transforms addObject:listenTransform];
+    if (listenEdge && strongNode) {
+        listenEdge.from = strongNode;
+        listenEdge.to = _listener;
+        [_transforms addObject:listenEdge];
         return [[EZRBlockCancelable alloc] initWithBlock:^{
-            listenTransform.from = nil;
-            listenTransform.to = nil;
-            [self->_transforms removeObject:listenTransform];
+            listenEdge.from = nil;
+            listenEdge.to = nil;
+            [self->_transforms removeObject:listenEdge];
             if (self->_transforms.count == 0) {
                 [self->_listener stopListen:strongNode];
             }

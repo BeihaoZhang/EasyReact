@@ -26,7 +26,7 @@
     EZR_LOCK_DEF(_toLock);
 }
 
-@synthesize name = _name;
+@synthesize name = _name, nextReceiver = _nextReceiver;
 
 - (instancetype)init {
     if (self = [super init]) {
@@ -38,7 +38,7 @@
 }
 
 - (void)next:(nullable id)value from:(EZRSenderList *)senderList context:(nullable id)context;  {
-    [self.to next:value from:senderList context:context];
+    [self.nextReceiver next:value from:senderList context:context];
 }
 
 - (EZRNode *)to {
@@ -58,12 +58,13 @@
         if (lastTo) {
             [lastTo removeUpstreamTransformData:self];
             _to = nil;
+            _nextReceiver = nil;
         }
         if (!to) {
             return;
         }
         _to = to;
-        [_to addUpstreamTransformData:self];
+        _nextReceiver = [_to addUpstreamTransformData:self];
     }
 
     [self pushValueIfNeeded];
@@ -88,10 +89,17 @@
 }
 
 - (void)pushValueIfNeeded {
-    if (self.from && self.to && (!self.from.isEmpty)) {
-        EZRSenderList *senderList = [EZRSenderList new];
-        [senderList appendSender:self.from];
-        [self next:self.from.value from:senderList context:NULL];
+    if (self.from && self.nextReceiver && (!self.from.isEmpty)) {
+        [self next:self.from.value from:[EZRSenderList senderListWithSender:self.from] context:nil];
+    }
+}
+
+- (void)dealloc {
+    if (_from) {
+        [_from removeDownstreamTransformData:self];
+    }
+    if (_to) {
+        [_to removeUpstreamTransformData:self];
     }
 }
 

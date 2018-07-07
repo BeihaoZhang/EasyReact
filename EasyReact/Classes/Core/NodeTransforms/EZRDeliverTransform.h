@@ -20,8 +20,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EZRDeliverTransform : EZRTransform
 
-- (instancetype)initWithQueue:(dispatch_queue_t)queue;
+- (instancetype)initWithQueue:(dispatch_queue_t)queue NS_DESIGNATED_INITIALIZER;
+
 - (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 
 @end
 

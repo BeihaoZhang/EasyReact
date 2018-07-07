@@ -18,7 +18,7 @@
 #import "EZREmpty.h"
 #import "EZRCombineTransformGroup.h"
 #import "EZRNode+ProjectPrivate.h"
-#import <EasyTuple/EasyTuple.h>
+#import <EasyFoundation/EasyFoundation.h>
 
 @interface EZRCombineTransform ()
 

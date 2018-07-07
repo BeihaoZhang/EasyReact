@@ -19,16 +19,16 @@
 @protocol EZRCancelableBagProtocol <EZRCancelable>
 
 /**
- 将可以被cancel的对象放进袋子里，后续可以批量操作。
+ Puts the cancelable object into the bag, for the purpose of later batch operation.
 
- @param cancelable 可以取消的对象
+ @param cancelable  Object which can be cancelled
  */
 - (void)addCancelable:(id<EZRCancelable>)cancelable;
 
 /**
- 将可以被cancel对象从袋子里取出
+ Removes the cancelable object from the bag
 
- @param cancelable 可以被取消的对象
+ @param cancelable  Object which can be cancelled
  */
 - (void)removeCancelable:(id<EZRCancelable>)cancelable;
 

@@ -21,7 +21,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EZRFlattenTransform : EZRTransform
 
-- (instancetype)initWithBlock:(EZRFlattenMapBlock)block;
+- (instancetype)initWithBlock:(EZRFlattenMapBlock)block NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 
 @end
 

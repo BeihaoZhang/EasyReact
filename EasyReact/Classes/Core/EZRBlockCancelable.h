@@ -21,15 +21,15 @@ NS_ASSUME_NONNULL_BEGIN
 typedef void(^EZRCancelBlockType)(void);
 
 /**
- 使用Block来实现 cancel 动作的类
+ Class which implements cancel action using Block
  */
 @interface EZRBlockCancelable : NSObject <EZRCancelable>
 
 /**
- 用block来执行取消动作的对象 在cancel方法被调用的时候 会自动执行此block
+ Object which executes cancel action using Block, when a cancel method is invoked, the block will be called
 
- @param block 代表取消动作的block
- @return 实例
+ @param block   Block representing the cancel action
+ @return        EZRBlockCancelable instance
  */
 - (instancetype)initWithBlock:(EZRCancelBlockType)block NS_DESIGNATED_INITIALIZER;
 

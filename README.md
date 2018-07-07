@@ -1,125 +1,144 @@
-![](./images/Banner.png)
+# ![EasyReact](https://raw.githubusercontent.com/meituan/EasyReact/master/images/Banner.png)
 
 [![CI Status](http://img.shields.io/travis/meituan/EasyReact.svg?style=flat)](https://travis-ci.org/meituan/EasyReact)
 [![Version](https://img.shields.io/cocoapods/v/EasyReact.svg?style=flat)](http://cocoapods.org/pods/EasyReact)
 [![License](https://img.shields.io/cocoapods/l/EasyReact.svg?style=flat)](http://cocoapods.org/pods/EasyReact)
 [![Platform](https://img.shields.io/cocoapods/p/EasyReact.svg?style=flat)](http://cocoapods.org/pods/EasyReact)
 
+*Read this in other languages: [简体中文](README-Chinese.md)*
 
-## EasyReact 是什么?
+## What is EasyReact
 
-EasyReact 是一个简单易用的响应式编程库。
+EasyReact is an easy-to-use reactive programming framework.
 
-## 为什么要使用 EasyReact?
+## Why use EasyReact
 
-你是否对 RxSwift 和 ReactiveCocoa 中的 functor、applicative、monad 感到困惑不解？没关系，那些概念太复杂了，以至于并没有多少人真的在实际项目中使用它们。有没有简单易用的响应式编程方式呢？EasyReact 就是为此而生的，来试试吧。
+Are you confused by the functors, applicatives, and monads in RxSwift and ReactiveCocoa? It doesn't matter, the concepts are so complicated that not many developers actually use them in normal projects. Is there an easy-to-use way to use reactive programming? EasyReact is born for this reason.
 
-## 特性
+## Features
 
-注：以下列出的"值"均指 `EZRNode` ，即 EasyReact 中对各种值（所有`id`类型）的一种统一表示。
+Note: The "Node" listed below refer to `EZRNode`, a unified representation of various values (all object types) in EasyReact.
 
-- [x]  开始／停止对一个值／UIControl 事件的监听 
-- [x]  为一个值添加／删除上游
-- [x]  为一个值添加／删除下游
-- [x]  对一个值做 map / filter
-- [x]  对一个值做 flatten / flattenMap
-- [x]  对若干值做 zip / combine / combine 生成一个新值
-- [x]  对监听的值去重
-- [x]  监听时取前 N 个值／跳过前 N 个值
-- [x]  监听时跳过特定值
-- [x]  监听多个值的组合
-- [x]  开始监听后修改组合
-- [x]  将多个值组合成一个值，并监听此值
-- [x]  将多个值 merge 成一个流，并监听每一个新值
-- [x]  merge 之后修改流的组成
-- [x]  将监听回调派发到指定的queue
-- [x]  易用的 KVO & KVC
-- [x]  同步两个值
-- [x]  同步多个值
-- [x]  自动内存管理
-- [x]  more...
+- [x] [Create node or mutable node](./Documents/English/BasicOperators.md#create-node)
+- [x] [Get the value of the node immediately](./Documents/English/BasicOperators.md#get-instant-value)
+- [x] [Listen to the future value of the node](./Documents/English/BasicOperators.md#listen-nodes-value)
+- [x] [Cancel listening to a node](./Documents/English/BasicOperators.md#listen-nodes-value)
+- [x] [Connect two points](./Documents/English/BasicOperators.md#connect-two-nodes)
+- [x] [Basic transformation of a node](./Documents/English/BasicOperators.md#basic-transformation)
+  - [x] [map](./Documents/English/BasicOperators.md#map)
+  - [x] [filter](./Documents/English/BasicOperators.md#filter)
+  - [x] [distinctUntilChanged](./Documents/English/BasicOperators.md#distinctuntilchanged)
+  - [x] [throttle](./Documents/English/BasicOperators.md#throttle)
+  - [x] [skip](./Documents/English/BasicOperators.md#skip)
+  - [x] [take](./Documents/English/BasicOperators.md#take)
+  - [x] [deliverOn](./Documents/English/BasicOperators.md#deliveron)
+  - [x] [delay](./Documents/English/BasicOperators.md#delay)
+  - [x] [scan](./Documents/English/BasicOperators.md#scan)
+- [x] [Combine multiple nodes](./Documents/English/BasicOperators.md#Combination)
+  - [x] [combine](./Documents/English/BasicOperators.md#combine)
+  - [x] [merge](./Documents/English/BasicOperators.md#merge)
+  - [x] [zip](./Documents/English/BasicOperators.md#zip)
+- [x] [Branch a node to get multiple nodes](./Documents/English/BasicOperators.md#Branch)
+  - [x] [switch-case-default](./Documents/English/BasicOperators.md#switch-case-default)
+  - [x] [if-then-else](./Documents/English/BasicOperators.md#if-then-else)
+- [x] [Synchronize values across multiple nodes](./Documents/English/BasicOperators.md#Sync)
+  - [x] [syncWith](./Documents/English/BasicOperators.md#syncwith)
+  - [x] [Manual Sync](./Documents/English/BasicOperators.md#manual-sync)
+- [x] [High-order transformation of nodes](./Documents/English/BasicOperators.md#high-order-transformation)
+  - [x] [flatten](./Documents/English/BasicOperators.md#flatten)
+  - [x] [flattenMap](./Documents/English/BasicOperators.md#flattenmap)
+- [x] [Traversing nodes and edges](./Documents/English/BasicOperators.md#graph-traversal)
+  - [x] [Simple Access](./Documents/English/BasicOperators.md#simple-access)
+  - [x] [Accessor Mode](./Documents/English/BasicOperators.md#accessor-mode)
 
-## 了解更多
+## Learn more
 
-1. [框架概述](./Documents/Chinese/FrameworkOverview.md)
+1. [Framework Overview](./Documents/English/FrameworkOverview.md)
 
-2. [基本操作](./Documents/Chinese/BasicOperators.md)
+2. [Basic Operations](./Documents/English/BasicOperators.md)
 
-3. [内存管理](./Documents/Chinese/MemoryManagement.md)
+3. [Memory Management](./Documents/English/MemoryManagement.md)
 
-4. [头文件注释](./Documentation/index.html)
+4. [How to Contribute](./Documents/English/CONTRIBUTING.md)
 
-## 系统需求
+## Compare other Functional Reactive libraries (e.g. [ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa) or [ReactiveX](https://github.com/ReactiveX))
+
+| Project                    | EasyReact                                                                                                                  | ReactiveCocoa          | ReactiveX                                      |
+| :------------------------: | :------------------------------------------------------------------------------------------------------------------------: | :--------------------: | :--------------------------------------------: |
+| Core idea                  | Graph theory and object-oriented programming                                                                               | Functional programming | Functional programming and generic programming |
+| Propagation variability    | ✅                                                                                                                         | ❌                      | ❌                                             |
+| Basic transformation       | ✅                                                                                                                         | ✅                      | ✅                                             |
+| Combination transformation | ✅                                                                                                                         | ✅                      | ✅                                             |
+| High-order transformation  | ✅                                                                                                                         | ✅                      | ✅                                             |
+| Traversal node/signal      | ✅                                                                                                                         | ❌                      | ❌                                             |
+| Multi-language support     | Objective-C<br>(Other language versions will open source in the future)                                                    | Objective-C, Swift     | Many language versions                         |
+| Performance                | faster                                                                                                                     | slow                   | fastest                                        |
+| Chinese document support   | ✅                                                                                                                         | ❌                      | ❌                                             |
+| Debugging tools            | [Topology display](./Documents/English/BasicOperators.md#simple-access) <br>More rich dynamic debugging tools(Coming soon) | Instrument             | ❌                                             |
+
+
+## System Requirements
 
 - iOS 8.0 +
 - Xcode 8.0 +
 
-## 如何运行示例项目
+## How to run the example project
 
-clone 本项目，在 Example 文件夹下执行`pod install`，然后打开`EasyReact.xcworkspace`.
+`git clone` this repo，excute `pod install` in Example/,  then open `EasyReact.xcworkspace`.
 
-## 安装
+## Installation
 
 ### CocoaPods
 
-在`Podfile`中添加
+Add the following content in `Podfile`
 
 ```ruby
 pod 'EasyReact'
 ```
 
-然后运行`pod install`即可
+Then execute `pod install`
 
-## 如何使用 (如需更详细的例子，请查看示例工程 Tests 文件夹下的测试用例)
+## How to use (For a more detailed example, please see the test specs in the example project Tests/)
 
-##### 单元测试
+### Unit Test
 
-EasyReact 包含了完善的单元测试，相关代码在示例工程的 Tests 文件夹下。你可以打开示例工程并执行 Test 命令来运行这些单元测试。
+EasyReact contains a complete unit test with the relevant code in the Example/Tests folder. You can open the sample project and execute the Test command to run these unit tests.
 
-## EasyReact, ReactiveCocoa, RxSwift 常见API 基于耗时的Benchmarking
+## Time-consuming Benchmarking with EasyReact, ReactiveCocoa, RxSwift Common APIs
 
-### 测试环境
+### Environment
 
 Mac OS  10.12.6, CPU: 2.9GHz, Core i5
-Xcode 9, iOS11, iPhone X simulator
+Xcode 9, iOS11, iPhone 8 Plus simulator
 
-### 测试对象
+### Cases
 
-1. listener, map, filter, flattenMap等单阶操作
-2. combine, zip, merge等多点聚合操作
-3. syncWith操作
+1. Single stage operations, such as listener, map, filter, flattenMap, etc.
+2. Multicast operations, such as combine, zip, merge, etc.
+3. syncWith operations
 
-其中测试的规模基于操作对象个数10，触发次数1000。如Listener方法  有10个监听者，重复触发发送值的行为1000次。
-时间单位为ns。
+The scale of the test is based on 10 operating objects and 1000 triggers. For example, the listener method has 10 listeners and repeats the action of sending the value 1000 times.
+The unit of time is ns.
 
-### 测试数据
+### Result data
 
-重复上面的实验10次，得到数据平均值如下：
+Repeat the above experiment 10 times to get the data as follows:
 
-| name          | listener | map       | filter   | flattenMap | combine   | zip       | merge    | syncWith |
-| ------------- | -------- | --------- | -------- | --------- | --------- | --------- | -------- | -------- |
-| EZRNode       | 6190929  | 68637372  | 21442593 | 19151285  | 16321936  | 157713421 | 59110553 | 20955312 |
-| ReactiveCocoa | 5372738  | 116090536 | 80578466 | 70141812  | 420171171 | 241515088 | 18736906 | 79677172 |
-| RxSwift       | 5329478  | 3976011   | 3362859  | 2966605   | 1661479   | 5658808   | 6650793  | 0        |
+| name          | listener | map       | filter   | flattenMap | combine   | zip       | merge    | syncWith  |
+| ------------- | -------- | --------- | -------- | ---------- | --------- | --------- | -------- | --------- |
+| EZRNode       | 4775053  | 57487844  | 13851412 | 11966681   | 18972713  | 134567221 | 36076535 | 18388601  |
+| ReactiveCocoa | 6273485  | 102644235 | 66771529 | 80881225   | 496207382 | 327464977 | 29010632 | 100022454 |
+| RAC:EZRNode   | 131.38%  | 178.55%   | 482.06%  | 675.89%    | 2615.37%  | 243.35%   | 80.41%   | 543.94%   |
 
-![](benchmarking.png)
-其中由于RxSwift不支持 action和syncTo行为故数据为0。
+![benchmark](./images/benchmark.png)
 
-### 结果总结
+### Summary
 
-基于Objective-C语言实现的EasyReact和ReactiveCocoa： 
+ReactiveCocoa's average time consuming is 618.87% times more than EasyReact.
 
-单阶操作上RAC的耗时基本是EasyReact的2-5倍耗时。
-多点聚合操作：
-RAC的combine操作耗时是EasyReact的20倍。
-RAC的zip和EasyReact耗时基本持平。
-RAC的merge要比EasyReact快1倍。
-RAC的syncWith的操作耗时是EasyReact的3倍以上。
+EasyReact will compare benchmark with RxSwift when the Swift version open source recently.
 
-基于Swift语言实现RxSwift的性能平均是RAC的10-100倍，是EasyReact的5-20倍。  
-但是RxSwift不支持action和syncWith等两种行为
-
-## 作者
+## Authors
 
 William Zang, [chengwei.zang.1985@gmail.com](mailto:chengwei.zang.1985@gmail.com)  
 姜沂, [nero_jy@qq.com](mailto:nero_jy@qq.com)  
@@ -131,6 +150,6 @@ johnnywjy, [johnny.wjy07@gmail.com](mailto:johnny.wjy07@gmail.com)
 qiezishu, [qiezishu@yahoo.com](mailto:qiezishu@yahoo.com)  
 
 
-## 许可证
+## License
 
-EasyReact 使用 Apache 许可证. 详情可查看 [LICENSE 文件](./LICENSE)。
+EasyReact is [Apache Public License 2.0](./LICENSE)

@@ -17,57 +17,53 @@
 
 QuickSpecBegin(EZRListenContextSpec)
 
-describe(@"Listen with context", ^{
-    context(@"single node test", ^{
-        it(@"can receive context from sender", ^{
-            EZRMutableNode<NSNumber *> *testNode = [EZRMutableNode new];
-            NSObject *listener = [NSObject new];
-            __block NSNumber *value;
-            __block id receiveContext;
-            [[testNode listenedBy:listener]  withContextBlock:^(NSNumber * _Nullable next, id _Nullable context) {
-                value = next;
-                receiveContext = context;
-            }];
-            [testNode setValue:@1 context:@"1"];
-            expect(value).to(equal(@1));
-            expect(receiveContext).to(equal(@"1"));
-        });
+describe(@"Listener", ^{
+    it(@"can receive value and context from sender", ^{
+        EZRMutableNode<NSNumber *> *testNode = [EZRMutableNode new];
+        NSObject *listener = [NSObject new];
+        __block NSNumber *value;
+        __block id receiveContext;
+        [[testNode listenedBy:listener]  withContextBlock:^(NSNumber * _Nullable next, id _Nullable context) {
+            value = next;
+            receiveContext = context;
+        }];
+        [testNode setValue:@1 context:@"1"];
+        expect(value).to(equal(@1));
+        expect(receiveContext).to(equal(@"1"));
     });
     
-    context(@"multi nodes test", ^{
-        it(@"can only receive the last sender's context when use zip", ^{
-            EZRMutableNode<NSNumber *> *testNode1 = [EZRMutableNode new];
-            EZRMutableNode<NSNumber *> *testNode2 = [EZRMutableNode new];
-            EZRNode<EZTuple2<NSNumber *, NSNumber *> *> *node = [EZRNode zip:@[testNode1, testNode2]];
-            NSObject *listener = [NSObject new];
-            __block EZTuple2<NSNumber *, NSNumber *> *value;
-            __block id receiveContext;
-            [[node listenedBy:listener] withContextBlock:^(EZTuple2<NSNumber *,NSNumber *> * _Nullable next, id  _Nullable context) {
-                value = next;
-                receiveContext = context;
-            }];
-            [testNode1 setValue:@1 context:@"1"];
-            [testNode2 setValue:@2 context:@"2"];
-            expect(value).to(equal(EZTuple(@1, @2)));
-            expect(receiveContext).to(equal(@"2"));
-        });
-        
-        it(@"can only receive the last sender's context when use combine", ^{
-            EZRMutableNode<NSNumber *> *testNode1 = [EZRMutableNode new];
-            EZRMutableNode<NSNumber *> *testNode2 = [EZRMutableNode new];
-            EZRNode<EZTuple2<NSNumber *, NSNumber *> *> *node = [EZRNode combine:@[testNode1, testNode2]];
-            NSObject *listener = [NSObject new];
-            __block EZTuple2<NSNumber *, NSNumber *> *value;
-            __block id receiveContext;
-            [[node listenedBy:listener] withContextBlock:^(EZTuple2<NSNumber *,NSNumber *> * _Nullable next, id  _Nullable context) {
-                value = next;
-                receiveContext = context;
-            }];
-            [testNode1 setValue:@1 context:@"1"];
-            [testNode2 setValue:@2 context:@"2"];
-            expect(value).to(equal(EZTuple(@1, @2)));
-            expect(receiveContext).to(equal(@"2"));
-        });
+    it(@"can only receive the last sender's context when zipping multi nodes", ^{
+        EZRMutableNode<NSNumber *> *testNode1 = [EZRMutableNode new];
+        EZRMutableNode<NSNumber *> *testNode2 = [EZRMutableNode new];
+        EZRNode<EZTuple2<NSNumber *, NSNumber *> *> *node = [EZRNode zip:@[testNode1, testNode2]];
+        NSObject *listener = [NSObject new];
+        __block EZTuple2<NSNumber *, NSNumber *> *value;
+        __block id receiveContext;
+        [[node listenedBy:listener] withContextBlock:^(EZTuple2<NSNumber *,NSNumber *> * _Nullable next, id  _Nullable context) {
+            value = next;
+            receiveContext = context;
+        }];
+        [testNode1 setValue:@1 context:@"1"];
+        [testNode2 setValue:@2 context:@"2"];
+        expect(value).to(equal(EZTuple(@1, @2)));
+        expect(receiveContext).to(equal(@"2"));
+    });
+    
+    it(@"can only receive the last sender's context when combining multi nodes", ^{
+        EZRMutableNode<NSNumber *> *testNode1 = [EZRMutableNode new];
+        EZRMutableNode<NSNumber *> *testNode2 = [EZRMutableNode new];
+        EZRNode<EZTuple2<NSNumber *, NSNumber *> *> *node = [EZRNode combine:@[testNode1, testNode2]];
+        NSObject *listener = [NSObject new];
+        __block EZTuple2<NSNumber *, NSNumber *> *value;
+        __block id receiveContext;
+        [[node listenedBy:listener] withContextBlock:^(EZTuple2<NSNumber *,NSNumber *> * _Nullable next, id  _Nullable context) {
+            value = next;
+            receiveContext = context;
+        }];
+        [testNode1 setValue:@1 context:@"1"];
+        [testNode2 setValue:@2 context:@"2"];
+        expect(value).to(equal(EZTuple(@1, @2)));
+        expect(receiveContext).to(equal(@"2"));
     });
 });
 

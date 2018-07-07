@@ -1,70 +1,84 @@
-# Framework Overview
 
-本文档描述了EasyReact框架的不同组件的高层描述，并试图解释它们如何协同工作。也就是说，你可以把本文档作为一个学习起点，并找到更多相关的具体文档。
+# 框架概述
 
-要寻找例子或者深入理解如何使用EasyReact，请参考README或者Design Guidelines。
+本文档描述了 EasyReact 框架的不同组件的高层描述，并试图解释它们如何协同工作。你可以把本文档作为一个学习起点，并找到更多相关的具体文档。
+
+要寻找例子或者深入理解如何使用 EasyReact，请参考 [README](../../README-Chinese.md) 和 [BasicOperators](./BasicOperators.md)。
+
+## 目录
+
+<!-- TOC -->
+
+- [理论基础](#理论基础)
+- [节点](#节点)
+- [监听者](#监听者)
+- [边](#边)
+- [接收者](#接收者)
+- [变换](#变换)
+- [上游与下游](#上游与下游)
+- [监听边](#监听边)
+- [连接和数据流动](#连接和数据流动)
+
+<!-- /TOC -->
 
 ## 理论基础
 
-本框架的理论基础是图论中的有向图。由“点”和“边”构成了数据的连接和流动关系。即，一个点可以有多条有向边与之连接，而一条有向边则可以连接任意两个点。
+本框架的理论基础是图论中的有向有环图。由**节点**和**边**构成了数据的连接，边的方向表达了流动方向。
 
-## Node
+## 节点
 
-一个Node, 被`EZRNode`类型表示。Node对应了有向图里的"点"。任何对象都可以包装为一个Node, 它有一个`value`属性，用于存放对象。
+我们用 EZRNode\<T\> 类来表示一个节点。所有 T 类的实例都可以被包装到一个节点中，节点中含有一个`T value`属性，这个值属性用于存放实例。
 
-值得注意的是，`nil`也是可以被Node处理的。当创建一个新的node而不给它任何value时，此Node的value为`EZREmpty`类型，用来表示数据是"空"的这个概念。
+值得注意的是，节点值也可能是 nil，这使得我们需要区分一个节点到底是存放了 nil 值还是什么都没有存放。所以当我们创建一个新的节点而不给它值时，此节点的值为 EZREmpty 类型的`EZREmpty.empty`，它用来表示值是“空”的这个概念。
 
-从静态的角度看，Node本身存储了value，可以通过访问`value`方法来获得一个即时值。
+我们可以随时通过`- (id)value`这个方法来获得节点当前时刻的值，也可以用点语法`someNode.value`来表示。更多的时候，我们将节点与节点间连接起来，这样一个节点的值就会随着另一个节点的值改变而改变，这种依赖的形式也就是响应式编程的基本思想。
 
-从动态的角度来看，Node是对变化后的未来的值的一种封装。如一个Node B，它的数据来自Node A，那么Node B就是未来Node A传递过来的值的一种封装。重要的是，依赖这种封装，我们便可以用Node对象先构建连接关系和处理流程，而不必等先得到值再进行命令式的处理，这也是响应式编程的基本思想。
+EZRNode\<T\> 类的实例是不可以主动触发变动的，如果想得到一个随意改变值的节点，我们需要 EZRNode\<T\> 的子类 EZRMutableNode\<T\>。 EZRMutableNode\<T\> 有`- (void)setValue:(nullable T)newValue`这个方法用来改变值，也可以用点语法`someNode.value = newValue`来表示。另外我们也可以给数据传递附加一个上下文对象，使用`- (void)setValue:(nullable T)value context:(nullable id)context`方法。整个传递的过程中这个上下文对象会传递给每个节点和边。
 
+## 监听者
 
-## Listener
+监听者在本框架中并没有特定的类型，任意对象都可以作为监听者。监听者是一种特殊的节点，它在整个有向图中是没有下游边的端点。
 
-一个Listener，表示一个监听者。在本框架中并没有特定的类型，任意对象都可以作为Listener。Listener可以看作是一种特殊的"点"，如同Node一样，同样可以构成有向图。和Node不同的是，Listener在整个有向图中为端点，即它没有下游，Listener接收的值也不需要向下传递。
+监听者代表了关心数据变化的主体，也用来维持整个响应链条的内存管理。当一个监听者被销毁的时候，会向上检查所有没有监听者的节点并将之释放（引用计数减一，如果一个节点被一个以上对象强持有则不会销毁）。
 
-## Transform
+## 边
 
-一个Transform, 被`id<EZRTransformProtocol>`类型表示。Transform的含义是"变换"，代表了一种数据加工。同时，可以通过Transform的`from`和`to`属性指定数据的来源和去向，从而构建连接关系。从构建连接关系的功能上来看，Transform和有向图的边的概念是一致的。
+我们用 EZREdge 协议来表示有向边。每个`id<EZREdge>`都有 from 和 to 两个属性来指定来源与去向。from 到 to 的方向也就是数据的流动方向。
 
-举个例子，如`EZRMapTransform`，它是`EZRTransform`的子类，这种边可以让数据先经过map操作产生新的数据，再将新的数据向下游传递。
+## 接收者
 
-## Upstream & Downstream
+我们用 EZRNextReceiver 协议来表示接收者，它表示可以不断接收新值的对象。EZRNextReceiver 协议有个非常重要的`- (void)next:(nullable id)value from:(nonnull EZRSenderList *)senderList context:(nullable id)context`方法，调用这个方法就可以向这个接收者发送新的值。
 
-数据的流动是有方向的。我们把数据的提供者叫做Upstream（上游），而把数据的需求者叫做DownStream（下游）。本框架中，Upstream和Downstream并没有对应的实体类，这只是一个逻辑上的概念。但是框架中的Node和Transform，却有"上游"和"下游"的区别。分为4种情况：
+## 变换
 
-1. ### Upstream Node
+EZREdge 协议有一个子协议 EZRTransformEdge，它表示数据流动中的变换，同时它也满足 EZRNextReceiver 协议。EZRTransformEdge 协议的 from 和 to 属性一定指向一个节点。
 
-如果点B的Upstream Node是点A，则表示点B和点A通过Transform产生了连接关系，数据流动方向是：从点A经过Transform传递到点B。
+每当来源节点执行`setValue:`或者`setValue:context:`的时候，只要值不是空值（`EZREmpty.empty`），就会调用所有的相连的下游边（from 指向该节点的边）的`- (void)next:(nullable id)value from:(nonnull EZRSenderList *)senderList context:(nullable id)context`方法。
 
-2. ### Downstream Node
+EZRTransform 是 EZRTransformEdge 协议的一个默认实现类，它帮助我们实现了 from 和 to 属性的 setter 和 getter，并且实现了 EZRNextReceiver 协议的`- (void)next:(nullable id)value from:(nonnull EZRSenderList *)senderList context:(nullable id)context`方法。它的变换规则是将每一个 from 节点通过`- (void)next:(nullable id)value from:(nonnull EZRSenderList *)senderList context:(nullable id)context`方法传过来的值和上下文对象都原封不动的传递给 to 节点。
 
-如果点B的Downstream Node是点C，则表示点C和点B通过Transform产生了连接关系，数据流动方向是：从点B经过Transform传递到点C。
+想要定制自己的边只需要继承 EZRTransform 类并覆盖`- (void)next:(nullable id)value from:(nonnull EZRSenderList *)senderList context:(nullable id)context`方法就可以了。如果需要向 to 节点传递，请务必使用父类的`next:from:context`方法，将入参 value 改变为想要传递的值，同时保持入参 from 和 context 不变。详细的内容可以参考源代码中 EasyReact/Classes/Core/NodeTransforms 中实现的默认边。
 
-3. ### Upstream Transform
+## 上游与下游
 
-如果点B的Upstream Transform是边U，则表示点B通过边U和某个点X产生了连接关系，数据流动方向是：从点X经过边U传递到点B。
+数据的流动是有方向的。因此数据的提供者叫做上游，数据的需求者叫做下游。上游和下游是一个逻辑上的概念。
 
-4. ### Downstream Transform
+为了方便遍历和深度、广度搜索，每个节点都拥有`upstreamNodes`、`downstreamNodes`、`upstreamTransforms`、`downstreamTransforms`等聚合属性用来获得上下游的边和节点。
 
-如果点B的Downstream Transform是边D，则表示点B通过边D和某个点Y产生了连接关系，数据流动方向是：从点B经过边D传递到点Y。
+另外，一个节点和另一个节点是可能存在多条边的，所以我们可以通过`- (NSArray<id<EZRTransformEdge>> *)upstreamTransformsFromNode:(EZRNode *)from`方法找到连接到 from 节点的所有的上游变换。相应的，`- (NSArray<id<EZRTransformEdge>> *)downstreamTransformsToNode:(EZRNode *)to`方法找到连接到 to 节点的所有的下游变换。
 
-## 连接和传递
+## 监听边
 
-通过Node、Listener和Transform构建连接关系之后，就构成了一条响应链。
+EZREdge 有另外一个子协议 EZRListenEdge，它表示数据流动中的监听行为，同时它也满足 EZRNextReceiver 协议。EZRListenEdge 协议的 from 属性一定指向一个节点，它的 to 属性指向一个 [监听者](#监听者)。
 
-连接规则是：
+EZRListen 是 EZRListenEdge 协议的一个默认实现类，它帮助我们实现了 from 和 to 属性的 setter 和 getter，并且实现了 EZRNextReceiver 协议的`- (void)next:(nullable id)value from:(nonnull EZRSenderList *)senderList context:(nullable id)context`方法。默认的`- (void)next:(nullable id)value from:(nonnull EZRSenderList *)senderList context:(nullable id)context`方法并没有做什么，你可以子类化并且覆盖这个方法。
 
-- Node可以有Upstream Transform, 这个上游边的一端连接到Node本身，而另一端是一个Node；
-- Node可以有Downstream Transform，这个下游边的一端连接到Node本身，而另一端是一个Node或Listener;
-- Node的Upstream Transform的另一端所连接的Node，叫做这个Node的Upstream Node, 即“上游点”；
-- Node的Downstream Transform的另一端所连接的Node，叫做这个Node的Downstream Node, 即“下游点”；如果这个Node的Downstream Transform的另一端所连接的不是Node而是其他类型的对象，则这个对象叫做Node的Listener;
-- Node和Node之间，以及Node和Listener之间并不具备连接能力，本质上还是通过Transform将它们连接。
+EZRBlockListen 和 EZRDeliveredListen 是 EZRListen 类的两个子类，可以方便的指定 block 和 GCD 的 queue 来完成监听，通常情况下可以满足我们的需要。
 
-数据传递规则是：
+## 连接和数据流动
 
-1. 数据从Node出发，流向它的全部的Downstream Transform。
-3. 每一个Downstream Transform给数据进行变换后，继续传递给它所连接的Node或Listener。当Transform另一端没有连接到任何对象，则数据流动结束。
-4. 当数据流动到了Listener，即数据流动到了端点，数据流动结束。
-5. 当数据流动到了Node，并且Node存在Downstream Transform，回到步骤2，否则数据流动结束。
+响应式编程的过程就是描述节点与节点、节点与监听者的关系，最终构成响应图的过程。
 
+本框架中所有的节点关系都是可以后期改变的，所以可以随时通过遍历和修改的方式来改变现有的响应图。
+
+一种特殊情况是节点环。当节点相互成为下游的时候便形成了节点环，例如 a --> b --> c --> a 形成了一个 a, b, c 的三角形节点环。节点环的数据流动是不会循环的，我们通过传递方法`- (void)next:(nullable id)value from:(nonnull EZRSenderList *)senderList context:(nullable id)context`的参数`senderList`来避免循环。所以当 b 改变的时候，c 会随之改变，然后再改变 a，a 在数据传递的时候发现 senderList 中已经包含了 b 所以不会继续向 b 传递数据，从而终止了循环。

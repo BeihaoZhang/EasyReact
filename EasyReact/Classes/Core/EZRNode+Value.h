@@ -19,16 +19,16 @@
 @interface EZRNode<T> (Value)
 
 /**
- 如果节点的当前值为 EZREmpty 则返回传递的默认值，如果不为 EZREmpty 则取得当前值
+ If value of current node were EZREmpty, return the passing 'defaultValue', otherwise, return current value.
 
- @param defaultValue 默认值
- @return 计算后的值
+ @param defaultValue    Default value
+ @return                value after calculation
  */
 - (nullable T)valueWithDefault:(nullable T)defaultValue;
 
 /**
- 如果当前的值有值则会执行当前 block, 此 Block 为非逃逸闭包，不会捕获变量。
- 类似 Swift语法中的 if let 语法
+ Block will be executed if the node has current value. The 'processBlock' is non-escaping block and will not capture variables.
+ Like 'if let' in Swift
  
  <pre>@textblock
  
@@ -40,7 +40,7 @@
  
  @/textblock</pre>
  
- @param processBlock 处理动作的block， block的参数为当前节点的值
+ @param processBlock    Block for processing action, and parameter of block is current value of node
  */
 - (void)getValue:(void(NS_NOESCAPE ^ _Nullable)(_Nullable T value))processBlock;
 

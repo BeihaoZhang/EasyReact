@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = 'EasyReact'
-  s.version          = '2.1.0'
-  s.summary          = 'EasyReact is an easy-to-use library for reactive programming.'
+  s.version          = '2.2.0'
+  s.summary          = 'Make reactive programming easier for you.'
 
   s.description      = <<-DESC
 You may be confused about the functor, applicative and monad while using RxSwift or ReactiveCocoa. However, those concepts are so complicated that only a few people are using them in real projects. So why not do reactive programming in a simpler way? EasyReact makes it easy to use reactive programming in your projects.
@@ -24,8 +24,8 @@ DESC
   
   s.requires_arc = true
 
-  s.private_header_files = ['EasyReact/Classes/Core/Private/**/*.h', 'EasyReact/Classes/Core/ListenTransform/**/*.h']
+  s.private_header_files = ['EasyReact/Classes/Core/Private/**/*.h', 'EasyReact/Classes/Core/ListenEdges/**/*.h']
 
-  s.dependency 'EasySequence', '~> 1.2.0'
-  s.dependency 'EasyTuple', '~> 1.1.0'
+  s.dependency 'EasyFoundation', '~> 1.0.0-alpha'
+
 end

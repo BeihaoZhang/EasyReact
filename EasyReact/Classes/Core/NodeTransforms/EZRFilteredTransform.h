@@ -21,7 +21,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EZRFilteredTransform : EZRTransform
 
-- (instancetype)initWithFilterBlock:(EZRFilterBlock)block;
+- (instancetype)initWithFilterBlock:(EZRFilterBlock)block NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 
 @end
 

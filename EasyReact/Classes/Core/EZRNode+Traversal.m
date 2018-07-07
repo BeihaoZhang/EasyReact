@@ -16,7 +16,7 @@
 
 #import "EZRNode+Traversal.h"
 #import "EZRTransformEdge.h"
-#import <EasySequence/EasySequence.h>
+#import <EasyFoundation/EasyFoundation.h>
 
 @interface EZRNodeVisitElement : NSObject
 

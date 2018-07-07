@@ -18,7 +18,7 @@
 #import "EZRMetaMacrosPrivate.h"
 #import "EZRBlockCancelable.h"
 #import "EZRCancelableBagProtocol.h"
-#import <EasySequence/EasySequence.h>
+#import <EasyFoundation/EasyFoundation.h>
 
 @implementation EZRCancelableBag {
     EZSArray<id<EZRCancelable>> *_cancelBag;

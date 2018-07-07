@@ -17,25 +17,25 @@
 #import <EasyReact/EZRNode.h>
 
 /**
- 节点的访问器协议，用于对图论中的点和边进行遍历
+ Visitor protocol of EZRNode, used for traversing nodes and edges to get a topological graph.
  */
 @protocol EZRNodeVisitor <NSObject>
 
 @optional
 /**
- 访问节点
+ Visits from a node by a given depth, and returns a boolean value to indicate whether the traversing finished.
 
- @param node 节点
- @param deep 深度，向上为负，向下为正
- @return 是否终止遍历
+ @param node    EZRNode
+ @param deep    Depth, negative for upwards and positive for downwards
+ @return        A boolean value to indicate whether the traversing finished.
  */
 - (BOOL)visitNode:(EZRNode *)node deep:(NSInteger)deep;
 
 /**
- 访问变换
+ Visits from a transformation by a given depth, and returns a boolean value to indicate whether the traversing finished.
 
- @param transform 变换
- @return 是否终止遍历
+ @param transform   Transforming edge
+ @return            A boolean value to indicate whether the traversing finished.
  */
 - (BOOL)visitTransform:(id<EZRTransformEdge>)transform;
 
@@ -44,9 +44,9 @@
 @interface EZRNode (Traversal)
 
 /**
- 开始对一个节点的拓扑进行遍历访问
+ Begin traversing by a given visitor object.
 
- @param visitor 访问者对象。
+ @param visitor     Visitor object
  */
 - (void)traversal:(id<EZRNodeVisitor>)visitor;
 

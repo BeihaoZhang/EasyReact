@@ -16,6 +16,10 @@
 
 #import <EasyReact/EZRListenEdge.h>
 
+/**
+ This class connects upstream nodes and listeners, and implements the direct data transmission from upstream nodes to listeners.
+ Usually we can directly inherit this class when we need to extend a listen edge.
+ */
 @interface EZRListen : NSObject <EZRListenEdge>
 
 @end

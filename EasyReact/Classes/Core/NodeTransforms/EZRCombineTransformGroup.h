@@ -18,12 +18,18 @@
 
 @class EZRCombineTransform;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface EZRCombineTransformGroup : NSObject
 
-- (instancetype)initWithTransforms:(NSArray<EZRCombineTransform *> *)transforms;
+- (instancetype)initWithTransforms:(NSArray<EZRCombineTransform *> *)transforms NS_DESIGNATED_INITIALIZER;
 
-- (id)nextValue;
+- (nullable id)nextValue;
 - (void)removeTransform:(EZRCombineTransform *)transform;
+
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 
 @end
 
+NS_ASSUME_NONNULL_END

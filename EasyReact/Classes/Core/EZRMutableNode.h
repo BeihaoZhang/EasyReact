@@ -19,37 +19,36 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- EZRNode 的可变版本。提供了对节点赋值的能力。
- 并且可以将设置的新值向下游传递
+ Mutable version of EZRNode, provide the ability of assigning value to node.
+ Provides the ability to transmit the assigned new value to downstream nodes also.
  */
 @interface EZRMutableNode<T> : EZRNode<T>
 
 /**
- 节点的值，目前只支持强引用。
- 节点值的设置是线程安全的。
+ A thread-safe object that defines the value of the receiver.
  */
 @property (atomic, readwrite, strong, nullable) T value;
 
 /**
- 通过指定值初始化一个节点，并且标记当前的节点是否可变。
- 如果为不可变，则再赋值的时候会抛出 `EZRExceptionReason_CannotModifyEZRNode` 异常。
+ Returns a new node created by a given boolean value to indicate whether the node is mutable.
+ If being immutable, node will throw `EZRExceptionReason_CannotModifyEZRNode` exception when it is assigned value.
 
- @param value 节点的值，可以为nil值
- @param isMutable 当前节点是否可修改
- @return 新的节点实例
+ @param value       Value of the node, could be nil
+ @param isMutable   Whether current node is mutable or not
+ @return            New node instance
  */
 - (instancetype)initWithValue:(nullable T)value mutable:(BOOL)isMutable NS_DESIGNATED_INITIALIZER;
 
 /**
- 对节点赋值并且可以附加一个标记， 此标记会传递到下游节点和监听者。
+ Sets value to node and attach a context if needed, the context will be transfer to downstream nodes and listeners.
 
- @param value 节点的值
- @param context 上下文标记
+ @param value       Value of the node
+ @param context     Context
  */
-- (void)setValue:(T)value context:(nullable id)context;
+- (void)setValue:(nullable T)value context:(nullable id)context;
 
 /**
- 清除节点当前的值，使其恢复为empty
+ Cleans the receiver's value to EZREmpty.empty.
  */
 - (void)clean;
 

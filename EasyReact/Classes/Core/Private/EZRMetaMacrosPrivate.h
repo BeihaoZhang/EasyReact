@@ -14,7 +14,7 @@
  * limitations under the License.
  **/
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 #ifndef EZR_META_MACRO_H
 #define EZR_META_MACRO_H
@@ -34,6 +34,19 @@ static inline void EZR_unlock(EZR_LOCK_TYPE *lock) {
 
 #define EZR_SCOPELOCK(LOCK)          EZR_LOCK(LOCK);EZR_LOCK_TYPE EZR_CONCAT(auto_lock_, __LINE__) __attribute__((cleanup(EZR_unlock), unused)) = LOCK
 
+// branch prediction
+#define EZR_BRANCH_PREDICTION
 
+#ifdef EZR_BRANCH_PREDICTION
+#define EZR_Likely(x)       (__builtin_expect(!!(x), 1))
+#define EZR_Unlikely(x)     (__builtin_expect(!!(x), 0))
+#define EZR_LikelyYES(x)    (__builtin_expect(x, YES))
+#define EZR_LikelyNO(x)     (__builtin_expect(x, NO))
+#else
+#define EZR_Likely(x)       (x)
+#define EZR_Unlikely(x)     (x)
+#define EZR_LikelyYES(x)    (x)
+#define EZR_LikelyNO(x)     (x)
+#endif
 
 #endif //EZR_META_MACRO_H
