@@ -1,9 +1,10 @@
 # ![EasyReact](https://raw.githubusercontent.com/meituan/EasyReact/master/images/Banner.png)
 
-[![CI Status](http://img.shields.io/travis/meituan/EasyReact.svg?style=flat)](https://travis-ci.org/WilliamZang/EasyReact)
+[![Build Status](https://travis-ci.com/meituan/EasyReact.svg?branch=master)](https://travis-ci.com/meituan/EasyReact)
 [![Version](https://img.shields.io/cocoapods/v/EasyReact.svg?style=flat)](http://cocoapods.org/pods/EasyReact)
 [![License](https://img.shields.io/cocoapods/l/EasyReact.svg?style=flat)](http://cocoapods.org/pods/EasyReact)
 [![Platform](https://img.shields.io/cocoapods/p/EasyReact.svg?style=flat)](http://cocoapods.org/pods/EasyReact)
+[![codecov](https://codecov.io/gh/meituan/EasyReact/branch/master/graph/badge.svg)](https://codecov.io/gh/meituan/EasyReact)
 
 *其他语言版本：[English](README.md)*
 
